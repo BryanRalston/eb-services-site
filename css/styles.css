@@ -373,13 +373,15 @@ p:last-child {
   display: flex;
   flex-direction: column;
   position: fixed;
-  top: var(--header-height);
+  top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
   background-color: var(--color-primary-dark);
-  padding: 2.5rem 1.5rem;
-  z-index: 999;
+  padding: calc(var(--header-height) + 2rem) 1.5rem 2.5rem;
+  z-index: 1001;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
