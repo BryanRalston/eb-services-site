@@ -1,0 +1,1442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Site Manager — EB Services</title>
+  <style>
+/* ============================================================
+   EB Services Site Manager
+   Mobile-first, self-contained, offline-capable
+   ============================================================ */
+
+:root {
+  --color-primary: #1A1A1A;
+  --color-primary-dark: #111111;
+  --color-primary-light: #2A2A2A;
+  --color-secondary: #2A2A2A;
+  --color-accent: #C6A44E;
+  --color-accent-hover: #A88A3D;
+  --color-accent-light: #D4B65A;
+  --color-accent-on-light: #8B7028;
+  --color-text: #1A1A1A;
+  --color-text-light: #F0EDE6;
+  --color-text-muted: #4A4A4A;
+  --color-bg: #FFFFFF;
+  --color-bg-alt: #F8F7F4;
+  --color-border: #E5E0D5;
+  --color-border-light: #F0EDE6;
+  --color-success: #28A745;
+  --color-error: #DC3545;
+  --color-warning: #F0AD4E;
+
+  --font-stack: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --transition-fast: 0.2s ease;
+}
+
+/* --- Reset --- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: var(--font-stack);
+  color: var(--color-text);
+  background: var(--color-bg-alt);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* --- App Header --- */
+.app-header {
+  background: var(--color-primary);
+  color: var(--color-text-light);
+  padding: 12px 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-md);
+}
+.app-header__inner {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.app-header__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.app-header__logo {
+  width: 36px;
+  height: 36px;
+  background: var(--color-accent);
+  color: var(--color-primary);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: -0.5px;
+  flex-shrink: 0;
+}
+.app-header__title {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+.app-header__company {
+  font-size: 11px;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+}
+.app-header__page {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+  padding: 0;
+  line-height: inherit;
+}
+
+/* --- View Tabs --- */
+.view-tabs {
+  background: var(--color-primary-dark);
+  display: flex;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.view-tabs__tab {
+  flex: 1;
+  padding: 10px 12px;
+  min-height: 44px;
+  text-align: center;
+  color: rgba(255,255,255,0.5);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+  transition: all var(--transition-fast);
+  position: relative;
+  white-space: nowrap;
+}
+.view-tabs__tab--active {
+  color: var(--color-accent);
+}
+.view-tabs__tab--active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 12px;
+  right: 12px;
+  height: 2px;
+  background: var(--color-accent);
+  border-radius: 2px 2px 0 0;
+}
+.view-tabs__tab:hover:not(.view-tabs__tab--active) {
+  color: rgba(255,255,255,0.7);
+}
+
+/* --- Views --- */
+.view { display: none; }
+.view--active { display: block; }
+
+/* --- Main Content --- */
+.main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 16px 16px 120px;
+}
+
+/* --- Sections --- */
+.section {
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.section__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--color-border-light);
+}
+.section__title {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--color-secondary);
+  margin: 0;
+  padding: 0;
+  line-height: inherit;
+}
+.section__body {
+  padding: 16px;
+}
+
+/* --- Form Fields --- */
+.field {
+  margin-bottom: 14px;
+}
+.field:last-child {
+  margin-bottom: 0;
+}
+.field__label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-muted);
+  margin-bottom: 4px;
+}
+.field__input,
+.field__select,
+.field__textarea {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 16px;
+  font-family: inherit;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  -webkit-appearance: none;
+  appearance: none;
+}
+.field__input:focus,
+.field__select:focus,
+.field__textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(198, 164, 78, 0.15);
+}
+.field__select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235A5A5A' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+}
+.field__textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+.field__row {
+  display: grid;
+  gap: 12px;
+}
+.field__row--2 { grid-template-columns: 1fr 1fr; }
+.field__row--3 { grid-template-columns: 1fr 1fr 1fr; }
+
+.field__hint {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-top: 4px;
+}
+
+/* --- List Items (Testimonials, Gallery) --- */
+.list-item {
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  margin-bottom: 10px;
+  position: relative;
+}
+.list-item__actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+}
+.list-item__btn {
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all var(--transition-fast);
+  min-height: 36px;
+}
+.list-item__btn:hover, .list-item__btn:active {
+  border-color: var(--color-accent);
+  color: var(--color-accent-on-light);
+}
+.list-item__btn--danger:hover, .list-item__btn--danger:active {
+  border-color: var(--color-error);
+  color: var(--color-error);
+  background: rgba(220, 53, 69, 0.05);
+}
+.list-item__number {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-accent-on-light);
+  margin-bottom: 6px;
+}
+.list-item__text {
+  font-size: 14px;
+  color: var(--color-text);
+  line-height: 1.5;
+  margin-bottom: 4px;
+}
+.list-item__meta {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+/* --- Gallery photo preview --- */
+.photo-preview {
+  width: 80px;
+  height: 60px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  border: 1px solid var(--color-border);
+  margin-bottom: 8px;
+}
+.photo-placeholder {
+  width: 80px;
+  height: 60px;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-alt);
+  border: 1px dashed var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: var(--color-border);
+  margin-bottom: 8px;
+}
+
+/* --- Add Item Button --- */
+.add-item-btn {
+  width: 100%;
+  padding: 14px;
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--color-accent-on-light);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: inherit;
+}
+.add-item-btn:hover, .add-item-btn:active {
+  border-color: var(--color-accent);
+  background: rgba(198, 164, 78, 0.05);
+}
+
+/* --- Preview Section --- */
+.preview-card {
+  background: var(--color-primary);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  color: var(--color-text-light);
+  margin-bottom: 16px;
+}
+.preview-card__badge {
+  display: inline-block;
+  background: rgba(198, 164, 78, 0.15);
+  color: var(--color-accent);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.preview-card__title {
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+.preview-card__phone {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.preview-testimonial {
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 10px;
+  border: 1px solid var(--color-border-light);
+}
+.preview-testimonial__stars {
+  color: var(--color-accent);
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+.preview-testimonial__text {
+  font-size: 14px;
+  font-style: italic;
+  color: var(--color-text);
+  margin-bottom: 8px;
+}
+.preview-testimonial__author {
+  font-weight: 600;
+  font-size: 14px;
+}
+.preview-testimonial__project {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.preview-footer {
+  background: var(--color-primary);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  color: rgba(255,255,255,0.7);
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+.preview-footer__title {
+  color: var(--color-accent);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.preview-footer__bottom {
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 12px;
+  margin-top: 12px;
+  font-size: 13px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.preview-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+.preview-gallery-item {
+  aspect-ratio: 4/3;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  position: relative;
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border-light);
+}
+.preview-gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.preview-gallery-item__placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  text-align: center;
+  padding: 8px;
+}
+.preview-gallery-item__placeholder-icon {
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+.preview-gallery-item__label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,0.7);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 8px;
+}
+
+/* --- Action Bar --- */
+.action-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-primary);
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding: 12px 16px;
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+  z-index: 200;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
+}
+.action-bar__inner {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  gap: 8px;
+}
+.action-bar__btn {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all var(--transition-fast);
+  border: none;
+  min-height: 44px;
+  text-align: center;
+}
+.action-bar__btn--primary {
+  background: var(--color-accent);
+  color: var(--color-primary);
+}
+.action-bar__btn--primary:hover, .action-bar__btn--primary:active {
+  background: var(--color-accent-hover);
+}
+.action-bar__btn--secondary {
+  background: var(--color-primary-light);
+  color: var(--color-text-light);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.action-bar__btn--secondary:hover, .action-bar__btn--secondary:active {
+  background: var(--color-secondary);
+}
+
+/* --- Instructions Modal --- */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 300;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.modal-overlay--active {
+  display: flex;
+}
+.modal {
+  background: var(--color-bg);
+  border-radius: var(--radius-lg);
+  max-width: 500px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+}
+.modal__header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal__title {
+  font-size: 18px;
+  font-weight: 700;
+}
+.modal__close {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-bg-alt);
+  color: var(--color-text-muted);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+}
+.modal__body {
+  padding: 20px;
+}
+.modal__step {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.modal__step-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  color: var(--color-primary);
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.modal__step-text {
+  font-size: 15px;
+  padding-top: 2px;
+}
+.modal__footer {
+  padding: 16px 20px;
+  border-top: 1px solid var(--color-border-light);
+}
+.modal__btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  background: var(--color-primary);
+  color: var(--color-text-light);
+  min-height: 44px;
+}
+
+/* --- Toast --- */
+.toast {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  background: var(--color-primary);
+  color: var(--color-text-light);
+  padding: 12px 20px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: var(--shadow-lg);
+  z-index: 400;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+  max-width: 90%;
+  text-align: center;
+}
+.toast--visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.toast--success { border-left: 4px solid var(--color-success); }
+.toast--error { border-left: 4px solid var(--color-error); }
+
+/* --- Add to Home Screen Hint --- */
+.a2hs-hint {
+  background: var(--color-accent);
+  color: var(--color-primary);
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.a2hs-hint__close {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px;
+  font-family: inherit;
+  line-height: 1;
+}
+
+/* --- Responsive --- */
+@media (max-width: 480px) {
+  .field__row--2, .field__row--3 { grid-template-columns: 1fr; }
+  .action-bar__inner { flex-direction: column; }
+}
+  </style>
+</head>
+<body>
+
+  <!-- A2HS Hint -->
+  <div class="a2hs-hint" id="a2hs-hint" style="display: none;">
+    <span>Add to Home Screen for quick access</span>
+    <button class="a2hs-hint__close" id="a2hs-dismiss" aria-label="Dismiss">&times;</button>
+  </div>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="app-header__inner">
+      <div class="app-header__brand">
+        <div class="app-header__logo">EB</div>
+        <div class="app-header__title">
+          <span class="app-header__company">EB Services</span>
+          <h1 class="app-header__page">Site Manager</h1>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- View Tabs -->
+  <div class="view-tabs">
+    <button class="view-tabs__tab view-tabs__tab--active" data-tab="business">Business</button>
+    <button class="view-tabs__tab" data-tab="testimonials">Reviews</button>
+    <button class="view-tabs__tab" data-tab="gallery">Gallery</button>
+    <button class="view-tabs__tab" data-tab="preview">Preview</button>
+  </div>
+
+  <!-- ===== BUSINESS INFO TAB ===== -->
+  <div class="view view--active" id="view-business">
+    <div class="main">
+
+      <div class="section">
+        <div class="section__header">
+          <h2 class="section__title">Business Details</h2>
+        </div>
+        <div class="section__body">
+          <div class="field__row field__row--2">
+            <div class="field">
+              <label class="field__label" for="cfg-name">Business Name</label>
+              <input class="field__input" type="text" id="cfg-name" data-path="business.name" placeholder="EB Services">
+            </div>
+            <div class="field">
+              <label class="field__label" for="cfg-tagline">Tagline</label>
+              <input class="field__input" type="text" id="cfg-tagline" data-path="business.tagline" placeholder="General Contractor">
+            </div>
+          </div>
+          <div class="field">
+            <label class="field__label" for="cfg-owner">Owner Name</label>
+            <input class="field__input" type="text" id="cfg-owner" data-path="business.owner" placeholder="Your Name">
+          </div>
+          <div class="field__row field__row--2">
+            <div class="field">
+              <label class="field__label" for="cfg-phone">Phone Number</label>
+              <input class="field__input" type="tel" id="cfg-phone" data-path="business.phone" placeholder="(555) 123-4567">
+            </div>
+            <div class="field">
+              <label class="field__label" for="cfg-phonelink">Phone Link</label>
+              <input class="field__input" type="text" id="cfg-phonelink" data-path="business.phoneLink" placeholder="+15551234567">
+              <div class="field__hint">Format: +1 then digits only</div>
+            </div>
+          </div>
+          <div class="field">
+            <label class="field__label" for="cfg-email">Email Address</label>
+            <input class="field__input" type="email" id="cfg-email" data-path="business.email" placeholder="info@ebservices.com">
+          </div>
+          <div class="field__row field__row--3">
+            <div class="field">
+              <label class="field__label" for="cfg-city">City</label>
+              <input class="field__input" type="text" id="cfg-city" data-path="business.city" placeholder="Your City">
+            </div>
+            <div class="field">
+              <label class="field__label" for="cfg-state">State</label>
+              <input class="field__input" type="text" id="cfg-state" data-path="business.state" placeholder="TX">
+            </div>
+            <div class="field">
+              <label class="field__label" for="cfg-zip">ZIP Code</label>
+              <input class="field__input" type="text" id="cfg-zip" data-path="business.zip" placeholder="75001">
+            </div>
+          </div>
+          <div class="field">
+            <label class="field__label" for="cfg-area">Service Area</label>
+            <input class="field__input" type="text" id="cfg-area" data-path="business.serviceArea" placeholder="Dallas & Surrounding Areas">
+          </div>
+          <div class="field">
+            <label class="field__label" for="cfg-license">License Number</label>
+            <input class="field__input" type="text" id="cfg-license" data-path="business.license" placeholder="GC-123456">
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section__header">
+          <h2 class="section__title">Business Hours</h2>
+        </div>
+        <div class="section__body">
+          <div class="field">
+            <label class="field__label" for="cfg-hours-weekdays">Weekdays</label>
+            <input class="field__input" type="text" id="cfg-hours-weekdays" data-path="business.hours.weekdays" placeholder="Monday-Friday: 7:00 AM - 6:00 PM">
+          </div>
+          <div class="field">
+            <label class="field__label" for="cfg-hours-saturday">Saturday</label>
+            <input class="field__input" type="text" id="cfg-hours-saturday" data-path="business.hours.saturday" placeholder="Saturday: 8:00 AM - 2:00 PM">
+          </div>
+          <div class="field">
+            <label class="field__label" for="cfg-hours-sunday">Sunday</label>
+            <input class="field__input" type="text" id="cfg-hours-sunday" data-path="business.hours.sunday" placeholder="Sunday: Closed">
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section__header">
+          <h2 class="section__title">Social Media</h2>
+        </div>
+        <div class="section__body">
+          <div class="field">
+            <label class="field__label" for="cfg-facebook">Facebook URL</label>
+            <input class="field__input" type="url" id="cfg-facebook" data-path="business.social.facebook" placeholder="https://facebook.com/yourpage">
+          </div>
+          <div class="field">
+            <label class="field__label" for="cfg-instagram">Instagram URL</label>
+            <input class="field__input" type="url" id="cfg-instagram" data-path="business.social.instagram" placeholder="https://instagram.com/yourhandle">
+          </div>
+          <div class="field">
+            <label class="field__label" for="cfg-nextdoor">Nextdoor URL</label>
+            <input class="field__input" type="url" id="cfg-nextdoor" data-path="business.social.nextdoor" placeholder="https://nextdoor.com/pages/yourpage">
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section__header">
+          <h2 class="section__title">About / Bio</h2>
+        </div>
+        <div class="section__body">
+          <div class="field">
+            <label class="field__label" for="cfg-bio">Owner Bio</label>
+            <textarea class="field__textarea" id="cfg-bio" data-path="about.ownerBio" rows="4" placeholder="Tell your story..."></textarea>
+          </div>
+          <div class="field">
+            <label class="field__label" for="cfg-experience">Years of Experience</label>
+            <input class="field__input" type="text" id="cfg-experience" data-path="about.yearsExperience" placeholder="e.g. 15+">
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== TESTIMONIALS TAB ===== -->
+  <div class="view" id="view-testimonials">
+    <div class="main">
+
+      <div class="section">
+        <div class="section__header">
+          <h2 class="section__title">Customer Testimonials</h2>
+        </div>
+        <div class="section__body">
+          <div id="testimonials-list"></div>
+          <button class="add-item-btn" id="add-testimonial">+ Add Testimonial</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== GALLERY TAB ===== -->
+  <div class="view" id="view-gallery">
+    <div class="main">
+
+      <div class="section">
+        <div class="section__header">
+          <h2 class="section__title">Project Photos</h2>
+        </div>
+        <div class="section__body">
+          <p class="field__hint" style="margin-bottom: 14px;">Upload your photos to the <strong>photos</strong> folder on GitHub, then enter the filename here (e.g., <code>photos/bathroom-remodel-1.jpg</code>).</p>
+          <div id="gallery-list"></div>
+          <button class="add-item-btn" id="add-gallery">+ Add Photo</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== PREVIEW TAB ===== -->
+  <div class="view" id="view-preview">
+    <div class="main">
+
+      <div class="section">
+        <div class="section__header">
+          <h2 class="section__title">Homepage Hero Preview</h2>
+        </div>
+        <div class="section__body" style="padding: 0;">
+          <div class="preview-card" id="preview-hero">
+            <div class="preview-card__badge" id="preview-badge">Serving [City] & Surrounding Areas</div>
+            <div class="preview-card__title">Quality Craftsmanship for Your Home</div>
+            <div>From quick repairs to full kitchen and bathroom remodels, we bring reliable workmanship and honest service to every project.</div>
+            <div class="preview-card__phone" style="margin-top: 12px;">Call us today: <span id="preview-phone">(555) 123-4567</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section__header">
+          <h2 class="section__title">Testimonials Preview</h2>
+        </div>
+        <div class="section__body" id="preview-testimonials"></div>
+      </div>
+
+      <div class="section">
+        <div class="section__header">
+          <h2 class="section__title">Gallery Preview</h2>
+        </div>
+        <div class="section__body">
+          <div class="preview-gallery-grid" id="preview-gallery"></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section__header">
+          <h2 class="section__title">Footer Preview</h2>
+        </div>
+        <div class="section__body" style="padding: 0;">
+          <div class="preview-footer" id="preview-footer">
+            <div class="preview-footer__title" id="preview-footer-name">EB Services</div>
+            <div>Professional handyman services and home remodeling in <span id="preview-footer-area">[City] and surrounding areas</span>. Quality work, honest pricing, and a commitment to your complete satisfaction.</div>
+            <div class="preview-footer__bottom">
+              <span>&copy; 2026 <span id="preview-footer-copy">EB Services</span>. All rights reserved.</span>
+              <span>Licensed & Insured &bull; <span id="preview-footer-license">[License #]</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Action Bar -->
+  <div class="action-bar">
+    <div class="action-bar__inner">
+      <button class="action-bar__btn action-bar__btn--secondary" id="btn-load">Load Config</button>
+      <button class="action-bar__btn action-bar__btn--primary" id="btn-save">Save Config</button>
+      <button class="action-bar__btn action-bar__btn--secondary" id="btn-upload">Upload Guide</button>
+    </div>
+  </div>
+
+  <!-- Upload Instructions Modal -->
+  <div class="modal-overlay" id="upload-modal">
+    <div class="modal">
+      <div class="modal__header">
+        <h3 class="modal__title">Upload to Your Site</h3>
+        <button class="modal__close" id="modal-close" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal__body">
+        <div class="modal__step">
+          <div class="modal__step-num">1</div>
+          <div class="modal__step-text">First, tap <strong>Save Config</strong> to download your <code>site-config.json</code> file.</div>
+        </div>
+        <div class="modal__step">
+          <div class="modal__step-num">2</div>
+          <div class="modal__step-text">Go to your GitHub repository in a web browser.</div>
+        </div>
+        <div class="modal__step">
+          <div class="modal__step-num">3</div>
+          <div class="modal__step-text">Click <strong>"Add file"</strong> then <strong>"Upload files"</strong>.</div>
+        </div>
+        <div class="modal__step">
+          <div class="modal__step-num">4</div>
+          <div class="modal__step-text">Drag in the <code>site-config.json</code> file you just downloaded.</div>
+        </div>
+        <div class="modal__step">
+          <div class="modal__step-num">5</div>
+          <div class="modal__step-text">Click <strong>"Commit changes"</strong>.</div>
+        </div>
+        <div class="modal__step">
+          <div class="modal__step-num">6</div>
+          <div class="modal__step-text">Wait 1-2 minutes for the site to update. That's it!</div>
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button class="modal__btn" id="modal-done">Got It</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Hidden file input for loading config -->
+  <input type="file" id="file-input" accept=".json,application/json" style="display: none;">
+
+  <script>
+/* ============================================================
+   Site Manager — App Logic
+   ============================================================ */
+(function () {
+  'use strict';
+
+  // --- Default Config ---
+  var DEFAULT_CONFIG = {
+    business: {
+      name: 'EB Services',
+      tagline: 'General Contractor',
+      owner: '',
+      phone: '(555) 123-4567',
+      phoneLink: '+15551234567',
+      email: 'info@ebservices.com',
+      city: '',
+      state: '',
+      zip: '',
+      serviceArea: '',
+      license: '',
+      hours: {
+        weekdays: 'Monday\u2013Friday: 7:00 AM \u2013 6:00 PM',
+        saturday: 'Saturday: 8:00 AM \u2013 2:00 PM',
+        sunday: 'Sunday: Closed'
+      },
+      social: {
+        facebook: '',
+        instagram: '',
+        nextdoor: ''
+      }
+    },
+    about: {
+      ownerBio: '',
+      yearsExperience: ''
+    },
+    testimonials: [],
+    gallery: []
+  };
+
+  var config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+
+  // --- Utility: resolve/set dot path ---
+  function resolve(obj, path) {
+    return path.split('.').reduce(function (o, k) {
+      return o && o[k] !== undefined ? o[k] : undefined;
+    }, obj);
+  }
+
+  function setPath(obj, path, value) {
+    var keys = path.split('.');
+    var target = obj;
+    for (var i = 0; i < keys.length - 1; i++) {
+      if (target[keys[i]] === undefined) target[keys[i]] = {};
+      target = target[keys[i]];
+    }
+    target[keys[keys.length - 1]] = value;
+  }
+
+  // --- Tab Switching ---
+  var tabs = document.querySelectorAll('.view-tabs__tab');
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      tabs.forEach(function (t) { t.classList.remove('view-tabs__tab--active'); });
+      tab.classList.add('view-tabs__tab--active');
+      document.querySelectorAll('.view').forEach(function (v) { v.classList.remove('view--active'); });
+      var viewId = 'view-' + tab.getAttribute('data-tab');
+      document.getElementById(viewId).classList.add('view--active');
+      if (tab.getAttribute('data-tab') === 'preview') {
+        updatePreview();
+      }
+    });
+  });
+
+  // --- Populate Form from Config ---
+  function populateForm() {
+    document.querySelectorAll('[data-path]').forEach(function (el) {
+      var value = resolve(config, el.getAttribute('data-path'));
+      if (value !== undefined) {
+        el.value = value;
+      }
+    });
+    renderTestimonials();
+    renderGallery();
+  }
+
+  // --- Read Form into Config ---
+  function readForm() {
+    document.querySelectorAll('[data-path]').forEach(function (el) {
+      setPath(config, el.getAttribute('data-path'), el.value);
+    });
+    // testimonials and gallery are managed separately via their render/add/remove
+  }
+
+  // --- Testimonials ---
+  function renderTestimonials() {
+    var list = document.getElementById('testimonials-list');
+    list.innerHTML = '';
+    config.testimonials.forEach(function (t, i) {
+      var item = document.createElement('div');
+      item.className = 'list-item';
+      item.innerHTML =
+        '<div class="list-item__number">Testimonial ' + (i + 1) + '</div>' +
+        '<div class="field">' +
+          '<label class="field__label">Quote</label>' +
+          '<textarea class="field__textarea testimonial-text" rows="3" data-index="' + i + '">' + escapeHtml(t.text) + '</textarea>' +
+        '</div>' +
+        '<div class="field__row field__row--2">' +
+          '<div class="field">' +
+            '<label class="field__label">Customer Name</label>' +
+            '<input class="field__input testimonial-author" type="text" value="' + escapeAttr(t.author) + '" data-index="' + i + '">' +
+          '</div>' +
+          '<div class="field">' +
+            '<label class="field__label">Project Type</label>' +
+            '<input class="field__input testimonial-project" type="text" value="' + escapeAttr(t.project) + '" data-index="' + i + '">' +
+          '</div>' +
+        '</div>' +
+        '<div class="field">' +
+          '<label class="field__label">City</label>' +
+          '<input class="field__input testimonial-city" type="text" value="' + escapeAttr(t.city) + '" data-index="' + i + '">' +
+        '</div>' +
+        '<div class="list-item__actions">' +
+          (i > 0 ? '<button class="list-item__btn move-up" data-index="' + i + '">Move Up</button>' : '') +
+          (i < config.testimonials.length - 1 ? '<button class="list-item__btn move-down" data-index="' + i + '">Move Down</button>' : '') +
+          '<button class="list-item__btn list-item__btn--danger remove-testimonial" data-index="' + i + '">Remove</button>' +
+        '</div>';
+      list.appendChild(item);
+    });
+
+    // Bind change events
+    list.querySelectorAll('.testimonial-text').forEach(function (el) {
+      el.addEventListener('input', function () {
+        config.testimonials[parseInt(this.getAttribute('data-index'))].text = this.value;
+      });
+    });
+    list.querySelectorAll('.testimonial-author').forEach(function (el) {
+      el.addEventListener('input', function () {
+        config.testimonials[parseInt(this.getAttribute('data-index'))].author = this.value;
+      });
+    });
+    list.querySelectorAll('.testimonial-project').forEach(function (el) {
+      el.addEventListener('input', function () {
+        config.testimonials[parseInt(this.getAttribute('data-index'))].project = this.value;
+      });
+    });
+    list.querySelectorAll('.testimonial-city').forEach(function (el) {
+      el.addEventListener('input', function () {
+        config.testimonials[parseInt(this.getAttribute('data-index'))].city = this.value;
+      });
+    });
+    list.querySelectorAll('.move-up').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var idx = parseInt(this.getAttribute('data-index'));
+        var tmp = config.testimonials[idx - 1];
+        config.testimonials[idx - 1] = config.testimonials[idx];
+        config.testimonials[idx] = tmp;
+        renderTestimonials();
+      });
+    });
+    list.querySelectorAll('.move-down').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var idx = parseInt(this.getAttribute('data-index'));
+        var tmp = config.testimonials[idx + 1];
+        config.testimonials[idx + 1] = config.testimonials[idx];
+        config.testimonials[idx] = tmp;
+        renderTestimonials();
+      });
+    });
+    list.querySelectorAll('.remove-testimonial').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var idx = parseInt(this.getAttribute('data-index'));
+        if (confirm('Remove this testimonial?')) {
+          config.testimonials.splice(idx, 1);
+          renderTestimonials();
+        }
+      });
+    });
+  }
+
+  document.getElementById('add-testimonial').addEventListener('click', function () {
+    config.testimonials.push({
+      text: '',
+      author: '',
+      project: '',
+      city: config.business.city || ''
+    });
+    renderTestimonials();
+    // Scroll to new item
+    var list = document.getElementById('testimonials-list');
+    var lastItem = list.lastElementChild;
+    if (lastItem) lastItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+
+  // --- Gallery ---
+  function renderGallery() {
+    var list = document.getElementById('gallery-list');
+    list.innerHTML = '';
+    config.gallery.forEach(function (g, i) {
+      var item = document.createElement('div');
+      item.className = 'list-item';
+
+      var previewHtml = '';
+      if (g.src) {
+        previewHtml = '<img class="photo-preview" src="' + escapeAttr(g.src) + '" alt="Preview" onerror="this.style.display=\'none\'">';
+      } else {
+        var icons = { bathroom: '&#128705;', kitchen: '&#127858;', handyman: '&#128295;', improvement: '&#127968;', entertainment: '&#127916;' };
+        previewHtml = '<div class="photo-placeholder">' + (icons[g.category] || '&#128247;') + '</div>';
+      }
+
+      item.innerHTML =
+        '<div class="list-item__number">Photo ' + (i + 1) + '</div>' +
+        previewHtml +
+        '<div class="field">' +
+          '<label class="field__label">File Path</label>' +
+          '<input class="field__input gallery-src" type="text" value="' + escapeAttr(g.src) + '" data-index="' + i + '" placeholder="photos/bathroom-remodel-1.jpg">' +
+        '</div>' +
+        '<div class="field">' +
+          '<label class="field__label">Description (Alt Text)</label>' +
+          '<input class="field__input gallery-alt" type="text" value="' + escapeAttr(g.alt) + '" data-index="' + i + '" placeholder="Master bathroom with custom tile shower">' +
+        '</div>' +
+        '<div class="field__row field__row--2">' +
+          '<div class="field">' +
+            '<label class="field__label">Category</label>' +
+            '<select class="field__select gallery-category" data-index="' + i + '">' +
+              '<option value="bathroom"' + (g.category === 'bathroom' ? ' selected' : '') + '>Bathroom</option>' +
+              '<option value="kitchen"' + (g.category === 'kitchen' ? ' selected' : '') + '>Kitchen</option>' +
+              '<option value="handyman"' + (g.category === 'handyman' ? ' selected' : '') + '>Handyman</option>' +
+              '<option value="improvement"' + (g.category === 'improvement' ? ' selected' : '') + '>Home Improvement</option>' +
+              '<option value="entertainment"' + (g.category === 'entertainment' ? ' selected' : '') + '>Entertainment</option>' +
+            '</select>' +
+          '</div>' +
+          '<div class="field">' +
+            '<label class="field__label">Label</label>' +
+            '<input class="field__input gallery-label" type="text" value="' + escapeAttr(g.label) + '" data-index="' + i + '" placeholder="Bathroom Remodel">' +
+          '</div>' +
+        '</div>' +
+        '<div class="list-item__actions">' +
+          '<button class="list-item__btn list-item__btn--danger remove-gallery" data-index="' + i + '">Remove</button>' +
+        '</div>';
+      list.appendChild(item);
+    });
+
+    // Bind events
+    list.querySelectorAll('.gallery-src').forEach(function (el) {
+      el.addEventListener('input', function () {
+        config.gallery[parseInt(this.getAttribute('data-index'))].src = this.value;
+      });
+    });
+    list.querySelectorAll('.gallery-alt').forEach(function (el) {
+      el.addEventListener('input', function () {
+        config.gallery[parseInt(this.getAttribute('data-index'))].alt = this.value;
+      });
+    });
+    list.querySelectorAll('.gallery-category').forEach(function (el) {
+      el.addEventListener('change', function () {
+        config.gallery[parseInt(this.getAttribute('data-index'))].category = this.value;
+      });
+    });
+    list.querySelectorAll('.gallery-label').forEach(function (el) {
+      el.addEventListener('input', function () {
+        config.gallery[parseInt(this.getAttribute('data-index'))].label = this.value;
+      });
+    });
+    list.querySelectorAll('.remove-gallery').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var idx = parseInt(this.getAttribute('data-index'));
+        if (confirm('Remove this photo entry?')) {
+          config.gallery.splice(idx, 1);
+          renderGallery();
+        }
+      });
+    });
+  }
+
+  document.getElementById('add-gallery').addEventListener('click', function () {
+    config.gallery.push({
+      src: '',
+      alt: '',
+      category: 'bathroom',
+      label: ''
+    });
+    renderGallery();
+    var list = document.getElementById('gallery-list');
+    var lastItem = list.lastElementChild;
+    if (lastItem) lastItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+
+  // --- Preview ---
+  function updatePreview() {
+    readForm();
+    var b = config.business;
+
+    // Hero
+    document.getElementById('preview-badge').textContent = 'Serving ' + (b.serviceArea || b.city || '[City] & Surrounding Areas');
+    document.getElementById('preview-phone').textContent = b.phone || '(555) 123-4567';
+
+    // Footer
+    document.getElementById('preview-footer-name').textContent = b.name || 'EB Services';
+    document.getElementById('preview-footer-area').textContent = b.serviceArea || b.city || '[City] and surrounding areas';
+    document.getElementById('preview-footer-copy').textContent = b.name || 'EB Services';
+    document.getElementById('preview-footer-license').textContent = b.license || '[License #]';
+
+    // Testimonials
+    var tContainer = document.getElementById('preview-testimonials');
+    tContainer.innerHTML = '';
+    if (config.testimonials.length === 0) {
+      tContainer.innerHTML = '<p style="color: var(--color-text-muted); font-style: italic;">No testimonials added yet. Go to the Reviews tab to add some.</p>';
+    } else {
+      config.testimonials.forEach(function (t) {
+        var card = document.createElement('div');
+        card.className = 'preview-testimonial';
+        card.innerHTML =
+          '<div class="preview-testimonial__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>' +
+          '<div class="preview-testimonial__text">"' + escapeHtml(t.text || '...') + '"</div>' +
+          '<div class="preview-testimonial__author">' + escapeHtml(t.author || 'Customer') + '</div>' +
+          '<div class="preview-testimonial__project">' + escapeHtml(t.project || '') + (t.city ? ' \u2014 ' + escapeHtml(t.city) : '') + '</div>';
+        tContainer.appendChild(card);
+      });
+    }
+
+    // Gallery
+    var gContainer = document.getElementById('preview-gallery');
+    gContainer.innerHTML = '';
+    if (config.gallery.length === 0) {
+      gContainer.innerHTML = '<p style="color: var(--color-text-muted); font-style: italic;">No photos added yet. Go to the Gallery tab to add some.</p>';
+    } else {
+      config.gallery.forEach(function (g) {
+        var card = document.createElement('div');
+        card.className = 'preview-gallery-item';
+        if (g.src) {
+          card.innerHTML = '<img src="' + escapeAttr(g.src) + '" alt="' + escapeAttr(g.alt || g.label || '') + '" onerror="this.parentElement.innerHTML=\'<div class=preview-gallery-item__placeholder><div class=preview-gallery-item__placeholder-icon>&#128247;</div><div>Image not found</div></div>\'">' +
+            '<div class="preview-gallery-item__label">' + escapeHtml(g.label || '') + '</div>';
+        } else {
+          var icons = { bathroom: '&#128705;', kitchen: '&#127858;', handyman: '&#128295;', improvement: '&#127968;', entertainment: '&#127916;' };
+          card.innerHTML = '<div class="preview-gallery-item__placeholder"><div class="preview-gallery-item__placeholder-icon">' + (icons[g.category] || '&#128247;') + '</div><div>No photo yet</div></div>' +
+            '<div class="preview-gallery-item__label">' + escapeHtml(g.label || '') + '</div>';
+        }
+        gContainer.appendChild(card);
+      });
+    }
+  }
+
+  // --- Save Config ---
+  document.getElementById('btn-save').addEventListener('click', function () {
+    readForm();
+    var json = JSON.stringify(config, null, 2);
+    var blob = new Blob([json], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'site-config.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('Config file downloaded!', 'success');
+  });
+
+  // --- Load Config ---
+  var fileInput = document.getElementById('file-input');
+  document.getElementById('btn-load').addEventListener('click', function () {
+    fileInput.click();
+  });
+  fileInput.addEventListener('change', function () {
+    var file = this.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      try {
+        var loaded = JSON.parse(e.target.result);
+        // Deep merge with defaults to fill any missing fields
+        config = deepMerge(JSON.parse(JSON.stringify(DEFAULT_CONFIG)), loaded);
+        populateForm();
+        showToast('Config loaded successfully!', 'success');
+      } catch (err) {
+        showToast('Error: Invalid JSON file', 'error');
+      }
+    };
+    reader.readAsText(file);
+    this.value = '';
+  });
+
+  // --- Upload Guide ---
+  document.getElementById('btn-upload').addEventListener('click', function () {
+    document.getElementById('upload-modal').classList.add('modal-overlay--active');
+  });
+  document.getElementById('modal-close').addEventListener('click', closeModal);
+  document.getElementById('modal-done').addEventListener('click', closeModal);
+  document.getElementById('upload-modal').addEventListener('click', function (e) {
+    if (e.target === this) closeModal();
+  });
+  function closeModal() {
+    document.getElementById('upload-modal').classList.remove('modal-overlay--active');
+  }
+
+  // --- Toast ---
+  function showToast(message, type) {
+    var toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.className = 'toast toast--' + (type || 'success') + ' toast--visible';
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(function () {
+      toast.classList.remove('toast--visible');
+    }, 3000);
+  }
+
+  // --- Deep Merge ---
+  function deepMerge(target, source) {
+    for (var key in source) {
+      if (source.hasOwnProperty(key)) {
+        if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key]) &&
+            target[key] && typeof target[key] === 'object' && !Array.isArray(target[key])) {
+          deepMerge(target[key], source[key]);
+        } else {
+          target[key] = source[key];
+        }
+      }
+    }
+    return target;
+  }
+
+  // --- Escape Helpers ---
+  function escapeHtml(str) {
+    if (!str) return '';
+    var div = document.createElement('div');
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
+  }
+  function escapeAttr(str) {
+    if (!str) return '';
+    return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  // --- Add to Home Screen Hint ---
+  function initA2HSHint() {
+    var dismissed = localStorage.getItem('eb_manager_hint_dismissed');
+    if (dismissed) return;
+    var hint = document.getElementById('a2hs-hint');
+    hint.style.display = 'flex';
+    document.getElementById('a2hs-dismiss').addEventListener('click', function () {
+      hint.style.display = 'none';
+      localStorage.setItem('eb_manager_hint_dismissed', '1');
+    });
+  }
+
+  // --- Try loading existing config from site ---
+  function tryLoadFromSite() {
+    fetch('site-config.json')
+      .then(function (response) {
+        if (!response.ok) throw new Error('Not found');
+        return response.json();
+      })
+      .then(function (loaded) {
+        config = deepMerge(JSON.parse(JSON.stringify(DEFAULT_CONFIG)), loaded);
+        populateForm();
+      })
+      .catch(function () {
+        // Load defaults
+        populateForm();
+      });
+  }
+
+  // --- Init ---
+  tryLoadFromSite();
+  initA2HSHint();
+
+})();
+  </script>
+</body>
+</html>

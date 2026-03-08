@@ -21,8 +21,8 @@
       <a href="index.html" class="site-logo" aria-label="EB Services - Home">
         <div class="site-logo__icon" aria-hidden="true">EB</div>
         <div class="site-logo__text">
-          <span class="site-logo__name">EB Services</span>
-          <span class="site-logo__tagline">General Contractor</span>
+          <span class="site-logo__name" data-config="business.name">EB Services</span>
+          <span class="site-logo__tagline" data-config="business.tagline">General Contractor</span>
         </div>
       </a>
 
@@ -37,13 +37,13 @@
         <a href="contact.html" class="btn btn--primary main-nav__cta">Free Estimate</a>
         <div class="main-nav__phone">
           <span aria-hidden="true">&#9742;</span>
-          <a href="tel:+15551234567">(555) 123-4567</a>
+          <a href="tel:+15551234567" data-config="business.phone" data-config-href="tel:{business.phoneLink}">(555) 123-4567</a>
         </div>
       </nav>
 
       <div class="header-phone">
         <span class="header-phone__icon" aria-hidden="true">&#9742;</span>
-        <a href="tel:+15551234567">(555) 123-4567</a>
+        <a href="tel:+15551234567" data-config="business.phone" data-config-href="tel:{business.phoneLink}">(555) 123-4567</a>
       </div>
 
       <button class="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="main-nav">
@@ -208,7 +208,7 @@
         <div class="cta-section__actions">
           <a href="contact.html" class="btn btn--primary btn--large">Get a Free Estimate</a>
           <div class="cta-section__phone">
-            or call <a href="tel:+15551234567">(555) 123-4567</a>
+            or call <a href="tel:+15551234567" data-config="business.phone" data-config-href="tel:{business.phoneLink}">(555) 123-4567</a>
           </div>
         </div>
       </div>
@@ -221,8 +221,8 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-col">
-          <div class="footer-col__title">EB Services</div>
-          <p>Professional handyman services and home remodeling in [City] and surrounding areas. Quality work, honest pricing, and a commitment to your complete satisfaction.</p>
+          <div class="footer-col__title" data-config="business.name">EB Services</div>
+          <p>Professional handyman services and home remodeling in <span data-config="business.serviceArea">[City] and surrounding areas</span>. Quality work, honest pricing, and a commitment to your complete satisfaction.</p>
         </div>
         <div class="footer-col">
           <div class="footer-col__title">Quick Links</div>
@@ -247,25 +247,26 @@
           <div class="footer-col__title">Contact Us</div>
           <div class="footer-col__contact-item">
             <span class="footer-col__contact-icon" aria-hidden="true">&#9742;</span>
-            <div><a href="tel:+15551234567">(555) 123-4567</a></div>
+            <div><a href="tel:+15551234567" data-config="business.phone" data-config-href="tel:{business.phoneLink}">(555) 123-4567</a></div>
           </div>
           <div class="footer-col__contact-item">
             <span class="footer-col__contact-icon" aria-hidden="true">&#9993;</span>
-            <div><a href="mailto:info@ebservices.com">info@ebservices.com</a></div>
+            <div><a href="mailto:info@ebservices.com" data-config="business.email" data-config-href="mailto:{business.email}">info@ebservices.com</a></div>
           </div>
           <div class="footer-col__contact-item">
             <span class="footer-col__contact-icon" aria-hidden="true">&#128205;</span>
-            <div>Serving [City] &amp; Surrounding Areas</div>
+            <div>Serving <span data-config="business.serviceArea">[City] &amp; Surrounding Areas</span></div>
           </div>
         </div>
       </div>
       <div class="footer-bottom">
-        <div>&copy; 2026 EB Services. All rights reserved.</div>
-        <div>Licensed &amp; Insured &bull; [License #]</div>
+        <div>&copy; 2026 <span data-config="business.name">EB Services</span>. All rights reserved.</div>
+        <div>Licensed &amp; Insured &bull; <span data-config="business.license">[License #]</span></div>
       </div>
     </div>
   </footer>
 
   <script src="js/main.js"></script>
+  <script src="js/config-loader.js" defer></script>
 </body>
 </html>

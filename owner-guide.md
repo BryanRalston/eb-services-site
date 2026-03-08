@@ -8,19 +8,38 @@ Hey! Here's everything I set up for you. All free, all work from your phone, no 
 
 **https://bryanralston.github.io/eb-services-site/**
 
-This is your professional site — share it with clients, put it on your business cards, link it from your Google Business Profile. Right now it has placeholder info (phone, city, etc). Send me your real details and I'll swap them in:
-- Your service area (city/region)
-- Phone number
-- Email
-- Your name (for the About page)
-- License number
-- Any job photos you want on the site (before/after shots are gold)
+This is your professional site — share it with clients, put it on your business cards, link it from your Google Business Profile.
+
+You can update all your business info, testimonials, and photos yourself using the **Site Manager** (see below).
 
 ---
 
 ## Your Business Tools
 
 These are private — only you can see them. Bookmark each one or **"Add to Home Screen"** on your phone so they work like apps.
+
+### Site Manager
+**https://bryanralston.github.io/eb-services-site/site-manager.html**
+
+This is how you update your website — your business info, testimonials, and photos. No coding needed.
+
+- **Business tab**: Your name, phone, email, service area, license number, hours, social media links, bio
+- **Reviews tab**: Add/edit/remove customer testimonials that show on the website
+- **Gallery tab**: Add photos to your gallery (upload photos to GitHub, then add the filename here)
+- **Preview tab**: See how your changes will look before publishing
+
+**How to update your site:**
+1. Open Site Manager and make your changes
+2. Tap **"Save Config"** — this downloads a small file to your phone
+3. Go to your GitHub repository (see "Upload Guide" button for step-by-step)
+4. Upload the file — your site updates automatically in 1-2 minutes
+
+**Adding photos:**
+1. Take good photos of your work (landscape mode, good lighting)
+2. Go to your GitHub repository → click the `photos` folder
+3. Click "Add file" → "Upload files" → drag your photos in → click "Commit changes"
+4. Open Site Manager → Gallery tab → enter the filename (e.g., `photos/bathroom-remodel-1.jpg`)
+5. Save and upload the config file
 
 ### Estimate Builder
 **https://bryanralston.github.io/eb-services-site/estimate.html**

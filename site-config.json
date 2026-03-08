@@ -1,0 +1,69 @@
+{
+  "business": {
+    "name": "EB Services",
+    "tagline": "General Contractor",
+    "owner": "[Your Name]",
+    "phone": "(555) 123-4567",
+    "phoneLink": "+15551234567",
+    "email": "info@ebservices.com",
+    "city": "[City]",
+    "state": "[State]",
+    "zip": "[ZIP]",
+    "serviceArea": "[City] & Surrounding Areas",
+    "license": "[License #]",
+    "hours": {
+      "weekdays": "Monday–Friday: 7:00 AM – 6:00 PM",
+      "saturday": "Saturday: 8:00 AM – 2:00 PM",
+      "sunday": "Sunday: Closed"
+    },
+    "social": {
+      "facebook": "",
+      "instagram": "",
+      "nextdoor": ""
+    }
+  },
+  "about": {
+    "ownerBio": "With years of experience in the trades, I started EB Services to bring honest, quality craftsmanship to every project. Whether it's a small repair or a full remodel, I treat every home like my own.",
+    "yearsExperience": ""
+  },
+  "testimonials": [
+    {
+      "text": "EB Services completely transformed our master bathroom. The attention to detail was incredible, and they finished right on schedule. We couldn't be happier with the results.",
+      "author": "[Customer Name]",
+      "project": "Bathroom Remodel",
+      "city": "[City]"
+    },
+    {
+      "text": "Finally found a contractor who shows up on time and does what they say they're going to do. Our kitchen looks amazing, and working with them was a great experience from start to finish.",
+      "author": "[Customer Name]",
+      "project": "Kitchen Remodel",
+      "city": "[City]"
+    },
+    {
+      "text": "We had a long list of repairs and improvements that had been piling up. EB Services knocked them all out efficiently and at a fair price. Highly recommend for any handyman work.",
+      "author": "[Customer Name]",
+      "project": "Handyman Services",
+      "city": "[City]"
+    }
+  ],
+  "gallery": [
+    {
+      "src": "",
+      "alt": "",
+      "category": "bathroom",
+      "label": "Bathroom Remodel"
+    },
+    {
+      "src": "",
+      "alt": "",
+      "category": "kitchen",
+      "label": "Kitchen Upgrade"
+    },
+    {
+      "src": "",
+      "alt": "",
+      "category": "improvement",
+      "label": "Home Improvement"
+    }
+  ]
+}
