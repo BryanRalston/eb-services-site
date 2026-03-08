@@ -1,0 +1,1591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Review Manager — EB Services</title>
+  <style>
+/* ============================================================
+   EB Services Review Manager
+   Mobile-first, self-contained, offline-capable
+   ============================================================ */
+
+:root {
+  --color-primary: #1A1A1A;
+  --color-primary-dark: #111111;
+  --color-primary-light: #2A2A2A;
+  --color-secondary: #2A2A2A;
+  --color-accent: #C6A44E;
+  --color-accent-hover: #A88A3D;
+  --color-accent-light: #D4B65A;
+  --color-accent-on-light: #8B7028;
+  --color-text: #1A1A1A;
+  --color-text-light: #F0EDE6;
+  --color-text-muted: #4A4A4A;
+  --color-bg: #FFFFFF;
+  --color-bg-alt: #F8F7F4;
+  --color-border: #E5E0D5;
+  --color-border-light: #F0EDE6;
+  --color-success: #28A745;
+  --color-error: #DC3545;
+  --color-warning: #F0AD4E;
+
+  --font-stack: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --transition-fast: 0.2s ease;
+}
+
+/* --- Reset --- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: var(--font-stack);
+  color: var(--color-text);
+  background: var(--color-bg-alt);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* --- App Header --- */
+.app-header {
+  background: var(--color-primary);
+  color: var(--color-text-light);
+  padding: 12px 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-md);
+}
+.app-header__inner {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.app-header__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.app-header__logo {
+  width: 36px;
+  height: 36px;
+  background: var(--color-accent);
+  color: var(--color-primary);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: -0.5px;
+  flex-shrink: 0;
+}
+.app-header__title {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+.app-header__company {
+  font-size: 11px;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+}
+.app-header__page {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* --- View Tabs --- */
+.view-tabs {
+  background: var(--color-primary-dark);
+  display: flex;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.view-tabs__tab {
+  flex: 1;
+  padding: 10px 16px;
+  min-height: 44px;
+  text-align: center;
+  color: rgba(255,255,255,0.5);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+  transition: all var(--transition-fast);
+  position: relative;
+}
+.view-tabs__tab--active {
+  color: var(--color-accent);
+}
+.view-tabs__tab--active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 16px;
+  right: 16px;
+  height: 2px;
+  background: var(--color-accent);
+  border-radius: 2px 2px 0 0;
+}
+.view-tabs__tab:hover:not(.view-tabs__tab--active) {
+  color: rgba(255,255,255,0.7);
+}
+
+/* --- Views --- */
+.view { display: none; }
+.view--active { display: block; }
+
+/* --- Main Content --- */
+.main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 16px 16px 40px;
+  padding-bottom: max(40px, env(safe-area-inset-bottom));
+}
+
+/* --- Sections --- */
+.section {
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.section__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--color-border-light);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.section__title {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--color-secondary);
+  margin: 0;
+  line-height: inherit;
+}
+.section__chevron {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  transition: transform var(--transition-fast);
+}
+.section--collapsed .section__chevron {
+  transform: rotate(-90deg);
+}
+.section--collapsed .section__body {
+  display: none;
+}
+.section__body {
+  padding: 16px;
+}
+
+/* --- Form Fields --- */
+.field {
+  margin-bottom: 12px;
+}
+.field:last-child {
+  margin-bottom: 0;
+}
+.field__label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-muted);
+  margin-bottom: 4px;
+}
+.field__input,
+.field__select,
+.field__textarea {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 16px; /* Prevents iOS zoom */
+  font-family: inherit;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  -webkit-appearance: none;
+  appearance: none;
+}
+.field__input:focus,
+.field__select:focus,
+.field__textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(198, 164, 78, 0.15);
+}
+.field__textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+.field__row {
+  display: grid;
+  gap: 12px;
+}
+.field__row--2 { grid-template-columns: 1fr 1fr; }
+.field__helper {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+/* --- Client Cards --- */
+.client-card {
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 8px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
+  border: 1px solid transparent;
+}
+.client-card:hover, .client-card:active {
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-accent);
+}
+.client-card__info {
+  flex: 1;
+  min-width: 0;
+}
+.client-card__name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+.client-card__detail {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.client-card__arrow {
+  color: var(--color-accent);
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-left: 12px;
+}
+.client-card--sent {
+  opacity: 0.5;
+  pointer-events: none;
+}
+.client-card--sent .client-card__arrow {
+  color: var(--color-success);
+}
+
+/* --- Send Buttons --- */
+.send-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 16px;
+}
+.send-btn {
+  padding: 14px 12px;
+  min-height: 44px;
+  border-radius: var(--radius-md);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: none;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+}
+.send-btn--text {
+  background: var(--color-accent);
+  color: var(--color-primary);
+}
+.send-btn--text:hover, .send-btn--text:active {
+  background: var(--color-accent-hover);
+}
+.send-btn--email {
+  background: var(--color-primary);
+  color: var(--color-text-light);
+}
+.send-btn--email:hover, .send-btn--email:active {
+  background: var(--color-primary-light);
+}
+.send-btn--copy {
+  background: var(--color-bg);
+  color: var(--color-text);
+  border: 1.5px solid var(--color-border);
+}
+.send-btn--copy:hover, .send-btn--copy:active {
+  border-color: var(--color-accent);
+  background: rgba(198, 164, 78, 0.05);
+}
+.send-btn--mark {
+  background: var(--color-bg);
+  color: var(--color-success);
+  border: 1.5px solid var(--color-success);
+}
+.send-btn--mark:hover, .send-btn--mark:active {
+  background: var(--color-success);
+  color: #fff;
+}
+.send-btn__icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* --- Stats Bar --- */
+.stats-bar {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.stat-card {
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 14px 12px;
+  text-align: center;
+}
+.stat-card__value {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--color-primary);
+  line-height: 1.2;
+}
+.stat-card__value--accent {
+  color: var(--color-accent-on-light);
+}
+.stat-card__label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+/* --- History Cards --- */
+.history-card {
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 8px;
+  padding: 14px 16px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
+  border: 1px solid transparent;
+}
+.history-card:hover, .history-card:active {
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-border);
+}
+.history-card__info {
+  flex: 1;
+  min-width: 0;
+}
+.history-card__name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+.history-card__detail {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.history-card__meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+  margin-left: 12px;
+}
+.history-card__method {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: var(--color-bg-alt);
+  color: var(--color-text-muted);
+}
+.history-card__method--text { background: rgba(198, 164, 78, 0.15); color: var(--color-accent-on-light); }
+.history-card__method--email { background: rgba(26, 26, 26, 0.08); color: var(--color-primary); }
+.history-card__method--manual { background: rgba(90, 90, 90, 0.1); color: var(--color-text-muted); }
+.history-card__status {
+  font-size: 12px;
+  font-weight: 600;
+}
+.history-card__status--sent { color: var(--color-text-muted); }
+.history-card__status--reviewed { color: var(--color-success); }
+
+/* --- Empty State --- */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--color-text-muted);
+}
+.empty-state__icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+  opacity: 0.3;
+}
+.empty-state__text {
+  font-size: 15px;
+}
+
+/* --- Warning Banner --- */
+.warning-banner {
+  background: rgba(240, 173, 78, 0.1);
+  border: 1px solid var(--color-warning);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.warning-banner__icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+/* --- Backup Buttons --- */
+.backup-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.backup-btn {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: 1.5px solid var(--color-border);
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+.backup-btn:hover, .backup-btn:active {
+  border-color: var(--color-accent);
+  background: rgba(198, 164, 78, 0.05);
+}
+.backup-btn__icon {
+  font-size: 15px;
+  line-height: 1;
+}
+
+/* --- Toast Notifications --- */
+.toast {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--color-primary);
+  color: var(--color-text-light);
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: var(--shadow-lg);
+  z-index: 300;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+.toast--visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+.toast--success {
+  border-left: 4px solid var(--color-success);
+}
+.toast--error {
+  border-left: 4px solid var(--color-error);
+}
+
+/* --- Homescreen Hint Banner --- */
+.homescreen-hint {
+  background: var(--color-primary);
+  color: var(--color-text-light);
+  padding: 10px 16px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.homescreen-hint__text {
+  flex: 1;
+  line-height: 1.4;
+}
+.homescreen-hint__text strong {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+.homescreen-hint__dismiss {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.4);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 8px;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  flex-shrink: 0;
+  font-family: inherit;
+  transition: color var(--transition-fast);
+}
+.homescreen-hint__dismiss:hover,
+.homescreen-hint__dismiss:active {
+  color: rgba(255,255,255,0.8);
+}
+
+/* --- Message Preview --- */
+.message-preview {
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  max-height: 200px;
+  overflow-y: auto;
+  color: var(--color-text);
+}
+
+/* --- Template Editor --- */
+.template-wrap {
+  margin-bottom: 16px;
+}
+.template-wrap__label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-secondary);
+  margin-bottom: 6px;
+}
+.template-wrap__hint {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+.template-tokens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.template-token {
+  font-size: 11px;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  background: rgba(198, 164, 78, 0.12);
+  color: var(--color-accent-on-light);
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+/* --- Reset Button --- */
+.reset-btn {
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: 1.5px solid var(--color-error);
+  font-family: inherit;
+  background: none;
+  color: var(--color-error);
+  width: 100%;
+  margin-top: 12px;
+}
+.reset-btn:hover, .reset-btn:active {
+  background: var(--color-error);
+  color: #fff;
+}
+
+/* --- Responsive --- */
+@media (max-width: 480px) {
+  .stats-bar {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+  }
+  .stat-card {
+    padding: 10px 8px;
+  }
+  .stat-card__value {
+    font-size: 20px;
+  }
+  .stat-card__label {
+    font-size: 10px;
+  }
+  .send-buttons {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 600px) {
+  .main { padding: 24px 24px 40px; }
+  .section__body { padding: 20px; }
+}
+
+/* --- Print: hide everything --- */
+@media print {
+  body { display: none; }
+}
+  </style>
+</head>
+<body>
+
+  <!-- ===== APP HEADER ===== -->
+  <header class="app-header">
+    <div class="app-header__inner">
+      <div class="app-header__brand">
+        <div class="app-header__logo">EB</div>
+        <div class="app-header__title">
+          <span class="app-header__company">EB Services</span>
+          <h1 class="app-header__page">Review Manager</h1>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== HOMESCREEN HINT ===== -->
+  <div class="homescreen-hint" id="homescreen-hint" style="display:none;">
+    <span class="homescreen-hint__text"><strong>Tip:</strong> Add this page to your Home Screen for quick access</span>
+    <button class="homescreen-hint__dismiss" id="homescreen-hint-dismiss" type="button" title="Dismiss">&times;</button>
+  </div>
+
+  <!-- ===== VIEW TABS ===== -->
+  <nav class="view-tabs" role="tablist">
+    <button class="view-tabs__tab view-tabs__tab--active" role="tab" data-view="send" aria-selected="true">Send Request</button>
+    <button class="view-tabs__tab" role="tab" data-view="history" aria-selected="false">History</button>
+    <button class="view-tabs__tab" role="tab" data-view="settings" aria-selected="false">Settings</button>
+  </nav>
+
+  <!-- ===== SEND REQUEST VIEW ===== -->
+  <div id="view-send" class="view view--active">
+    <div class="main">
+
+      <!-- Review Link Warning -->
+      <div class="warning-banner" id="review-link-warning" style="display:none;">
+        <span class="warning-banner__icon">&#9888;</span>
+        <span>Set your Google review link in <strong>Settings</strong> before sending requests.</span>
+      </div>
+
+      <!-- Recent Clients -->
+      <div class="section" id="recent-clients-section">
+        <div class="section__header" data-collapse>
+          <h2 class="section__title">Recent Clients</h2>
+          <span class="section__chevron">&#9660;</span>
+        </div>
+        <div class="section__body" id="recent-clients-body">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+      <!-- Send Form -->
+      <div class="section">
+        <div class="section__header" data-collapse>
+          <h2 class="section__title">Send Review Request</h2>
+          <span class="section__chevron">&#9660;</span>
+        </div>
+        <div class="section__body">
+          <div class="field__row field__row--2">
+            <div class="field">
+              <label class="field__label" for="send-name">Client Name *</label>
+              <input class="field__input" type="text" id="send-name" placeholder="Full name" autocomplete="name">
+            </div>
+            <div class="field">
+              <label class="field__label" for="send-project">Project Type</label>
+              <input class="field__input" type="text" id="send-project" placeholder="e.g. Kitchen Remodel">
+            </div>
+          </div>
+          <div class="field__row field__row--2">
+            <div class="field">
+              <label class="field__label" for="send-phone">Phone (for text)</label>
+              <input class="field__input" type="tel" id="send-phone" placeholder="(555) 123-4567" autocomplete="tel">
+            </div>
+            <div class="field">
+              <label class="field__label" for="send-email">Email</label>
+              <input class="field__input" type="email" id="send-email" placeholder="client@email.com" autocomplete="email">
+            </div>
+          </div>
+
+          <div class="field" style="margin-top: 4px;">
+            <label class="field__label">Message Preview</label>
+            <div class="message-preview" id="message-preview"></div>
+          </div>
+          <div class="field">
+            <label class="field__label" for="send-message">Edit Message</label>
+            <textarea class="field__textarea" id="send-message" rows="5"></textarea>
+          </div>
+
+          <div class="send-buttons">
+            <a class="send-btn send-btn--text" id="btn-send-text" href="#">
+              <span class="send-btn__icon">&#128172;</span>
+              <span>Send via Text</span>
+            </a>
+            <a class="send-btn send-btn--email" id="btn-send-email" href="#">
+              <span class="send-btn__icon">&#9993;</span>
+              <span>Send via Email</span>
+            </a>
+            <button class="send-btn send-btn--copy" id="btn-copy" type="button">
+              <span class="send-btn__icon">&#128203;</span>
+              <span>Copy Message</span>
+            </button>
+            <button class="send-btn send-btn--mark" id="btn-mark-sent" type="button">
+              <span class="send-btn__icon">&#10003;</span>
+              <span>Mark as Sent</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== HISTORY VIEW ===== -->
+  <div id="view-history" class="view">
+    <div class="main">
+      <div class="stats-bar" id="stats-bar">
+        <!-- Rendered by JS -->
+      </div>
+      <div class="backup-bar">
+        <button class="backup-btn" id="btn-export" type="button">
+          <span class="backup-btn__icon">&#11015;</span>
+          <span>Download Backup</span>
+        </button>
+        <button class="backup-btn" id="btn-import" type="button">
+          <span class="backup-btn__icon">&#11014;</span>
+          <span>Restore Backup</span>
+        </button>
+        <input type="file" id="import-file" accept=".json" aria-label="Import backup file" style="display:none;">
+      </div>
+      <div id="history-list">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SETTINGS VIEW ===== -->
+  <div id="view-settings" class="view">
+    <div class="main">
+
+      <div class="section">
+        <div class="section__header">
+          <h2 class="section__title">Business Info</h2>
+        </div>
+        <div class="section__body">
+          <div class="field">
+            <label class="field__label" for="setting-review-link">Google Review Link *</label>
+            <input class="field__input" type="url" id="setting-review-link" placeholder="https://g.page/r/...">
+            <div class="field__helper">Find this in your Google Business Profile under "Ask for reviews"</div>
+          </div>
+          <div class="field">
+            <label class="field__label" for="setting-phone">Business Phone</label>
+            <input class="field__input" type="tel" id="setting-phone" placeholder="(555) 123-4567">
+            <div class="field__helper">Used in the email signature</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section__header">
+          <h2 class="section__title">Message Templates</h2>
+        </div>
+        <div class="section__body">
+
+          <div class="template-wrap">
+            <label class="template-wrap__label" for="setting-text-template">Text Message Template</label>
+            <div class="template-tokens">
+              <span class="template-token">{name}</span>
+              <span class="template-token">{project}</span>
+              <span class="template-token">{link}</span>
+            </div>
+            <textarea class="field__textarea" id="setting-text-template" rows="4"></textarea>
+          </div>
+
+          <div class="template-wrap">
+            <label class="template-wrap__label" for="setting-email-subject">Email Subject Template</label>
+            <div class="template-tokens">
+              <span class="template-token">{name}</span>
+              <span class="template-token">{project}</span>
+            </div>
+            <textarea class="field__textarea" id="setting-email-subject" rows="1" style="min-height:auto;"></textarea>
+          </div>
+
+          <div class="template-wrap">
+            <label class="template-wrap__label" for="setting-email-template">Email Body Template</label>
+            <div class="template-tokens">
+              <span class="template-token">{name}</span>
+              <span class="template-token">{project}</span>
+              <span class="template-token">{link}</span>
+              <span class="template-token">{phone}</span>
+            </div>
+            <textarea class="field__textarea" id="setting-email-template" rows="8"></textarea>
+          </div>
+
+          <button class="reset-btn" id="btn-reset-templates" type="button">Reset to Defaults</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== TOAST ===== -->
+  <div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   EB Services Review Manager — Application Logic
+   ============================================================ */
+(function() {
+  'use strict';
+
+  // ---- Default Templates ----
+  const DEFAULT_TEXT_TEMPLATE = `Hey {name}, thanks again for letting me handle the {project} — glad it turned out great! If you have a minute, a Google review would really help my business out. Here's the link: {link}. Thanks!`;
+
+  const DEFAULT_EMAIL_SUBJECT = `Quick favor — would you leave us a review?`;
+
+  const DEFAULT_EMAIL_TEMPLATE = `Hi {name},
+
+Thanks again for choosing EB Services for your {project}. We're glad you're happy with the work!
+
+If you have a moment, we'd really appreciate a Google review. It helps other homeowners find us and means a lot to a small business like ours.
+
+{link}
+
+Thanks so much,
+EB Services
+{phone}`;
+
+  // ---- DOM References ----
+  const $ = (sel) => document.querySelector(sel);
+  const $$ = (sel) => document.querySelectorAll(sel);
+
+  // ---- Toast ----
+  let toastTimer = null;
+  function toast(message, type = 'success') {
+    const el = $('#toast');
+    el.textContent = message;
+    el.className = 'toast toast--visible toast--' + type;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { el.className = 'toast'; }, 2500);
+  }
+
+  // ---- LocalStorage Helpers ----
+  function getRequests() {
+    try {
+      return JSON.parse(localStorage.getItem('eb_review_requests')) || [];
+    } catch { return []; }
+  }
+  function saveRequests(list) {
+    localStorage.setItem('eb_review_requests', JSON.stringify(list));
+  }
+
+  function getSettings() {
+    try {
+      const s = JSON.parse(localStorage.getItem('eb_review_settings'));
+      if (s && typeof s === 'object') return s;
+    } catch {}
+    return {};
+  }
+  function saveSettings(settings) {
+    localStorage.setItem('eb_review_settings', JSON.stringify(settings));
+  }
+
+  function getJobs() {
+    try {
+      return JSON.parse(localStorage.getItem('eb_jobs')) || [];
+    } catch { return []; }
+  }
+
+  // ---- Settings with Defaults ----
+  function getReviewLink() {
+    return (getSettings().reviewLink || '').trim();
+  }
+  function getBusinessPhone() {
+    return (getSettings().businessPhone || '').trim();
+  }
+  function getTextTemplate() {
+    return getSettings().textTemplate || DEFAULT_TEXT_TEMPLATE;
+  }
+  function getEmailSubject() {
+    return getSettings().emailSubject || DEFAULT_EMAIL_SUBJECT;
+  }
+  function getEmailTemplate() {
+    return getSettings().emailTemplate || DEFAULT_EMAIL_TEMPLATE;
+  }
+
+  // ---- Date Helpers ----
+  function todayStr() {
+    const d = new Date();
+    return d.getFullYear() + '-' +
+      String(d.getMonth() + 1).padStart(2, '0') + '-' +
+      String(d.getDate()).padStart(2, '0');
+  }
+
+  function formatShortDate(dateStr) {
+    if (!dateStr) return '';
+    const d = new Date(dateStr);
+    if (isNaN(d)) return dateStr;
+    return (d.getMonth() + 1) + '/' + d.getDate() + '/' + String(d.getFullYear()).slice(2);
+  }
+
+  function formatDisplayDate(dateStr) {
+    if (!dateStr) return '';
+    const d = new Date(dateStr);
+    if (isNaN(d)) return dateStr;
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+  }
+
+  // ---- ID Generation ----
+  function generateRequestId() {
+    const date = todayStr().replace(/-/g, '');
+    const requests = getRequests();
+    const todayRequests = requests.filter(r => r.id && r.id.startsWith('REV-' + date));
+    const num = String(todayRequests.length + 1).padStart(3, '0');
+    return 'REV-' + date + '-' + num;
+  }
+
+  // ---- HTML Escaping ----
+  function escHtml(str) {
+    if (!str) return '';
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  // ---- Template Rendering ----
+  function renderTemplate(template, data) {
+    return template
+      .replace(/\{name\}/g, data.name || '')
+      .replace(/\{project\}/g, data.project || 'project')
+      .replace(/\{link\}/g, data.link || '[Review link not set]')
+      .replace(/\{phone\}/g, data.phone || '');
+  }
+
+  // ---- Phone Formatting ----
+  function formatPhone(input) {
+    input.addEventListener('input', () => {
+      let val = input.value.replace(/\D/g, '');
+      if (val.length > 10) val = val.slice(0, 10);
+      if (val.length >= 7) {
+        input.value = '(' + val.slice(0, 3) + ') ' + val.slice(3, 6) + '-' + val.slice(6);
+      } else if (val.length >= 4) {
+        input.value = '(' + val.slice(0, 3) + ') ' + val.slice(3);
+      } else if (val.length > 0) {
+        input.value = '(' + val;
+      }
+    });
+  }
+
+  // ---- Initialize ----
+  function init() {
+    setupCollapsible();
+    setupTabs();
+    setupPhoneFormatting();
+    setupSendForm();
+    setupSettings();
+    setupBackup();
+    setupHomescreenHint();
+    renderRecentClients();
+    checkReviewLinkWarning();
+    updateMessagePreview();
+  }
+
+  // ---- Collapsible Sections ----
+  function setupCollapsible() {
+    $$('[data-collapse]').forEach(header => {
+      header.addEventListener('click', () => {
+        header.closest('.section').classList.toggle('section--collapsed');
+      });
+    });
+  }
+
+  // ---- View Tabs ----
+  function setupTabs() {
+    $$('.view-tabs__tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const view = tab.dataset.view;
+        $$('.view-tabs__tab').forEach(t => {
+          t.classList.toggle('view-tabs__tab--active', t === tab);
+          t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
+        });
+        $$('.view').forEach(v => v.classList.remove('view--active'));
+        $('#view-' + view).classList.add('view--active');
+
+        if (view === 'history') renderHistory();
+        if (view === 'settings') populateSettings();
+      });
+    });
+  }
+
+  // ---- Phone Formatting ----
+  function setupPhoneFormatting() {
+    formatPhone($('#send-phone'));
+    formatPhone($('#setting-phone'));
+  }
+
+  // ---- Review Link Warning ----
+  function checkReviewLinkWarning() {
+    const link = getReviewLink();
+    $('#review-link-warning').style.display = link ? 'none' : 'flex';
+  }
+
+  // ---- Recent Clients from eb_jobs ----
+  function renderRecentClients() {
+    const body = $('#recent-clients-body');
+    const jobs = getJobs();
+    const requests = getRequests();
+    const sentJobIds = new Set(requests.map(r => r.jobId).filter(Boolean));
+
+    // Filter to completed jobs — try common status fields
+    const completedJobs = jobs.filter(j => {
+      const status = (j.status || '').toLowerCase();
+      return status === 'completed' || status === 'complete' || status === 'done' || status === 'finished';
+    });
+
+    if (!completedJobs.length) {
+      body.innerHTML = `
+        <div class="empty-state" style="padding: 24px 16px;">
+          <div class="empty-state__text" style="font-size:13px; color:var(--color-text-muted);">
+            No completed jobs found.<br>Completed jobs from Job Tracker will appear here, or fill in the form below.
+          </div>
+        </div>`;
+      return;
+    }
+
+    // Sort by completion date, most recent first
+    completedJobs.sort((a, b) => {
+      const da = a.completedDate || a.completionDate || a.date || '';
+      const db = b.completedDate || b.completionDate || b.date || '';
+      return db.localeCompare(da);
+    });
+
+    // Show up to 10
+    const display = completedJobs.slice(0, 10);
+
+    body.innerHTML = display.map(job => {
+      const name = job.clientName || job.client?.name || job.client || 'Unknown Client';
+      const project = job.projectType || job.type || job.project || '';
+      const dateStr = job.completedDate || job.completionDate || job.date || '';
+      const isSent = sentJobIds.has(job.id);
+      const sentClass = isSent ? ' client-card--sent' : '';
+      const arrowText = isSent ? '&#10003;' : '&#8250;';
+
+      return `
+        <div class="client-card${sentClass}" data-job='${escHtml(JSON.stringify({
+          id: job.id || null,
+          name: name,
+          phone: job.clientPhone || job.client?.phone || job.phone || '',
+          email: job.clientEmail || job.client?.email || job.email || '',
+          project: project
+        }))}'>
+          <div class="client-card__info">
+            <div class="client-card__name">${escHtml(name)}</div>
+            <div class="client-card__detail">${escHtml(project)}${dateStr ? ' &mdash; ' + formatShortDate(dateStr) : ''}</div>
+          </div>
+          <span class="client-card__arrow">${arrowText}</span>
+        </div>`;
+    }).join('');
+
+    // Click handlers
+    body.querySelectorAll('.client-card:not(.client-card--sent)').forEach(card => {
+      card.addEventListener('click', () => {
+        try {
+          const data = JSON.parse(card.dataset.job);
+          $('#send-name').value = data.name || '';
+          $('#send-phone').value = data.phone || '';
+          $('#send-email').value = data.email || '';
+          $('#send-project').value = data.project || '';
+          // Store job id for reference
+          $('#btn-mark-sent').dataset.jobId = data.id || '';
+          updateMessagePreview();
+          // Scroll to form
+          const formSection = document.querySelectorAll('.section')[1];
+          if (formSection) {
+            formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        } catch {}
+      });
+    });
+  }
+
+  // ---- Send Form ----
+  function setupSendForm() {
+    // Update preview when form fields change
+    ['send-name', 'send-project'].forEach(id => {
+      $('#' + id).addEventListener('input', updateMessagePreview);
+    });
+
+    // Manual message editing
+    $('#send-message').addEventListener('input', () => {
+      // When user edits message manually, update the preview
+      $('#message-preview').textContent = $('#send-message').value;
+    });
+
+    // Send via text
+    $('#btn-send-text').addEventListener('click', (e) => {
+      e.preventDefault();
+      const phone = $('#send-phone').value.replace(/\D/g, '');
+      if (!phone) {
+        toast('Enter a phone number to send via text', 'error');
+        return;
+      }
+      if (!getReviewLink()) {
+        toast('Set your review link in Settings first', 'error');
+        return;
+      }
+      const message = $('#send-message').value;
+      const smsUrl = 'sms:' + phone + '?&body=' + encodeURIComponent(message);
+      window.location.href = smsUrl;
+      // Log after a brief delay (user might cancel)
+      logRequest('text');
+    });
+
+    // Send via email
+    $('#btn-send-email').addEventListener('click', (e) => {
+      e.preventDefault();
+      const email = $('#send-email').value.trim();
+      if (!email) {
+        toast('Enter an email address to send via email', 'error');
+        return;
+      }
+      if (!getReviewLink()) {
+        toast('Set your review link in Settings first', 'error');
+        return;
+      }
+      const name = $('#send-name').value.trim();
+      const project = $('#send-project').value.trim() || 'project';
+      const subject = renderTemplate(getEmailSubject(), { name, project });
+      const body = renderTemplate(getEmailTemplate(), {
+        name,
+        project,
+        link: getReviewLink(),
+        phone: getBusinessPhone()
+      });
+      const mailtoUrl = 'mailto:' + encodeURIComponent(email) +
+        '?subject=' + encodeURIComponent(subject) +
+        '&body=' + encodeURIComponent(body);
+      window.location.href = mailtoUrl;
+      logRequest('email');
+    });
+
+    // Copy message
+    $('#btn-copy').addEventListener('click', () => {
+      const msg = $('#send-message').value;
+      if (!msg.trim()) {
+        toast('No message to copy', 'error');
+        return;
+      }
+      copyToClipboard(msg);
+    });
+
+    // Mark as sent
+    $('#btn-mark-sent').addEventListener('click', () => {
+      if (!$('#send-name').value.trim()) {
+        toast('Enter a client name first', 'error');
+        return;
+      }
+      logRequest('manual');
+      toast('Marked as sent');
+    });
+  }
+
+  function updateMessagePreview() {
+    const name = $('#send-name').value.trim() || '[Name]';
+    const project = $('#send-project').value.trim() || 'project';
+    const link = getReviewLink() || '[Review link not set]';
+
+    const message = renderTemplate(getTextTemplate(), { name, project, link });
+    $('#send-message').value = message;
+    $('#message-preview').textContent = message;
+  }
+
+  function logRequest(method) {
+    const name = $('#send-name').value.trim();
+    if (!name) return;
+
+    const request = {
+      id: generateRequestId(),
+      clientName: name,
+      clientPhone: $('#send-phone').value.trim(),
+      clientEmail: $('#send-email').value.trim(),
+      projectType: $('#send-project').value.trim(),
+      jobId: $('#btn-mark-sent').dataset.jobId || null,
+      method: method,
+      message: $('#send-message').value,
+      status: 'sent',
+      sentDate: new Date().toISOString(),
+      reviewedDate: null
+    };
+
+    const requests = getRequests();
+    requests.unshift(request);
+    saveRequests(requests);
+
+    // Refresh recent clients to show sent status
+    renderRecentClients();
+
+    // Clear form
+    clearSendForm();
+  }
+
+  function clearSendForm() {
+    $('#send-name').value = '';
+    $('#send-phone').value = '';
+    $('#send-email').value = '';
+    $('#send-project').value = '';
+    $('#btn-mark-sent').dataset.jobId = '';
+    updateMessagePreview();
+  }
+
+  // ---- History ----
+  function renderHistory() {
+    const requests = getRequests();
+
+    // Stats
+    const totalSent = requests.length;
+    const totalReviewed = requests.filter(r => r.status === 'reviewed').length;
+    const rate = totalSent > 0 ? Math.round((totalReviewed / totalSent) * 100) : 0;
+
+    $('#stats-bar').innerHTML = `
+      <div class="stat-card">
+        <div class="stat-card__value">${totalSent}</div>
+        <div class="stat-card__label">Sent</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card__value">${totalReviewed}</div>
+        <div class="stat-card__label">Reviewed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card__value stat-card__value--accent">${rate}%</div>
+        <div class="stat-card__label">Rate</div>
+      </div>`;
+
+    const list = $('#history-list');
+
+    if (!requests.length) {
+      list.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-state__icon">&#11088;</div>
+          <div class="empty-state__text">No review requests sent yet.<br>Send one from the Send Request tab.</div>
+        </div>`;
+      return;
+    }
+
+    list.innerHTML = requests.map(req => {
+      const methodLabel = { text: 'Text', email: 'Email', manual: 'Manual' }[req.method] || req.method;
+      const statusLabel = req.status === 'reviewed' ? 'Reviewed' : 'Sent';
+      const statusClass = req.status === 'reviewed' ? 'reviewed' : 'sent';
+
+      return `
+        <div class="history-card" data-request-id="${escHtml(req.id)}">
+          <div class="history-card__info">
+            <div class="history-card__name">${escHtml(req.clientName)}</div>
+            <div class="history-card__detail">${escHtml(req.projectType || 'No project type')} &mdash; ${formatShortDate(req.sentDate)}</div>
+          </div>
+          <div class="history-card__meta">
+            <span class="history-card__method history-card__method--${req.method}">${methodLabel}</span>
+            <span class="history-card__status history-card__status--${statusClass}">${statusLabel}</span>
+          </div>
+        </div>`;
+    }).join('');
+
+    // Tap to toggle reviewed
+    list.querySelectorAll('.history-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const reqId = card.dataset.requestId;
+        toggleReviewed(reqId);
+      });
+    });
+  }
+
+  function toggleReviewed(reqId) {
+    const requests = getRequests();
+    const req = requests.find(r => r.id === reqId);
+    if (!req) return;
+
+    if (req.status === 'sent') {
+      req.status = 'reviewed';
+      req.reviewedDate = new Date().toISOString();
+      toast('Marked as reviewed');
+    } else {
+      req.status = 'sent';
+      req.reviewedDate = null;
+      toast('Marked as sent');
+    }
+
+    saveRequests(requests);
+    renderHistory();
+  }
+
+  // ---- Settings ----
+  function populateSettings() {
+    const s = getSettings();
+    $('#setting-review-link').value = s.reviewLink || '';
+    $('#setting-phone').value = s.businessPhone || '';
+    $('#setting-text-template').value = s.textTemplate || DEFAULT_TEXT_TEMPLATE;
+    $('#setting-email-subject').value = s.emailSubject || DEFAULT_EMAIL_SUBJECT;
+    $('#setting-email-template').value = s.emailTemplate || DEFAULT_EMAIL_TEMPLATE;
+  }
+
+  function setupSettings() {
+    // Save on every input change
+    const settingFields = [
+      'setting-review-link',
+      'setting-phone',
+      'setting-text-template',
+      'setting-email-subject',
+      'setting-email-template'
+    ];
+
+    settingFields.forEach(id => {
+      $('#' + id).addEventListener('input', saveSettingsFromForm);
+    });
+
+    // Reset templates
+    $('#btn-reset-templates').addEventListener('click', () => {
+      if (!window.confirm('Reset all message templates to defaults?')) return;
+      const s = getSettings();
+      s.textTemplate = DEFAULT_TEXT_TEMPLATE;
+      s.emailSubject = DEFAULT_EMAIL_SUBJECT;
+      s.emailTemplate = DEFAULT_EMAIL_TEMPLATE;
+      saveSettings(s);
+      populateSettings();
+      updateMessagePreview();
+      toast('Templates reset to defaults');
+    });
+
+    // Initial populate
+    populateSettings();
+  }
+
+  function saveSettingsFromForm() {
+    const settings = {
+      reviewLink: $('#setting-review-link').value.trim(),
+      businessPhone: $('#setting-phone').value.trim(),
+      textTemplate: $('#setting-text-template').value,
+      emailSubject: $('#setting-email-subject').value,
+      emailTemplate: $('#setting-email-template').value
+    };
+    saveSettings(settings);
+    checkReviewLinkWarning();
+    // Don't auto-update send message if user has manually edited it,
+    // but do update the preview display
+  }
+
+  // ---- Clipboard ----
+  function copyToClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => {
+        toast('Message copied to clipboard');
+      }).catch(() => {
+        fallbackCopy(text);
+      });
+    } else {
+      fallbackCopy(text);
+    }
+  }
+
+  function fallbackCopy(text) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand('copy');
+      toast('Message copied to clipboard');
+    } catch {
+      toast('Could not copy — please copy manually', 'error');
+    }
+    document.body.removeChild(ta);
+  }
+
+  // ---- Backup: Export / Import ----
+  function setupBackup() {
+    $('#btn-export').addEventListener('click', exportRequests);
+    $('#btn-import').addEventListener('click', () => $('#import-file').click());
+    $('#import-file').addEventListener('change', importRequests);
+  }
+
+  function exportRequests() {
+    const requests = getRequests();
+    if (!requests.length) {
+      toast('No review requests to export', 'error');
+      return;
+    }
+    const data = {
+      requests: requests,
+      settings: getSettings(),
+      exportDate: new Date().toISOString()
+    };
+    const json = JSON.stringify(data, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'eb-reviews-backup-' + todayStr() + '.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toast('Backup downloaded');
+  }
+
+  function importRequests(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    e.target.value = '';
+
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+      try {
+        const data = JSON.parse(evt.target.result);
+
+        // Support both formats: raw array or { requests, settings }
+        let importedRequests = [];
+        let importedSettings = null;
+
+        if (Array.isArray(data)) {
+          importedRequests = data;
+        } else if (data && Array.isArray(data.requests)) {
+          importedRequests = data.requests;
+          importedSettings = data.settings || null;
+        } else {
+          toast('Invalid backup file', 'error');
+          return;
+        }
+
+        // Validate entries
+        const valid = importedRequests.filter(r =>
+          r && typeof r.id === 'string' && typeof r.clientName === 'string'
+        );
+
+        if (!valid.length) {
+          toast('No valid review requests found in file', 'error');
+          return;
+        }
+
+        // Merge: imported replaces by ID, new IDs are added
+        const existing = getRequests();
+        const existingMap = {};
+        existing.forEach(r => { existingMap[r.id] = r; });
+
+        let importedCount = 0;
+        valid.forEach(r => {
+          existingMap[r.id] = r;
+          importedCount++;
+        });
+
+        const merged = Object.values(existingMap);
+        merged.sort((a, b) => {
+          const da = a.sentDate || '';
+          const db = b.sentDate || '';
+          return db.localeCompare(da);
+        });
+
+        saveRequests(merged);
+
+        // Optionally restore settings
+        if (importedSettings && typeof importedSettings === 'object') {
+          const current = getSettings();
+          // Only overwrite if current settings are empty
+          if (!current.reviewLink && importedSettings.reviewLink) {
+            saveSettings({ ...current, ...importedSettings });
+          }
+        }
+
+        renderHistory();
+        toast(importedCount + ' request' + (importedCount !== 1 ? 's' : '') + ' imported');
+      } catch (err) {
+        toast('Could not read file — invalid JSON', 'error');
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  // ---- Homescreen Hint ----
+  function setupHomescreenHint() {
+    if (localStorage.getItem('eb_reviews_hint_dismissed')) return;
+    const hint = $('#homescreen-hint');
+    hint.style.display = '';
+    $('#homescreen-hint-dismiss').addEventListener('click', () => {
+      hint.style.display = 'none';
+      localStorage.setItem('eb_reviews_hint_dismissed', '1');
+    });
+  }
+
+  // ---- Start ----
+  document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+</body>
+</html>

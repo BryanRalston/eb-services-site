@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <meta name="robots" content="noindex, nofollow">
-  <title>Estimate Builder — EB Services</title>
+  <title>Invoice — EB Services</title>
   <style>
 /* ============================================================
-   EB Services Estimate Builder
+   EB Services Invoice Tool
    Mobile-first, self-contained, offline-capable
    ============================================================ */
 
@@ -102,7 +102,7 @@ body {
   letter-spacing: 1.5px;
   font-weight: 600;
 }
-.app-header__page {
+h1.app-header__page {
   font-size: 18px;
   font-weight: 700;
   margin: 0;
@@ -198,7 +198,7 @@ body {
   user-select: none;
   -webkit-user-select: none;
 }
-.section__title {
+h2.section__title {
   font-size: 14px;
   font-weight: 700;
   text-transform: uppercase;
@@ -221,13 +221,6 @@ body {
 }
 .section__body {
   padding: 16px;
-}
-
-/* --- Estimate Meta --- */
-.estimate-meta {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
 }
 
 /* --- Form Fields --- */
@@ -292,6 +285,74 @@ body {
 .field__row--3 { grid-template-columns: 2fr 1fr 1fr; }
 .field__row--4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
 
+/* --- Invoice Meta --- */
+.invoice-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* --- Create from Estimate --- */
+.from-estimate {
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 12px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.from-estimate__label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.from-estimate__select {
+  flex: 1;
+  padding: 10px 12px;
+  font-size: 16px;
+  font-family: inherit;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 1.5px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C6A44E' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+  cursor: pointer;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+.from-estimate__select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(198, 164, 78, 0.15);
+}
+
+/* --- Status Badge --- */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1;
+}
+.status-badge--draft { background: #E9ECEF; color: #6C757D; }
+.status-badge--sent { background: #D4EDFC; color: #1A6FB5; }
+.status-badge--partial { background: #FFF3CD; color: #856404; }
+.status-badge--paid { background: #D4EDDA; color: #155724; }
+.status-badge--overdue { background: #F8D7DA; color: #721C24; }
+
 /* --- Line Items --- */
 .line-item {
   background: var(--color-bg-alt);
@@ -303,8 +364,8 @@ body {
 }
 .line-item__remove {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 2px;
+  right: 2px;
   width: 44px;
   height: 44px;
   border-radius: 50%;
@@ -390,6 +451,75 @@ body {
   color: var(--color-primary);
 }
 
+/* --- Payments --- */
+.payment-item {
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  margin-bottom: 10px;
+  position: relative;
+}
+.payment-item__remove {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: none;
+  border: 1.5px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  font-family: inherit;
+  line-height: 1;
+  padding: 0;
+}
+.payment-item__remove:hover, .payment-item__remove:active {
+  background: var(--color-error);
+  border-color: var(--color-error);
+  color: #fff;
+}
+.payment-item__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.payment-item__row:last-child {
+  margin-bottom: 0;
+}
+.payment-item__note {
+  padding-right: 36px;
+}
+.payment-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.payment-summary__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  border-top: 1px solid var(--color-border-light);
+}
+.payment-summary__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+.payment-summary__amount {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-success);
+}
+
 /* --- Totals --- */
 .totals {
   padding: 0;
@@ -408,6 +538,11 @@ body {
   background: var(--color-primary);
   color: var(--color-text-light);
   padding: 16px;
+}
+.totals__row--balance {
+  background: var(--color-primary-dark);
+  color: var(--color-text-light);
+  padding: 16px;
   border-radius: 0 0 var(--radius-md) var(--radius-md);
 }
 .totals__label {
@@ -422,12 +557,22 @@ body {
   font-weight: 700;
   color: var(--color-text-light);
 }
+.totals__row--balance .totals__label {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--color-accent);
+}
 .totals__amount {
   font-size: 16px;
   font-weight: 600;
 }
 .totals__row--grand .totals__amount {
-  font-size: 22px;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--color-text-light);
+}
+.totals__row--balance .totals__amount {
+  font-size: 24px;
   font-weight: 800;
   color: var(--color-accent);
 }
@@ -578,7 +723,7 @@ body {
   line-height: 1;
 }
 
-/* --- Saved Estimates List --- */
+/* --- Saved Invoices List --- */
 .saved-list {
   padding: 16px 16px 120px;
   max-width: 720px;
@@ -633,16 +778,26 @@ body {
 }
 .saved-card__meta {
   display: flex;
-  gap: 12px;
+  gap: 8px;
   align-items: center;
   font-size: 13px;
+  flex-shrink: 0;
 }
 .saved-card__total {
   font-weight: 700;
   color: var(--color-accent-on-light);
+  font-variant-numeric: tabular-nums;
 }
-.saved-card__date {
-  color: var(--color-text-muted);
+.saved-card__balance {
+  font-weight: 600;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.saved-card__balance--zero {
+  color: var(--color-success);
+}
+.saved-card__balance--due {
+  color: var(--color-error);
 }
 .saved-card__delete {
   width: 32px;
@@ -764,22 +919,25 @@ body {
   color: var(--color-text-muted);
   line-height: 1.6;
 }
-.preview-estimate-info {
+.preview-invoice-info {
   display: flex;
   justify-content: space-between;
   margin-bottom: 28px;
 }
-.preview-estimate-meta {
+.preview-invoice-meta {
   text-align: right;
 }
-.preview-estimate-meta__id {
+.preview-invoice-meta__id {
   font-size: 20px;
   font-weight: 800;
   color: var(--color-primary);
 }
-.preview-estimate-meta__date {
+.preview-invoice-meta__date {
   font-size: 13px;
   color: var(--color-text-muted);
+}
+.preview-invoice-meta__status {
+  margin-top: 6px;
 }
 .preview-label {
   font-size: 10px;
@@ -852,6 +1010,35 @@ body {
   background: var(--color-bg-alt);
 }
 
+/* Preview Payments Table */
+.preview-payments-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 24px;
+  font-size: 14px;
+}
+.preview-payments-table th {
+  background: var(--color-primary);
+  color: var(--color-text-light);
+  padding: 10px 12px;
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: 600;
+}
+.preview-payments-table th:last-child,
+.preview-payments-table td:last-child {
+  text-align: right;
+}
+.preview-payments-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--color-border-light);
+}
+.preview-payments-table tbody tr:nth-child(even) {
+  background: var(--color-bg-alt);
+}
+
 .preview-totals {
   display: flex;
   flex-direction: column;
@@ -861,7 +1048,7 @@ body {
 .preview-totals__row {
   display: flex;
   justify-content: space-between;
-  width: 240px;
+  width: 280px;
   padding: 6px 0;
   font-size: 14px;
 }
@@ -869,10 +1056,23 @@ body {
   border-top: 2px solid var(--color-primary);
   margin-top: 4px;
   padding-top: 10px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 800;
 }
 .preview-totals__row--grand .preview-totals__amount {
+  color: var(--color-primary);
+}
+.preview-totals__row--payments {
+  color: var(--color-success);
+}
+.preview-totals__row--balance {
+  border-top: 2px solid var(--color-accent-on-light);
+  margin-top: 4px;
+  padding-top: 10px;
+  font-size: 20px;
+  font-weight: 800;
+}
+.preview-totals__row--balance .preview-totals__amount {
   color: var(--color-accent-on-light);
 }
 .preview-totals__label {
@@ -973,6 +1173,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
+  line-height: 1;
   flex-shrink: 0;
   font-family: inherit;
   transition: color var(--transition-fast);
@@ -1052,11 +1254,11 @@ body {
   .preview-contact {
     text-align: left;
   }
-  .preview-estimate-info {
+  .preview-invoice-info {
     flex-direction: column;
     gap: 12px;
   }
-  .preview-estimate-meta {
+  .preview-invoice-meta {
     text-align: left;
   }
   .preview-totals__row {
@@ -1075,12 +1277,24 @@ body {
   .action-btn--preview span:not(.action-btn__icon) {
     display: inline;
   }
+  .from-estimate {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+  .invoice-meta {
+    grid-template-columns: 1fr;
+  }
+  .payment-item__row {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (min-width: 600px) {
   .main { padding: 24px 24px 120px; }
   .section__body { padding: 20px; }
   .line-item { padding: 16px; }
+  .payment-item { padding: 16px; }
 }
 
 /* --- Print Styles --- */
@@ -1109,14 +1323,20 @@ body {
   .preview-header {
     border-bottom-width: 2px;
   }
-  .preview-table th {
+  .preview-table th,
+  .preview-payments-table th {
     background: var(--color-primary) !important;
     color: white !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
-  .preview-totals__row--grand {
+  .preview-totals__row--grand,
+  .preview-totals__row--balance {
     font-weight: 800;
+  }
+  .status-badge {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
   .section, .saved-card {
     box-shadow: none;
@@ -1133,7 +1353,7 @@ body {
         <div class="app-header__logo">EB</div>
         <div class="app-header__title">
           <span class="app-header__company">EB Services</span>
-          <h1 class="app-header__page">Estimate Builder</h1>
+          <h1 class="app-header__page">Invoice</h1>
         </div>
       </div>
     </div>
@@ -1155,22 +1375,58 @@ body {
   <div id="view-editor" class="view view--active">
     <div class="main">
 
-      <!-- Estimate Info -->
+      <!-- Create from Estimate -->
+      <div class="from-estimate" id="from-estimate-section">
+        <label class="from-estimate__label" for="from-estimate-select">Create from Estimate</label>
+        <select class="from-estimate__select" id="from-estimate-select">
+          <option value="">Select an estimate...</option>
+        </select>
+      </div>
+
+      <!-- Invoice Info -->
       <div class="section">
         <div class="section__header" data-collapse>
-          <h2 class="section__title">Estimate Info</h2>
+          <h2 class="section__title">Invoice Info</h2>
           <span class="section__chevron">&#9660;</span>
         </div>
         <div class="section__body">
-          <div class="estimate-meta">
+          <div class="invoice-meta">
             <div class="field">
-              <label class="field__label" for="est-number">Estimate #</label>
-              <input class="field__input" type="text" id="est-number" readonly style="background:var(--color-bg-alt); color:var(--color-text-muted);">
+              <label class="field__label" for="inv-number">Invoice #</label>
+              <input class="field__input" type="text" id="inv-number" readonly style="background:var(--color-bg-alt); color:var(--color-text-muted);">
             </div>
             <div class="field">
-              <label class="field__label" for="est-date">Date</label>
-              <input class="field__input" type="date" id="est-date">
+              <label class="field__label" for="inv-date">Invoice Date</label>
+              <input class="field__input" type="date" id="inv-date">
             </div>
+            <div class="field">
+              <label class="field__label" for="inv-due-date">Due Date</label>
+              <input class="field__input" type="date" id="inv-due-date">
+            </div>
+            <div class="field">
+              <label class="field__label" for="inv-terms">Payment Terms</label>
+              <select class="field__select" id="inv-terms">
+                <option value="Net 30">Net 30</option>
+                <option value="Due on Receipt">Due on Receipt</option>
+                <option value="Net 15">Net 15</option>
+                <option value="Net 60">Net 60</option>
+                <option value="50% Due Now">50% Due Now</option>
+              </select>
+            </div>
+          </div>
+          <div class="field" style="margin-top:12px;">
+            <label class="field__label" for="inv-reference">Reference</label>
+            <input class="field__input" type="text" id="inv-reference" placeholder="Linked estimate # or PO number" style="background:var(--color-bg-alt);">
+          </div>
+          <div class="field" style="margin-top:12px;">
+            <label class="field__label" for="inv-status">Status</label>
+            <select class="field__select" id="inv-status">
+              <option value="draft">Draft</option>
+              <option value="sent">Sent</option>
+              <option value="partial">Partial</option>
+              <option value="paid">Paid</option>
+              <option value="overdue">Overdue</option>
+            </select>
           </div>
         </div>
       </div>
@@ -1217,31 +1473,6 @@ body {
         </div>
       </div>
 
-      <!-- Project Info -->
-      <div class="section">
-        <div class="section__header" data-collapse>
-          <h2 class="section__title">Project Info</h2>
-          <span class="section__chevron">&#9660;</span>
-        </div>
-        <div class="section__body">
-          <div class="field">
-            <label class="field__label" for="project-type">Project Type *</label>
-            <select class="field__select" id="project-type" data-required>
-              <option value="">Select type...</option>
-              <option value="Handyman Services">Handyman Services</option>
-              <option value="Bathroom Remodel">Bathroom Remodel</option>
-              <option value="Kitchen Remodel">Kitchen Remodel</option>
-              <option value="Home Improvement">Home Improvement</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <div class="field">
-            <label class="field__label" for="project-desc">Description</label>
-            <textarea class="field__textarea" id="project-desc" rows="3" placeholder="Describe the scope of work..."></textarea>
-          </div>
-        </div>
-      </div>
-
       <!-- Line Items -->
       <div class="section">
         <div class="section__header" data-collapse>
@@ -1257,6 +1488,26 @@ body {
         <div class="subtotal-bar">
           <span class="subtotal-bar__label">Subtotal</span>
           <span class="subtotal-bar__amount" id="subtotal-display">$0.00</span>
+        </div>
+      </div>
+
+      <!-- Payments -->
+      <div class="section">
+        <div class="section__header" data-collapse>
+          <h2 class="section__title">Payments</h2>
+          <span class="section__chevron">&#9660;</span>
+        </div>
+        <div class="section__body" id="payments-body">
+          <div id="payments-list">
+            <!-- Payments rendered by JS -->
+          </div>
+          <button class="add-item-btn" id="add-payment-btn" type="button">+ Add Payment</button>
+        </div>
+        <div class="payment-summary">
+          <div class="payment-summary__row">
+            <span class="payment-summary__label">Total Payments</span>
+            <span class="payment-summary__amount" id="payments-total-display">$0.00</span>
+          </div>
         </div>
       </div>
 
@@ -1289,6 +1540,14 @@ body {
             <span class="totals__label">Total</span>
             <span class="totals__amount" id="total-grand">$0.00</span>
           </div>
+          <div class="totals__row" id="totals-payments-row">
+            <span class="totals__label" style="color:var(--color-success);">Payments Received</span>
+            <span class="totals__amount" id="total-payments" style="color:var(--color-success);">-$0.00</span>
+          </div>
+          <div class="totals__row totals__row--balance">
+            <span class="totals__label">Balance Due</span>
+            <span class="totals__amount" id="total-balance">$0.00</span>
+          </div>
         </div>
       </div>
 
@@ -1300,8 +1559,8 @@ body {
         </div>
         <div class="section__body">
           <div class="field">
-            <label class="field__label" for="est-notes">Notes</label>
-            <textarea class="field__textarea" id="est-notes" rows="4">Estimate valid for 30 days. 50% deposit required to begin work. Balance due upon completion.</textarea>
+            <label class="field__label" for="inv-notes">Notes</label>
+            <textarea class="field__textarea" id="inv-notes" rows="4">Payment due within 30 days of invoice date. Please make checks payable to EB Services.</textarea>
           </div>
         </div>
       </div>
@@ -1342,7 +1601,7 @@ body {
         <span class="action-btn__icon">&#128228;</span>
         <span>Share</span>
       </button>
-      <button class="action-btn action-btn--new" id="btn-new" type="button" title="New Estimate">
+      <button class="action-btn action-btn--new" id="btn-new" type="button" title="New Invoice">
         <span class="action-btn__icon">&#10010;</span>
       </button>
     </div>
@@ -1364,15 +1623,15 @@ body {
 
 <script>
 /* ============================================================
-   EB Services Estimate Builder — Application Logic
+   EB Services Invoice Tool — Application Logic
    ============================================================ */
 (function() {
   'use strict';
 
   // ---- State ----
-  let currentEstimate = null;
   let lineItems = [];
-  let loadedEstimateId = null; // track if we loaded an existing estimate
+  let payments = [];
+  let loadedInvoiceId = null;
 
   // ---- DOM References ----
   const $ = (sel) => document.querySelector(sel);
@@ -1395,25 +1654,30 @@ body {
   }
 
   // ---- LocalStorage Helpers ----
+  function getInvoices() {
+    try {
+      return JSON.parse(localStorage.getItem('eb_invoices')) || [];
+    } catch { return []; }
+  }
+  function saveInvoices(list) {
+    localStorage.setItem('eb_invoices', JSON.stringify(list));
+  }
+  function getCounter() {
+    try {
+      return JSON.parse(localStorage.getItem('eb_invoice_counter')) || {};
+    } catch { return {}; }
+  }
+  function saveCounter(counter) {
+    localStorage.setItem('eb_invoice_counter', JSON.stringify(counter));
+  }
   function getEstimates() {
     try {
       return JSON.parse(localStorage.getItem('eb_estimates')) || [];
     } catch { return []; }
   }
-  function saveEstimates(list) {
-    localStorage.setItem('eb_estimates', JSON.stringify(list));
-  }
-  function getCounter() {
-    try {
-      return JSON.parse(localStorage.getItem('eb_estimate_counter')) || {};
-    } catch { return {}; }
-  }
-  function saveCounter(counter) {
-    localStorage.setItem('eb_estimate_counter', JSON.stringify(counter));
-  }
 
-  // ---- Estimate Number Generation ----
-  function generateEstimateNumber(dateStr) {
+  // ---- Invoice Number Generation ----
+  function generateInvoiceNumber(dateStr) {
     const counter = getCounter();
     const dateKey = dateStr || todayStr();
     const count = (counter[dateKey] || 0) + 1;
@@ -1421,11 +1685,19 @@ body {
     saveCounter(counter);
     const num = String(count).padStart(3, '0');
     const datePart = dateKey.replace(/-/g, '');
-    return 'EST-' + datePart + '-' + num;
+    return 'INV-' + datePart + '-' + num;
   }
 
   function todayStr() {
     const d = new Date();
+    return d.getFullYear() + '-' +
+      String(d.getMonth() + 1).padStart(2, '0') + '-' +
+      String(d.getDate()).padStart(2, '0');
+  }
+
+  function addDays(dateStr, days) {
+    const d = new Date(dateStr + 'T00:00:00');
+    d.setDate(d.getDate() + days);
     return d.getFullYear() + '-' +
       String(d.getMonth() + 1).padStart(2, '0') + '-' +
       String(d.getDate()).padStart(2, '0');
@@ -1440,7 +1712,9 @@ body {
     setupPhoneFormatting();
     setupBackup();
     setupHomescreenHint();
-    newEstimate(false); // don't confirm on first load
+    setupFromEstimate();
+    setupPaymentTerms();
+    newInvoice(false);
   }
 
   // ---- Collapsible Sections ----
@@ -1500,6 +1774,122 @@ body {
     });
   }
 
+  // ---- Payment Terms -> Due Date ----
+  function setupPaymentTerms() {
+    const terms = $('#inv-terms');
+    terms.addEventListener('change', () => {
+      updateDueDateFromTerms();
+    });
+  }
+
+  function updateDueDateFromTerms() {
+    const terms = $('#inv-terms').value;
+    const invoiceDate = $('#inv-date').value || todayStr();
+    let days = 30;
+    if (terms === 'Due on Receipt' || terms === '50% Due Now') days = 0;
+    else if (terms === 'Net 15') days = 15;
+    else if (terms === 'Net 30') days = 30;
+    else if (terms === 'Net 60') days = 60;
+    $('#inv-due-date').value = addDays(invoiceDate, days);
+  }
+
+  // ---- Create from Estimate ----
+  function setupFromEstimate() {
+    const select = $('#from-estimate-select');
+    populateEstimateDropdown();
+    select.addEventListener('change', () => {
+      const estId = select.value;
+      if (!estId) return;
+      const estimates = getEstimates();
+      const est = estimates.find(e => e.id === estId);
+      if (!est) {
+        toast('Estimate not found', 'error');
+        return;
+      }
+      createFromEstimate(est);
+      select.value = '';
+    });
+  }
+
+  function populateEstimateDropdown() {
+    const select = $('#from-estimate-select');
+    const estimates = getEstimates();
+    // Keep the default option
+    select.innerHTML = '<option value="">Select an estimate...</option>';
+    if (!estimates.length) {
+      select.innerHTML = '<option value="">No saved estimates</option>';
+      return;
+    }
+    estimates.forEach(est => {
+      const subtotal = (est.items || []).reduce((s, i) => s + ((i.quantity || 0) * (i.unitPrice || 0)), 0);
+      const tax = est.taxEnabled ? subtotal * ((est.taxRate || 0) / 100) : 0;
+      const total = subtotal + tax;
+      const opt = document.createElement('option');
+      opt.value = est.id;
+      opt.textContent = est.id + ' — ' + (est.client?.name || 'No name') + ' — ' + fmt(total);
+      select.appendChild(opt);
+    });
+  }
+
+  function createFromEstimate(est) {
+    // Generate new invoice number
+    const date = todayStr();
+    const invNumber = generateInvoiceNumber(date);
+
+    // Fill invoice fields
+    $('#inv-number').value = invNumber;
+    $('#inv-date').value = date;
+    $('#inv-terms').value = 'Net 30';
+    updateDueDateFromTerms();
+    $('#inv-reference').value = est.id;
+    $('#inv-status').value = 'draft';
+
+    // Client info
+    $('#client-name').value = est.client?.name || '';
+    $('#client-address').value = est.client?.address || '';
+    $('#client-city').value = est.client?.city || '';
+    $('#client-state').value = est.client?.state || '';
+    $('#client-zip').value = est.client?.zip || '';
+    $('#client-phone').value = est.client?.phone || '';
+    $('#client-email').value = est.client?.email || '';
+
+    // Tax
+    $('#tax-toggle').checked = !!est.taxEnabled;
+    $('#tax-rate').value = est.taxRate || 0;
+    $('#tax-rate-wrap').classList.toggle('tax-rate-wrap--visible', !!est.taxEnabled);
+
+    // Notes — use invoice default, not estimate notes
+    $('#inv-notes').value = 'Payment due within 30 days of invoice date. Please make checks payable to EB Services.';
+
+    // Line items
+    lineItems = [];
+    if (est.items && est.items.length) {
+      est.items.forEach(i => {
+        lineItems.push({
+          id: Date.now() + '-' + Math.random().toString(36).slice(2, 6),
+          description: i.description || '',
+          quantity: i.quantity || 1,
+          unit: i.unit || 'each',
+          unitPrice: i.unitPrice || 0
+        });
+      });
+    }
+    renderLineItems();
+
+    // Clear payments
+    payments = [];
+    renderPayments();
+
+    // Clear validation
+    $$('.field__input--error, .field__select--error, .field__textarea--error').forEach(el => {
+      el.classList.remove('field__input--error', 'field__select--error', 'field__textarea--error');
+    });
+
+    loadedInvoiceId = null;
+    toast('Invoice created from ' + est.id);
+    window.scrollTo(0, 0);
+  }
+
   // ---- Line Items ----
   function addLineItem(data) {
     const item = {
@@ -1528,19 +1918,18 @@ body {
       div.className = 'line-item';
       div.dataset.id = item.id;
       div.innerHTML = `
-        <button class="line-item__remove" type="button" title="Remove item" aria-label="Remove line item" data-remove="${item.id}">&times;</button>
+        <button class="line-item__remove" type="button" title="Remove item" data-remove="${item.id}">&times;</button>
         <div class="line-item__desc">
-          <label class="field__label" for="desc-${item.id}">Description</label>
-          <input class="field__input" type="text" id="desc-${item.id}" placeholder="Item description" value="${escHtml(item.description)}" data-field="description" data-item="${item.id}">
+          <input class="field__input" type="text" placeholder="Item description" value="${escHtml(item.description)}" data-field="description" data-item="${item.id}" aria-label="Item description">
         </div>
         <div class="line-item__numbers">
           <div class="field">
             <label class="field__label" for="qty-${item.id}">Qty</label>
-            <input class="field__input" type="number" id="qty-${item.id}" min="0" step="any" value="${item.quantity}" inputmode="decimal" data-field="quantity" data-item="${item.id}">
+            <input class="field__input" type="number" min="0" step="any" value="${item.quantity}" inputmode="decimal" data-field="quantity" data-item="${item.id}" id="qty-${item.id}">
           </div>
           <div class="field">
             <label class="field__label" for="unit-${item.id}">Unit</label>
-            <select class="field__select" id="unit-${item.id}" data-field="unit" data-item="${item.id}">
+            <select class="field__select" data-field="unit" data-item="${item.id}" id="unit-${item.id}">
               <option value="each"${item.unit === 'each' ? ' selected' : ''}>each</option>
               <option value="hr"${item.unit === 'hr' ? ' selected' : ''}>hr</option>
               <option value="sqft"${item.unit === 'sqft' ? ' selected' : ''}>sq ft</option>
@@ -1549,7 +1938,7 @@ body {
           </div>
           <div class="field">
             <label class="field__label" for="price-${item.id}">Price</label>
-            <input class="field__input" type="number" id="price-${item.id}" min="0" step="0.01" value="${item.unitPrice}" inputmode="decimal" data-field="unitPrice" data-item="${item.id}" style="text-align:right;">
+            <input class="field__input" type="number" min="0" step="0.01" value="${item.unitPrice}" inputmode="decimal" data-field="unitPrice" data-item="${item.id}" id="price-${item.id}" style="text-align:right;">
           </div>
           <div class="line-item__total" data-total="${item.id}">${fmt(item.quantity * item.unitPrice)}</div>
         </div>
@@ -1572,7 +1961,6 @@ body {
         } else {
           item[field] = parseFloat(input.value) || 0;
         }
-        // Update line total
         const totalEl = list.querySelector(`[data-total="${id}"]`);
         if (totalEl) totalEl.textContent = fmt(item.quantity * item.unitPrice);
         recalcTotals();
@@ -1582,24 +1970,116 @@ body {
     recalcTotals();
   }
 
+  // ---- Payments ----
+  function addPayment(data) {
+    const payment = {
+      id: Date.now() + '-' + Math.random().toString(36).slice(2, 6),
+      date: (data && data.date) || todayStr(),
+      amount: (data && data.amount) || 0,
+      method: (data && data.method) || 'Cash',
+      note: (data && data.note) || ''
+    };
+    payments.push(payment);
+    renderPayments();
+    return payment;
+  }
+
+  function removePayment(id) {
+    payments = payments.filter(p => p.id !== id);
+    renderPayments();
+    recalcTotals();
+  }
+
+  function renderPayments() {
+    const list = $('#payments-list');
+    list.innerHTML = '';
+    payments.forEach((payment) => {
+      const div = document.createElement('div');
+      div.className = 'payment-item';
+      div.dataset.id = payment.id;
+      div.innerHTML = `
+        <button class="payment-item__remove" type="button" title="Remove payment" data-remove-payment="${payment.id}">&times;</button>
+        <div class="payment-item__row">
+          <div class="field">
+            <label class="field__label" for="pdate-${payment.id}">Date</label>
+            <input class="field__input" type="date" value="${payment.date}" data-pfield="date" data-payment="${payment.id}" id="pdate-${payment.id}">
+          </div>
+          <div class="field">
+            <label class="field__label" for="pamount-${payment.id}">Amount</label>
+            <input class="field__input" type="number" min="0" step="0.01" value="${payment.amount}" inputmode="decimal" data-pfield="amount" data-payment="${payment.id}" id="pamount-${payment.id}" style="text-align:right;">
+          </div>
+        </div>
+        <div class="payment-item__row">
+          <div class="field">
+            <label class="field__label" for="pmethod-${payment.id}">Method</label>
+            <select class="field__select" data-pfield="method" data-payment="${payment.id}" id="pmethod-${payment.id}">
+              <option value="Cash"${payment.method === 'Cash' ? ' selected' : ''}>Cash</option>
+              <option value="Check"${payment.method === 'Check' ? ' selected' : ''}>Check</option>
+              <option value="Card"${payment.method === 'Card' ? ' selected' : ''}>Card</option>
+              <option value="Zelle"${payment.method === 'Zelle' ? ' selected' : ''}>Zelle</option>
+              <option value="Venmo"${payment.method === 'Venmo' ? ' selected' : ''}>Venmo</option>
+              <option value="Other"${payment.method === 'Other' ? ' selected' : ''}>Other</option>
+            </select>
+          </div>
+          <div class="field payment-item__note">
+            <label class="field__label" for="pnote-${payment.id}">Note</label>
+            <input class="field__input" type="text" value="${escHtml(payment.note)}" placeholder="Check #, memo..." data-pfield="note" data-payment="${payment.id}" id="pnote-${payment.id}">
+          </div>
+        </div>
+      `;
+      list.appendChild(div);
+    });
+
+    // Event listeners
+    list.querySelectorAll('[data-remove-payment]').forEach(btn => {
+      btn.addEventListener('click', () => removePayment(btn.dataset.removePayment));
+    });
+    list.querySelectorAll('[data-pfield]').forEach(input => {
+      input.addEventListener('input', () => {
+        const id = input.dataset.payment;
+        const field = input.dataset.pfield;
+        const payment = payments.find(p => p.id === id);
+        if (!payment) return;
+        if (field === 'amount') {
+          payment[field] = parseFloat(input.value) || 0;
+        } else {
+          payment[field] = input.value;
+        }
+        recalcTotals();
+      });
+    });
+
+    recalcTotals();
+  }
+
+  // ---- Totals ----
   function recalcTotals() {
     const subtotal = lineItems.reduce((sum, i) => sum + (i.quantity * i.unitPrice), 0);
     const taxEnabled = $('#tax-toggle').checked;
     const taxRate = taxEnabled ? (parseFloat($('#tax-rate').value) || 0) : 0;
     const tax = subtotal * (taxRate / 100);
     const total = subtotal + tax;
+    const totalPayments = payments.reduce((sum, p) => sum + (p.amount || 0), 0);
+    const balance = total - totalPayments;
 
     $('#subtotal-display').textContent = fmt(subtotal);
     $('#total-subtotal').textContent = fmt(subtotal);
     $('#total-tax').textContent = fmt(tax);
     $('#total-grand').textContent = fmt(total);
+    $('#total-payments').textContent = totalPayments > 0 ? '-' + fmt(totalPayments) : fmt(0);
+    $('#total-balance').textContent = fmt(Math.max(0, balance));
+    $('#payments-total-display').textContent = fmt(totalPayments);
   }
 
   // ---- Form Data ----
   function gatherFormData() {
     return {
-      id: $('#est-number').value,
-      date: $('#est-date').value,
+      id: $('#inv-number').value,
+      date: $('#inv-date').value,
+      dueDate: $('#inv-due-date').value,
+      terms: $('#inv-terms').value,
+      reference: $('#inv-reference').value.trim(),
+      status: $('#inv-status').value,
       client: {
         name: $('#client-name').value.trim(),
         address: $('#client-address').value.trim(),
@@ -1609,41 +2089,47 @@ body {
         phone: $('#client-phone').value.trim(),
         email: $('#client-email').value.trim()
       },
-      projectType: $('#project-type').value,
-      description: $('#project-desc').value.trim(),
       items: lineItems.map(i => ({
         description: i.description,
         quantity: i.quantity,
         unit: i.unit,
         unitPrice: i.unitPrice
       })),
+      payments: payments.map(p => ({
+        date: p.date,
+        amount: p.amount,
+        method: p.method,
+        note: p.note
+      })),
       taxEnabled: $('#tax-toggle').checked,
       taxRate: parseFloat($('#tax-rate').value) || 0,
-      notes: $('#est-notes').value,
-      status: 'draft'
+      notes: $('#inv-notes').value
     };
   }
 
-  function populateForm(est) {
-    $('#est-number').value = est.id;
-    $('#est-date').value = est.date;
-    $('#client-name').value = est.client.name || '';
-    $('#client-address').value = est.client.address || '';
-    $('#client-city').value = est.client.city || '';
-    $('#client-state').value = est.client.state || '';
-    $('#client-zip').value = est.client.zip || '';
-    $('#client-phone').value = est.client.phone || '';
-    $('#client-email').value = est.client.email || '';
-    $('#project-type').value = est.projectType || '';
-    $('#project-desc').value = est.description || '';
-    $('#tax-toggle').checked = !!est.taxEnabled;
-    $('#tax-rate').value = est.taxRate || 0;
-    $('#tax-rate-wrap').classList.toggle('tax-rate-wrap--visible', !!est.taxEnabled);
-    $('#est-notes').value = est.notes || '';
+  function populateForm(inv) {
+    $('#inv-number').value = inv.id;
+    $('#inv-date').value = inv.date;
+    $('#inv-due-date').value = inv.dueDate || '';
+    $('#inv-terms').value = inv.terms || 'Net 30';
+    $('#inv-reference').value = inv.reference || '';
+    $('#inv-status').value = inv.status || 'draft';
+    $('#client-name').value = inv.client?.name || '';
+    $('#client-address').value = inv.client?.address || '';
+    $('#client-city').value = inv.client?.city || '';
+    $('#client-state').value = inv.client?.state || '';
+    $('#client-zip').value = inv.client?.zip || '';
+    $('#client-phone').value = inv.client?.phone || '';
+    $('#client-email').value = inv.client?.email || '';
+    $('#tax-toggle').checked = !!inv.taxEnabled;
+    $('#tax-rate').value = inv.taxRate || 0;
+    $('#tax-rate-wrap').classList.toggle('tax-rate-wrap--visible', !!inv.taxEnabled);
+    $('#inv-notes').value = inv.notes || '';
 
+    // Line items
     lineItems = [];
-    if (est.items && est.items.length) {
-      est.items.forEach(i => {
+    if (inv.items && inv.items.length) {
+      inv.items.forEach(i => {
         lineItems.push({
           id: Date.now() + '-' + Math.random().toString(36).slice(2, 6),
           description: i.description || '',
@@ -1654,6 +2140,21 @@ body {
       });
     }
     renderLineItems();
+
+    // Payments
+    payments = [];
+    if (inv.payments && inv.payments.length) {
+      inv.payments.forEach(p => {
+        payments.push({
+          id: Date.now() + '-' + Math.random().toString(36).slice(2, 6),
+          date: p.date || todayStr(),
+          amount: p.amount || 0,
+          method: p.method || 'Cash',
+          note: p.note || ''
+        });
+      });
+    }
+    renderPayments();
 
     // Clear validation errors
     $$('.field__input--error, .field__select--error, .field__textarea--error').forEach(el => {
@@ -1686,10 +2187,8 @@ body {
     }
 
     if (!valid) {
-      // Scroll to first error
       const firstError = document.querySelector('.field__input--error, .field__select--error');
       if (firstError) {
-        // Expand parent section if collapsed
         const section = firstError.closest('.section');
         if (section && section.classList.contains('section--collapsed')) {
           section.classList.remove('section--collapsed');
@@ -1704,58 +2203,62 @@ body {
   // ---- Actions ----
   function setupActions() {
     $('#add-item-btn').addEventListener('click', () => addLineItem());
+    $('#add-payment-btn').addEventListener('click', () => addPayment());
 
-    $('#btn-save').addEventListener('click', saveEstimate);
+    $('#btn-save').addEventListener('click', saveInvoice);
     $('#btn-preview').addEventListener('click', showPreview);
-    $('#btn-share').addEventListener('click', shareEstimate);
-    $('#btn-new').addEventListener('click', () => newEstimate(true));
+    $('#btn-share').addEventListener('click', shareInvoice);
+    $('#btn-new').addEventListener('click', () => newInvoice(true));
 
     $('#preview-back').addEventListener('click', hidePreview);
     $('#preview-print').addEventListener('click', () => window.print());
   }
 
-  function saveEstimate() {
+  function saveInvoice() {
     const data = gatherFormData();
     const now = new Date().toISOString();
 
-    const estimates = getEstimates();
-    const existingIdx = estimates.findIndex(e => e.id === data.id);
+    const invoices = getInvoices();
+    const existingIdx = invoices.findIndex(e => e.id === data.id);
 
     if (existingIdx >= 0) {
-      // Update existing
-      estimates[existingIdx] = {
+      invoices[existingIdx] = {
         ...data,
-        created: estimates[existingIdx].created,
+        created: invoices[existingIdx].created,
         updated: now
       };
     } else {
-      // New
-      estimates.unshift({
+      invoices.unshift({
         ...data,
         created: now,
         updated: now
       });
     }
 
-    saveEstimates(estimates);
-    loadedEstimateId = data.id;
-    toast('Estimate saved');
+    saveInvoices(invoices);
+    loadedInvoiceId = data.id;
+    toast('Invoice saved');
   }
 
-  function newEstimate(confirm) {
+  function newInvoice(confirm) {
     if (confirm) {
       const hasContent = lineItems.some(i => i.description.trim()) || $('#client-name').value.trim();
-      if (hasContent && !window.confirm('Start a new estimate? Unsaved changes will be lost.')) return;
+      if (hasContent && !window.confirm('Start a new invoice? Unsaved changes will be lost.')) return;
     }
 
-    loadedEstimateId = null;
+    loadedInvoiceId = null;
     const date = todayStr();
-    const estNumber = generateEstimateNumber(date);
+    const invNumber = generateInvoiceNumber(date);
     lineItems = [];
+    payments = [];
 
     // Reset form
-    $('#est-number').value = estNumber;
-    $('#est-date').value = date;
+    $('#inv-number').value = invNumber;
+    $('#inv-date').value = date;
+    $('#inv-terms').value = 'Net 30';
+    updateDueDateFromTerms();
+    $('#inv-reference').value = '';
+    $('#inv-status').value = 'draft';
     $('#client-name').value = '';
     $('#client-address').value = '';
     $('#client-city').value = '';
@@ -1763,20 +2266,22 @@ body {
     $('#client-zip').value = '';
     $('#client-phone').value = '';
     $('#client-email').value = '';
-    $('#project-type').value = '';
-    $('#project-desc').value = '';
     $('#tax-toggle').checked = false;
     $('#tax-rate').value = 0;
     $('#tax-rate-wrap').classList.remove('tax-rate-wrap--visible');
-    $('#est-notes').value = 'Estimate valid for 30 days. 50% deposit required to begin work. Balance due upon completion.';
+    $('#inv-notes').value = 'Payment due within 30 days of invoice date. Please make checks payable to EB Services.';
 
     // Start with one empty line item
     addLineItem();
+    renderPayments();
 
     // Clear validation errors
     $$('.field__input--error, .field__select--error').forEach(el => {
       el.classList.remove('field__input--error', 'field__select--error');
     });
+
+    // Refresh estimate dropdown
+    populateEstimateDropdown();
 
     // Ensure editor view is active
     $$('.view-tabs__tab').forEach(t => {
@@ -1798,6 +2303,8 @@ body {
     const subtotal = data.items.reduce((s, i) => s + (i.quantity * i.unitPrice), 0);
     const taxAmt = data.taxEnabled ? subtotal * (data.taxRate / 100) : 0;
     const total = subtotal + taxAmt;
+    const totalPayments = data.payments.reduce((s, p) => s + (p.amount || 0), 0);
+    const balance = Math.max(0, total - totalPayments);
 
     // Build client address string
     let addressParts = [];
@@ -1817,8 +2324,12 @@ body {
     if (data.client.phone) contactLines.push(data.client.phone);
     if (data.client.email) contactLines.push(data.client.email);
 
-    // Format date for display
     const displayDate = formatDisplayDate(data.date);
+    const displayDueDate = formatDisplayDate(data.dueDate);
+
+    // Status badge
+    const statusLabels = { draft: 'Draft', sent: 'Sent', partial: 'Partial', paid: 'Paid', overdue: 'Overdue' };
+    const statusBadge = `<span class="status-badge status-badge--${data.status}">${statusLabels[data.status] || data.status}</span>`;
 
     // Build items rows
     const itemRows = data.items.filter(i => i.description.trim()).map(i => {
@@ -1832,11 +2343,46 @@ body {
       </tr>`;
     }).join('');
 
+    // Build payments rows
+    let paymentsSection = '';
+    if (data.payments.length > 0) {
+      const paymentRows = data.payments.map(p => `<tr>
+        <td>${formatDisplayDate(p.date)}</td>
+        <td>${p.method}</td>
+        <td>${escHtml(p.note || '-')}</td>
+        <td>${fmt(p.amount)}</td>
+      </tr>`).join('');
+
+      paymentsSection = `
+        <div class="preview-label" style="margin-bottom:8px; margin-top:8px;">Payment History</div>
+        <table class="preview-payments-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Method</th>
+              <th>Note</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${paymentRows}
+          </tbody>
+        </table>`;
+    }
+
     let taxRow = '';
     if (data.taxEnabled && data.taxRate > 0) {
       taxRow = `<div class="preview-totals__row">
         <span class="preview-totals__label">Tax (${data.taxRate}%)</span>
         <span class="preview-totals__amount">${fmt(taxAmt)}</span>
+      </div>`;
+    }
+
+    let paymentsRow = '';
+    if (totalPayments > 0) {
+      paymentsRow = `<div class="preview-totals__row preview-totals__row--payments">
+        <span class="preview-totals__label">Payments Received</span>
+        <span class="preview-totals__amount">-${fmt(totalPayments)}</span>
       </div>`;
     }
 
@@ -1856,24 +2402,22 @@ body {
         </div>
       </div>
 
-      <div class="preview-estimate-info">
+      <div class="preview-invoice-info">
         <div>
-          <div class="preview-label">Prepared For</div>
+          <div class="preview-label">Bill To</div>
           <div class="preview-client-name">${escHtml(data.client.name)}</div>
           ${addressParts.length ? '<div class="preview-client-detail">' + addressParts.map(escHtml).join('<br>') + '</div>' : ''}
           ${contactLines.length ? '<div class="preview-client-detail" style="margin-top:4px;">' + contactLines.map(escHtml).join('<br>') + '</div>' : ''}
         </div>
-        <div class="preview-estimate-meta">
-          <div class="preview-estimate-meta__id">${escHtml(data.id)}</div>
-          <div class="preview-estimate-meta__date">${displayDate}</div>
+        <div class="preview-invoice-meta">
+          <div class="preview-invoice-meta__id">${escHtml(data.id)}</div>
+          <div class="preview-invoice-meta__date">${displayDate}</div>
+          ${data.dueDate ? '<div class="preview-invoice-meta__date">Due: ' + displayDueDate + '</div>' : ''}
+          ${data.terms ? '<div class="preview-invoice-meta__date">' + escHtml(data.terms) + '</div>' : ''}
+          ${data.reference ? '<div class="preview-invoice-meta__date">Ref: ' + escHtml(data.reference) + '</div>' : ''}
+          <div class="preview-invoice-meta__status">${statusBadge}</div>
         </div>
       </div>
-
-      ${data.projectType || data.description ? `
-      <div class="preview-project">
-        ${data.projectType ? '<div class="preview-project__type">' + escHtml(data.projectType) + '</div>' : ''}
-        ${data.description ? '<div class="preview-project__desc">' + escHtml(data.description) + '</div>' : ''}
-      </div>` : ''}
 
       <table class="preview-table">
         <thead>
@@ -1900,7 +2444,17 @@ body {
           <span class="preview-totals__label">Total</span>
           <span class="preview-totals__amount">${fmt(total)}</span>
         </div>
+        ${paymentsRow}
+        ${totalPayments > 0 || balance !== total ? `<div class="preview-totals__row preview-totals__row--balance">
+          <span class="preview-totals__label">Balance Due</span>
+          <span class="preview-totals__amount">${fmt(balance)}</span>
+        </div>` : `<div class="preview-totals__row preview-totals__row--balance">
+          <span class="preview-totals__label">Amount Due</span>
+          <span class="preview-totals__amount">${fmt(balance)}</span>
+        </div>`}
       </div>
+
+      ${paymentsSection}
 
       ${data.notes ? `
       <div class="preview-notes">
@@ -1924,16 +2478,21 @@ body {
   }
 
   // ---- Share ----
-  function shareEstimate() {
+  function shareInvoice() {
     const data = gatherFormData();
     const subtotal = data.items.reduce((s, i) => s + (i.quantity * i.unitPrice), 0);
     const taxAmt = data.taxEnabled ? subtotal * (data.taxRate / 100) : 0;
     const total = subtotal + taxAmt;
+    const totalPayments = data.payments.reduce((s, p) => s + (p.amount || 0), 0);
+    const balance = Math.max(0, total - totalPayments);
 
     const unitLabels = { each: 'each', hr: 'hr', sqft: 'sq ft', lf: 'lin ft' };
 
-    let text = `EB SERVICES — ESTIMATE\n`;
+    let text = `EB SERVICES \u2014 INVOICE\n`;
     text += `${data.id} | ${formatDisplayDate(data.date)}\n`;
+    if (data.dueDate) text += `Due: ${formatDisplayDate(data.dueDate)}\n`;
+    if (data.terms) text += `Terms: ${data.terms}\n`;
+    if (data.reference) text += `Ref: ${data.reference}\n`;
     text += `${'─'.repeat(36)}\n\n`;
 
     if (data.client.name) text += `Client: ${data.client.name}\n`;
@@ -1944,14 +2503,11 @@ body {
     if (data.client.phone) text += `Phone: ${data.client.phone}\n`;
     if (data.client.email) text += `Email: ${data.client.email}\n`;
 
-    if (data.projectType) text += `\nProject: ${data.projectType}\n`;
-    if (data.description) text += `${data.description}\n`;
-
     text += `\n${'─'.repeat(36)}\n`;
     data.items.filter(i => i.description.trim()).forEach(i => {
       const lineTotal = fmt(i.quantity * i.unitPrice);
       text += `${i.description}\n`;
-      text += `  ${i.quantity} ${unitLabels[i.unit] || i.unit} × ${fmt(i.unitPrice)} = ${lineTotal}\n`;
+      text += `  ${i.quantity} ${unitLabels[i.unit] || i.unit} \u00d7 ${fmt(i.unitPrice)} = ${lineTotal}\n`;
     });
     text += `${'─'.repeat(36)}\n`;
     text += `Subtotal: ${fmt(subtotal)}\n`;
@@ -1960,18 +2516,25 @@ body {
     }
     text += `TOTAL: ${fmt(total)}\n`;
 
+    if (totalPayments > 0) {
+      text += `\nPayments Received: -${fmt(totalPayments)}\n`;
+      data.payments.forEach(p => {
+        text += `  ${formatDisplayDate(p.date)} - ${p.method} - ${fmt(p.amount)}${p.note ? ' (' + p.note + ')' : ''}\n`;
+      });
+    }
+
+    text += `\nBALANCE DUE: ${fmt(balance)}\n`;
+
     if (data.notes) {
       text += `\n${data.notes}\n`;
     }
-    text += `\n— EB Services | (555) 123-4567`;
+    text += `\n\u2014 EB Services | (555) 123-4567`;
 
-    // Try Web Share API first (mobile)
     if (navigator.share) {
       navigator.share({
-        title: `Estimate ${data.id}`,
+        title: `Invoice ${data.id}`,
         text: text
       }).catch(() => {
-        // User cancelled or error — fall back to clipboard
         copyToClipboard(text);
       });
     } else {
@@ -1982,7 +2545,7 @@ body {
   function copyToClipboard(text) {
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(text).then(() => {
-        toast('Estimate copied to clipboard');
+        toast('Invoice copied to clipboard');
       }).catch(() => {
         fallbackCopy(text);
       });
@@ -2000,42 +2563,54 @@ body {
     ta.select();
     try {
       document.execCommand('copy');
-      toast('Estimate copied to clipboard');
+      toast('Invoice copied to clipboard');
     } catch {
-      toast('Could not copy — please copy manually', 'error');
+      toast('Could not copy \u2014 please copy manually', 'error');
     }
     document.body.removeChild(ta);
   }
 
-  // ---- Saved Estimates List ----
+  // ---- Saved Invoices List ----
   function renderSavedList() {
     const list = $('#saved-list');
-    const estimates = getEstimates();
+    const invoices = getInvoices();
 
-    if (!estimates.length) {
+    if (!invoices.length) {
       list.innerHTML = `
         <div class="saved-empty">
           <div class="saved-empty__icon">&#128203;</div>
-          <div class="saved-empty__text">No saved estimates yet.<br>Create one and tap Save.</div>
+          <div class="saved-empty__text">No saved invoices yet.<br>Create one and tap Save.</div>
         </div>`;
       return;
     }
 
-    list.innerHTML = estimates.map(est => {
-      const subtotal = (est.items || []).reduce((s, i) => s + ((i.quantity || 0) * (i.unitPrice || 0)), 0);
-      const tax = est.taxEnabled ? subtotal * ((est.taxRate || 0) / 100) : 0;
+    list.innerHTML = invoices.map(inv => {
+      const subtotal = (inv.items || []).reduce((s, i) => s + ((i.quantity || 0) * (i.unitPrice || 0)), 0);
+      const tax = inv.taxEnabled ? subtotal * ((inv.taxRate || 0) / 100) : 0;
       const total = subtotal + tax;
+      const totalPayments = (inv.payments || []).reduce((s, p) => s + ((p.amount || 0)), 0);
+      const balance = Math.max(0, total - totalPayments);
+      const statusLabels = { draft: 'Draft', sent: 'Sent', partial: 'Partial', paid: 'Paid', overdue: 'Overdue' };
+      const status = inv.status || 'draft';
+
       return `
-        <div class="saved-card" data-load="${escAttr(est.id)}">
+        <div class="saved-card" data-load="${escAttr(inv.id)}">
           <div class="saved-card__info">
-            <div class="saved-card__id">${escHtml(est.id)}</div>
-            <div class="saved-card__client">${escHtml(est.client?.name || 'No client name')}</div>
+            <div class="saved-card__id">
+              ${escHtml(inv.id)}
+              <span class="status-badge status-badge--${status}" style="margin-left:6px;">${statusLabels[status] || status}</span>
+            </div>
+            <div class="saved-card__client">${escHtml(inv.client?.name || 'No client name')}</div>
           </div>
           <div class="saved-card__meta">
-            <span class="saved-card__total">${fmt(total)}</span>
-            <span class="saved-card__date">${formatShortDate(est.date)}</span>
+            <div style="text-align:right;">
+              <div class="saved-card__total">${fmt(total)}</div>
+              <div class="saved-card__balance ${balance === 0 ? 'saved-card__balance--zero' : 'saved-card__balance--due'}">
+                ${balance === 0 ? 'Paid' : 'Due: ' + fmt(balance)}
+              </div>
+            </div>
           </div>
-          <button class="saved-card__delete" title="Delete" data-delete="${escAttr(est.id)}">&times;</button>
+          <button class="saved-card__delete" title="Delete" data-delete="${escAttr(inv.id)}">&times;</button>
         </div>`;
     }).join('');
 
@@ -2043,7 +2618,7 @@ body {
     list.querySelectorAll('[data-load]').forEach(card => {
       card.addEventListener('click', (e) => {
         if (e.target.closest('[data-delete]')) return;
-        loadEstimate(card.dataset.load);
+        loadInvoice(card.dataset.load);
       });
     });
 
@@ -2051,20 +2626,20 @@ body {
     list.querySelectorAll('[data-delete]').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        if (window.confirm('Delete this estimate?')) {
-          deleteEstimate(btn.dataset.delete);
+        if (window.confirm('Delete this invoice?')) {
+          deleteInvoice(btn.dataset.delete);
         }
       });
     });
   }
 
-  function loadEstimate(id) {
-    const estimates = getEstimates();
-    const est = estimates.find(e => e.id === id);
-    if (!est) return;
+  function loadInvoice(id) {
+    const invoices = getInvoices();
+    const inv = invoices.find(e => e.id === id);
+    if (!inv) return;
 
-    loadedEstimateId = est.id;
-    populateForm(est);
+    loadedInvoiceId = inv.id;
+    populateForm(inv);
 
     // Switch to editor
     $$('.view-tabs__tab').forEach(t => {
@@ -2075,17 +2650,20 @@ body {
     $('#view-editor').classList.add('view--active');
     $('#action-bar').style.display = '';
 
-    toast('Estimate loaded');
+    // Refresh estimate dropdown
+    populateEstimateDropdown();
+
+    toast('Invoice loaded');
     window.scrollTo(0, 0);
   }
 
-  function deleteEstimate(id) {
-    let estimates = getEstimates();
-    estimates = estimates.filter(e => e.id !== id);
-    saveEstimates(estimates);
-    if (loadedEstimateId === id) loadedEstimateId = null;
+  function deleteInvoice(id) {
+    let invoices = getInvoices();
+    invoices = invoices.filter(e => e.id !== id);
+    saveInvoices(invoices);
+    if (loadedInvoiceId === id) loadedInvoiceId = null;
     renderSavedList();
-    toast('Estimate deleted');
+    toast('Invoice deleted');
   }
 
   // ---- Utility ----
@@ -2119,23 +2697,23 @@ body {
 
   // ---- Backup: Export / Import ----
   function setupBackup() {
-    $('#btn-export').addEventListener('click', exportEstimates);
+    $('#btn-export').addEventListener('click', exportInvoices);
     $('#btn-import').addEventListener('click', () => $('#import-file').click());
-    $('#import-file').addEventListener('change', importEstimates);
+    $('#import-file').addEventListener('change', importInvoices);
   }
 
-  function exportEstimates() {
-    const estimates = getEstimates();
-    if (!estimates.length) {
-      toast('No estimates to export', 'error');
+  function exportInvoices() {
+    const invoices = getInvoices();
+    if (!invoices.length) {
+      toast('No invoices to export', 'error');
       return;
     }
-    const json = JSON.stringify(estimates, null, 2);
+    const json = JSON.stringify(invoices, null, 2);
     const blob = new Blob([json], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'eb-estimates-backup-' + todayStr() + '.json';
+    a.download = 'eb-invoices-backup-' + todayStr() + '.json';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -2143,10 +2721,9 @@ body {
     toast('Backup downloaded');
   }
 
-  function importEstimates(e) {
+  function importInvoices(e) {
     const file = e.target.files[0];
     if (!file) return;
-    // Reset so the same file can be re-selected
     e.target.value = '';
 
     const reader = new FileReader();
@@ -2154,42 +2731,39 @@ body {
       try {
         const data = JSON.parse(evt.target.result);
         if (!Array.isArray(data)) {
-          toast('Invalid backup file — expected an array', 'error');
+          toast('Invalid backup file \u2014 expected an array', 'error');
           return;
         }
-        // Validate each entry has id and client
         const valid = data.filter(item =>
           item && typeof item.id === 'string' && item.client && typeof item.client === 'object'
         );
         if (!valid.length) {
-          toast('No valid estimates found in file', 'error');
+          toast('No valid invoices found in file', 'error');
           return;
         }
 
-        // Merge with existing: imported version replaces by ID, new IDs are added
-        const existing = getEstimates();
+        const existing = getInvoices();
         const existingMap = {};
-        existing.forEach(est => { existingMap[est.id] = est; });
+        existing.forEach(inv => { existingMap[inv.id] = inv; });
 
         let importedCount = 0;
-        valid.forEach(est => {
-          existingMap[est.id] = est;
+        valid.forEach(inv => {
+          existingMap[inv.id] = inv;
           importedCount++;
         });
 
         const merged = Object.values(existingMap);
-        // Sort by updated date descending
         merged.sort((a, b) => {
           const da = a.updated || a.created || '';
           const db = b.updated || b.created || '';
           return db.localeCompare(da);
         });
 
-        saveEstimates(merged);
+        saveInvoices(merged);
         renderSavedList();
-        toast(importedCount + ' estimate' + (importedCount !== 1 ? 's' : '') + ' imported');
+        toast(importedCount + ' invoice' + (importedCount !== 1 ? 's' : '') + ' imported');
       } catch (err) {
-        toast('Could not read file — invalid JSON', 'error');
+        toast('Could not read file \u2014 invalid JSON', 'error');
       }
     };
     reader.readAsText(file);
@@ -2197,12 +2771,12 @@ body {
 
   // ---- Homescreen Hint ----
   function setupHomescreenHint() {
-    if (localStorage.getItem('eb_homescreen_hint_dismissed')) return;
+    if (localStorage.getItem('eb_invoice_hint_dismissed')) return;
     const hint = $('#homescreen-hint');
     hint.style.display = '';
     $('#homescreen-hint-dismiss').addEventListener('click', () => {
       hint.style.display = 'none';
-      localStorage.setItem('eb_homescreen_hint_dismissed', '1');
+      localStorage.setItem('eb_invoice_hint_dismissed', '1');
     });
   }
 
