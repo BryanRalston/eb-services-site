@@ -1,0 +1,2021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Estimate Builder — EB Services</title>
+  <style>
+/* ============================================================
+   EB Services Estimate Builder
+   Mobile-first, self-contained, offline-capable
+   ============================================================ */
+
+:root {
+  --color-primary: #1A1A1A;
+  --color-primary-dark: #111111;
+  --color-primary-light: #2A2A2A;
+  --color-secondary: #333333;
+  --color-accent: #C6A44E;
+  --color-accent-hover: #A88A3D;
+  --color-accent-light: #D4B65A;
+  --color-accent-on-light: #8B7028;
+  --color-text: #1A1A1A;
+  --color-text-light: #F0EDE6;
+  --color-text-muted: #5A5A5A;
+  --color-bg: #FFFFFF;
+  --color-bg-alt: #F8F7F4;
+  --color-border: #E5E0D5;
+  --color-border-light: #F0EDE6;
+  --color-success: #28A745;
+  --color-error: #DC3545;
+  --color-warning: #F0AD4E;
+
+  --font-stack: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --transition-fast: 0.2s ease;
+}
+
+/* --- Reset --- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: var(--font-stack);
+  color: var(--color-text);
+  background: var(--color-bg-alt);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* --- App Header --- */
+.app-header {
+  background: var(--color-primary);
+  color: var(--color-text-light);
+  padding: 12px 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-md);
+}
+.app-header__inner {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.app-header__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.app-header__logo {
+  width: 36px;
+  height: 36px;
+  background: var(--color-accent);
+  color: var(--color-primary);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: -0.5px;
+  flex-shrink: 0;
+}
+.app-header__title {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+.app-header__company {
+  font-size: 11px;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+}
+.app-header__page {
+  font-size: 18px;
+  font-weight: 700;
+}
+.app-header__actions {
+  display: flex;
+  gap: 6px;
+}
+.app-header__btn {
+  background: var(--color-primary-light);
+  color: var(--color-text-light);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  font-family: inherit;
+}
+.app-header__btn:hover, .app-header__btn:active {
+  background: var(--color-secondary);
+}
+
+/* --- View Tabs --- */
+.view-tabs {
+  background: var(--color-primary-dark);
+  display: flex;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.view-tabs__tab {
+  flex: 1;
+  padding: 10px 16px;
+  text-align: center;
+  color: rgba(255,255,255,0.5);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+  transition: all var(--transition-fast);
+  position: relative;
+}
+.view-tabs__tab--active {
+  color: var(--color-accent);
+}
+.view-tabs__tab--active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 16px;
+  right: 16px;
+  height: 2px;
+  background: var(--color-accent);
+  border-radius: 2px 2px 0 0;
+}
+.view-tabs__tab:hover:not(.view-tabs__tab--active) {
+  color: rgba(255,255,255,0.7);
+}
+
+/* --- Views --- */
+.view { display: none; }
+.view--active { display: block; }
+
+/* --- Main Content --- */
+.main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 16px 16px 120px;
+}
+
+/* --- Sections --- */
+.section {
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.section__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--color-border-light);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.section__title {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--color-secondary);
+}
+.section__chevron {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  transition: transform var(--transition-fast);
+}
+.section--collapsed .section__chevron {
+  transform: rotate(-90deg);
+}
+.section--collapsed .section__body {
+  display: none;
+}
+.section__body {
+  padding: 16px;
+}
+
+/* --- Estimate Meta --- */
+.estimate-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* --- Form Fields --- */
+.field {
+  margin-bottom: 12px;
+}
+.field:last-child {
+  margin-bottom: 0;
+}
+.field__label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-muted);
+  margin-bottom: 4px;
+}
+.field__input,
+.field__select,
+.field__textarea {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 16px; /* Prevents iOS zoom */
+  font-family: inherit;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  -webkit-appearance: none;
+  appearance: none;
+}
+.field__input:focus,
+.field__select:focus,
+.field__textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(198, 164, 78, 0.15);
+}
+.field__input--error,
+.field__select--error,
+.field__textarea--error {
+  border-color: var(--color-error);
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+.field__select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235A5A5A' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+}
+.field__textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+.field__row {
+  display: grid;
+  gap: 12px;
+}
+.field__row--2 { grid-template-columns: 1fr 1fr; }
+.field__row--3 { grid-template-columns: 2fr 1fr 1fr; }
+.field__row--4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+/* --- Line Items --- */
+.line-item {
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  margin-bottom: 10px;
+  position: relative;
+}
+.line-item__remove {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: none;
+  border: 1.5px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  font-family: inherit;
+  line-height: 1;
+  padding: 0;
+}
+.line-item__remove:hover, .line-item__remove:active {
+  background: var(--color-error);
+  border-color: var(--color-error);
+  color: #fff;
+}
+.line-item__desc {
+  margin-bottom: 8px;
+  padding-right: 36px;
+}
+.line-item__desc .field__input {
+  font-weight: 500;
+}
+.line-item__numbers {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 8px;
+  align-items: end;
+}
+.line-item__total {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-primary);
+  padding: 10px 0;
+  text-align: right;
+  white-space: nowrap;
+  min-width: 70px;
+}
+
+.add-item-btn {
+  width: 100%;
+  padding: 14px;
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--color-accent-on-light);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: inherit;
+}
+.add-item-btn:hover, .add-item-btn:active {
+  border-color: var(--color-accent);
+  background: rgba(198, 164, 78, 0.05);
+}
+
+/* --- Subtotal Bar --- */
+.subtotal-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  background: var(--color-bg-alt);
+  border-top: 1px solid var(--color-border-light);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+.subtotal-bar__label {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-muted);
+}
+.subtotal-bar__amount {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+/* --- Totals --- */
+.totals {
+  padding: 0;
+}
+.totals__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border-light);
+}
+.totals__row:last-child {
+  border-bottom: none;
+}
+.totals__row--grand {
+  background: var(--color-primary);
+  color: var(--color-text-light);
+  padding: 16px;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+.totals__label {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.totals__row--grand .totals__label {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text-light);
+}
+.totals__amount {
+  font-size: 16px;
+  font-weight: 600;
+}
+.totals__row--grand .totals__amount {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--color-accent);
+}
+
+/* --- Tax Toggle --- */
+.toggle {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.toggle__input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+.toggle__slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--color-border);
+  border-radius: 24px;
+  transition: background var(--transition-fast);
+}
+.toggle__slider::before {
+  content: '';
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: transform var(--transition-fast);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.toggle__input:checked + .toggle__slider {
+  background: var(--color-accent);
+}
+.toggle__input:checked + .toggle__slider::before {
+  transform: translateX(20px);
+}
+.tax-rate-input {
+  width: 64px;
+  padding: 6px 8px;
+  font-size: 14px;
+  text-align: center;
+  font-family: inherit;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  background: var(--color-bg);
+  -webkit-appearance: none;
+  appearance: none;
+}
+.tax-rate-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(198, 164, 78, 0.15);
+}
+.tax-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tax-rate-wrap {
+  display: none;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+.tax-rate-wrap--visible {
+  display: flex;
+}
+
+/* --- Bottom Action Bar --- */
+.action-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-primary);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding: 10px 16px;
+  padding-bottom: max(10px, env(safe-area-inset-bottom));
+  z-index: 100;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
+}
+.action-bar__inner {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  gap: 8px;
+}
+.action-btn {
+  flex: 1;
+  padding: 12px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: none;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.action-btn--save {
+  background: var(--color-primary-light);
+  color: var(--color-text-light);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.action-btn--save:hover, .action-btn--save:active {
+  background: var(--color-secondary);
+}
+.action-btn--preview {
+  background: var(--color-accent);
+  color: var(--color-primary);
+}
+.action-btn--preview:hover, .action-btn--preview:active {
+  background: var(--color-accent-hover);
+}
+.action-btn--share {
+  background: var(--color-primary-light);
+  color: var(--color-text-light);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.action-btn--share:hover, .action-btn--share:active {
+  background: var(--color-secondary);
+}
+.action-btn--new {
+  background: none;
+  color: rgba(255,255,255,0.5);
+  flex: 0 0 auto;
+  padding: 12px;
+}
+.action-btn--new:hover, .action-btn--new:active {
+  color: var(--color-text-light);
+}
+.action-btn__icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* --- Saved Estimates List --- */
+.saved-list {
+  padding: 16px 16px 120px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+.saved-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--color-text-muted);
+}
+.saved-empty__icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+  opacity: 0.3;
+}
+.saved-empty__text {
+  font-size: 15px;
+}
+.saved-card {
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 10px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: box-shadow var(--transition-fast);
+  border: 1px solid transparent;
+}
+.saved-card:hover, .saved-card:active {
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-accent);
+}
+.saved-card__info {
+  flex: 1;
+  min-width: 0;
+}
+.saved-card__id {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-primary);
+  font-variant-numeric: tabular-nums;
+}
+.saved-card__client {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.saved-card__meta {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  font-size: 13px;
+}
+.saved-card__total {
+  font-weight: 700;
+  color: var(--color-accent-on-light);
+}
+.saved-card__date {
+  color: var(--color-text-muted);
+}
+.saved-card__delete {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: none;
+  color: var(--color-text-muted);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+  margin-left: 8px;
+  font-family: inherit;
+}
+.saved-card__delete:hover, .saved-card__delete:active {
+  background: var(--color-error);
+  color: #fff;
+}
+
+/* --- Preview/Print View --- */
+.preview-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 200;
+  background: var(--color-bg);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.preview-overlay--active {
+  display: block;
+}
+.preview-toolbar {
+  position: sticky;
+  top: 0;
+  background: var(--color-primary);
+  color: var(--color-text-light);
+  padding: 10px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+  box-shadow: var(--shadow-md);
+}
+.preview-toolbar__btn {
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  transition: all var(--transition-fast);
+}
+.preview-toolbar__btn--back {
+  background: var(--color-primary-light);
+  color: var(--color-text-light);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.preview-toolbar__btn--back:hover {
+  background: var(--color-secondary);
+}
+.preview-toolbar__btn--print {
+  background: var(--color-accent);
+  color: var(--color-primary);
+}
+.preview-toolbar__btn--print:hover {
+  background: var(--color-accent-hover);
+}
+
+.preview-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+.preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 3px solid var(--color-primary);
+}
+.preview-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.preview-brand__logo {
+  width: 48px;
+  height: 48px;
+  background: var(--color-primary);
+  color: var(--color-accent);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 18px;
+}
+.preview-brand__name {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--color-primary);
+}
+.preview-brand__tagline {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.preview-contact {
+  text-align: right;
+  font-size: 12px;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+.preview-estimate-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+.preview-estimate-meta {
+  text-align: right;
+}
+.preview-estimate-meta__id {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--color-primary);
+}
+.preview-estimate-meta__date {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+.preview-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--color-accent-on-light);
+  margin-bottom: 4px;
+}
+.preview-client-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+.preview-client-detail {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+.preview-project {
+  background: var(--color-bg-alt);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 24px;
+}
+.preview-project__type {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.preview-project__desc {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  white-space: pre-wrap;
+}
+
+/* Preview Table */
+.preview-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 24px;
+  font-size: 14px;
+}
+.preview-table th {
+  background: var(--color-primary);
+  color: var(--color-text-light);
+  padding: 10px 12px;
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: 600;
+}
+.preview-table th:last-child,
+.preview-table td:last-child {
+  text-align: right;
+}
+.preview-table th:nth-child(2),
+.preview-table td:nth-child(2),
+.preview-table th:nth-child(3),
+.preview-table td:nth-child(3),
+.preview-table th:nth-child(4),
+.preview-table td:nth-child(4) {
+  text-align: center;
+}
+.preview-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--color-border-light);
+}
+.preview-table tbody tr:nth-child(even) {
+  background: var(--color-bg-alt);
+}
+
+.preview-totals {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-bottom: 32px;
+}
+.preview-totals__row {
+  display: flex;
+  justify-content: space-between;
+  width: 240px;
+  padding: 6px 0;
+  font-size: 14px;
+}
+.preview-totals__row--grand {
+  border-top: 2px solid var(--color-primary);
+  margin-top: 4px;
+  padding-top: 10px;
+  font-size: 18px;
+  font-weight: 800;
+}
+.preview-totals__row--grand .preview-totals__amount {
+  color: var(--color-accent-on-light);
+}
+.preview-totals__label {
+  color: var(--color-text-muted);
+}
+.preview-totals__amount {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.preview-notes {
+  border-top: 1px solid var(--color-border);
+  padding-top: 20px;
+  margin-bottom: 32px;
+}
+.preview-notes__title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-accent-on-light);
+  margin-bottom: 8px;
+}
+.preview-notes__text {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.preview-footer {
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-border-light);
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+/* --- Toast Notifications --- */
+.toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--color-primary);
+  color: var(--color-text-light);
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: var(--shadow-lg);
+  z-index: 300;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+.toast--visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+.toast--success {
+  border-left: 4px solid var(--color-success);
+}
+.toast--error {
+  border-left: 4px solid var(--color-error);
+}
+
+/* --- Validation shake --- */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+.shake {
+  animation: shake 0.4s ease;
+}
+
+/* --- Responsive --- */
+@media (max-width: 480px) {
+  .line-item__numbers {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .line-item__total {
+    grid-column: 1 / -1;
+    text-align: left;
+    padding: 4px 0 0;
+    border-top: 1px solid var(--color-border-light);
+    margin-top: 4px;
+  }
+  .field__row--3 {
+    grid-template-columns: 1fr 1fr;
+  }
+  .field__row--3 > :first-child {
+    grid-column: 1 / -1;
+  }
+  .preview-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .preview-contact {
+    text-align: left;
+  }
+  .preview-estimate-info {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .preview-estimate-meta {
+    text-align: left;
+  }
+  .preview-totals__row {
+    width: 100%;
+  }
+  .action-btn span:not(.action-btn__icon) {
+    display: none;
+  }
+  .action-btn {
+    flex: 0 1 auto;
+    padding: 12px 14px;
+  }
+  .action-btn--preview {
+    flex: 1;
+  }
+  .action-btn--preview span:not(.action-btn__icon) {
+    display: inline;
+  }
+}
+
+@media (min-width: 600px) {
+  .main { padding: 24px 24px 120px; }
+  .section__body { padding: 20px; }
+  .line-item { padding: 16px; }
+}
+
+/* --- Print Styles --- */
+@media print {
+  body {
+    background: white;
+    font-size: 12pt;
+  }
+  .app-header,
+  .view-tabs,
+  .action-bar,
+  .preview-toolbar,
+  .toast {
+    display: none !important;
+  }
+  .preview-overlay {
+    position: static;
+    display: block !important;
+  }
+  .preview-page {
+    padding: 0;
+    max-width: none;
+  }
+  .preview-header {
+    border-bottom-width: 2px;
+  }
+  .preview-table th {
+    background: var(--color-primary) !important;
+    color: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .preview-totals__row--grand {
+    font-weight: 800;
+  }
+  .section, .saved-card {
+    box-shadow: none;
+  }
+}
+  </style>
+</head>
+<body>
+
+  <!-- ===== APP HEADER ===== -->
+  <header class="app-header">
+    <div class="app-header__inner">
+      <div class="app-header__brand">
+        <div class="app-header__logo">EB</div>
+        <div class="app-header__title">
+          <span class="app-header__company">EB Services</span>
+          <span class="app-header__page">Estimate Builder</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== VIEW TABS ===== -->
+  <nav class="view-tabs" role="tablist">
+    <button class="view-tabs__tab view-tabs__tab--active" role="tab" data-view="editor" aria-selected="true">Editor</button>
+    <button class="view-tabs__tab" role="tab" data-view="saved" aria-selected="false">Saved</button>
+  </nav>
+
+  <!-- ===== EDITOR VIEW ===== -->
+  <div id="view-editor" class="view view--active">
+    <div class="main">
+
+      <!-- Estimate Info -->
+      <div class="section">
+        <div class="section__header" data-collapse>
+          <span class="section__title">Estimate Info</span>
+          <span class="section__chevron">&#9660;</span>
+        </div>
+        <div class="section__body">
+          <div class="estimate-meta">
+            <div class="field">
+              <label class="field__label" for="est-number">Estimate #</label>
+              <input class="field__input" type="text" id="est-number" readonly style="background:var(--color-bg-alt); color:var(--color-text-muted);">
+            </div>
+            <div class="field">
+              <label class="field__label" for="est-date">Date</label>
+              <input class="field__input" type="date" id="est-date">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Client Info -->
+      <div class="section">
+        <div class="section__header" data-collapse>
+          <span class="section__title">Client Info</span>
+          <span class="section__chevron">&#9660;</span>
+        </div>
+        <div class="section__body">
+          <div class="field">
+            <label class="field__label" for="client-name">Client Name *</label>
+            <input class="field__input" type="text" id="client-name" placeholder="Full name" autocomplete="name" data-required>
+          </div>
+          <div class="field">
+            <label class="field__label" for="client-address">Street Address</label>
+            <input class="field__input" type="text" id="client-address" placeholder="123 Main St" autocomplete="street-address">
+          </div>
+          <div class="field__row field__row--3">
+            <div class="field">
+              <label class="field__label" for="client-city">City</label>
+              <input class="field__input" type="text" id="client-city" placeholder="City" autocomplete="address-level2">
+            </div>
+            <div class="field">
+              <label class="field__label" for="client-state">State</label>
+              <input class="field__input" type="text" id="client-state" placeholder="TX" maxlength="2" autocomplete="address-level1" style="text-transform:uppercase;">
+            </div>
+            <div class="field">
+              <label class="field__label" for="client-zip">ZIP</label>
+              <input class="field__input" type="text" id="client-zip" placeholder="78701" maxlength="10" autocomplete="postal-code" inputmode="numeric">
+            </div>
+          </div>
+          <div class="field__row field__row--2">
+            <div class="field">
+              <label class="field__label" for="client-phone">Phone</label>
+              <input class="field__input" type="tel" id="client-phone" placeholder="(555) 123-4567" autocomplete="tel">
+            </div>
+            <div class="field">
+              <label class="field__label" for="client-email">Email</label>
+              <input class="field__input" type="email" id="client-email" placeholder="client@email.com" autocomplete="email">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project Info -->
+      <div class="section">
+        <div class="section__header" data-collapse>
+          <span class="section__title">Project Info</span>
+          <span class="section__chevron">&#9660;</span>
+        </div>
+        <div class="section__body">
+          <div class="field">
+            <label class="field__label" for="project-type">Project Type *</label>
+            <select class="field__select" id="project-type" data-required>
+              <option value="">Select type...</option>
+              <option value="Handyman Services">Handyman Services</option>
+              <option value="Bathroom Remodel">Bathroom Remodel</option>
+              <option value="Kitchen Remodel">Kitchen Remodel</option>
+              <option value="Home Improvement">Home Improvement</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field__label" for="project-desc">Description</label>
+            <textarea class="field__textarea" id="project-desc" rows="3" placeholder="Describe the scope of work..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Line Items -->
+      <div class="section">
+        <div class="section__header" data-collapse>
+          <span class="section__title">Line Items</span>
+          <span class="section__chevron">&#9660;</span>
+        </div>
+        <div class="section__body" id="line-items-body">
+          <div id="line-items-list">
+            <!-- Items rendered by JS -->
+          </div>
+          <button class="add-item-btn" id="add-item-btn" type="button">+ Add Line Item</button>
+        </div>
+        <div class="subtotal-bar">
+          <span class="subtotal-bar__label">Subtotal</span>
+          <span class="subtotal-bar__amount" id="subtotal-display">$0.00</span>
+        </div>
+      </div>
+
+      <!-- Totals -->
+      <div class="section">
+        <div class="section__header" data-collapse>
+          <span class="section__title">Totals</span>
+          <span class="section__chevron">&#9660;</span>
+        </div>
+        <div class="totals">
+          <div class="totals__row">
+            <span class="totals__label">Subtotal</span>
+            <span class="totals__amount" id="total-subtotal">$0.00</span>
+          </div>
+          <div class="totals__row">
+            <span class="totals__label">
+              <label class="toggle">
+                <input type="checkbox" class="toggle__input" id="tax-toggle">
+                <span class="toggle__slider"></span>
+              </label>
+              Tax
+              <span class="tax-rate-wrap" id="tax-rate-wrap">
+                <input type="number" class="tax-rate-input" id="tax-rate" value="0" min="0" max="100" step="0.25" inputmode="decimal">
+                <span>%</span>
+              </span>
+            </span>
+            <span class="totals__amount" id="total-tax">$0.00</span>
+          </div>
+          <div class="totals__row totals__row--grand">
+            <span class="totals__label">Total</span>
+            <span class="totals__amount" id="total-grand">$0.00</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notes -->
+      <div class="section">
+        <div class="section__header" data-collapse>
+          <span class="section__title">Terms &amp; Notes</span>
+          <span class="section__chevron">&#9660;</span>
+        </div>
+        <div class="section__body">
+          <div class="field">
+            <textarea class="field__textarea" id="est-notes" rows="4">Estimate valid for 30 days. 50% deposit required to begin work. Balance due upon completion.</textarea>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== SAVED VIEW ===== -->
+  <div id="view-saved" class="view">
+    <div class="saved-list" id="saved-list">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+
+  <!-- ===== BOTTOM ACTION BAR ===== -->
+  <div class="action-bar" id="action-bar">
+    <div class="action-bar__inner">
+      <button class="action-btn action-btn--save" id="btn-save" type="button">
+        <span class="action-btn__icon">&#128190;</span>
+        <span>Save</span>
+      </button>
+      <button class="action-btn action-btn--preview" id="btn-preview" type="button">
+        <span class="action-btn__icon">&#128196;</span>
+        <span>Preview</span>
+      </button>
+      <button class="action-btn action-btn--share" id="btn-share" type="button">
+        <span class="action-btn__icon">&#128228;</span>
+        <span>Share</span>
+      </button>
+      <button class="action-btn action-btn--new" id="btn-new" type="button" title="New Estimate">
+        <span class="action-btn__icon">&#10010;</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== PREVIEW OVERLAY ===== -->
+  <div class="preview-overlay" id="preview-overlay">
+    <div class="preview-toolbar">
+      <button class="preview-toolbar__btn preview-toolbar__btn--back" id="preview-back" type="button">&#8592; Back</button>
+      <button class="preview-toolbar__btn preview-toolbar__btn--print" id="preview-print" type="button">&#128424; Print</button>
+    </div>
+    <div class="preview-page" id="preview-content">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+
+  <!-- ===== TOAST ===== -->
+  <div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   EB Services Estimate Builder — Application Logic
+   ============================================================ */
+(function() {
+  'use strict';
+
+  // ---- State ----
+  let currentEstimate = null;
+  let lineItems = [];
+  let loadedEstimateId = null; // track if we loaded an existing estimate
+
+  // ---- DOM References ----
+  const $ = (sel) => document.querySelector(sel);
+  const $$ = (sel) => document.querySelectorAll(sel);
+
+  // ---- Currency Formatting ----
+  const fmt = (n) => {
+    const num = parseFloat(n) || 0;
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(num);
+  };
+
+  // ---- Toast ----
+  let toastTimer = null;
+  function toast(message, type = 'success') {
+    const el = $('#toast');
+    el.textContent = message;
+    el.className = 'toast toast--visible toast--' + type;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { el.className = 'toast'; }, 2500);
+  }
+
+  // ---- LocalStorage Helpers ----
+  function getEstimates() {
+    try {
+      return JSON.parse(localStorage.getItem('eb_estimates')) || [];
+    } catch { return []; }
+  }
+  function saveEstimates(list) {
+    localStorage.setItem('eb_estimates', JSON.stringify(list));
+  }
+  function getCounter() {
+    try {
+      return JSON.parse(localStorage.getItem('eb_estimate_counter')) || {};
+    } catch { return {}; }
+  }
+  function saveCounter(counter) {
+    localStorage.setItem('eb_estimate_counter', JSON.stringify(counter));
+  }
+
+  // ---- Estimate Number Generation ----
+  function generateEstimateNumber(dateStr) {
+    const counter = getCounter();
+    const dateKey = dateStr || todayStr();
+    const count = (counter[dateKey] || 0) + 1;
+    counter[dateKey] = count;
+    saveCounter(counter);
+    const num = String(count).padStart(3, '0');
+    const datePart = dateKey.replace(/-/g, '');
+    return 'EST-' + datePart + '-' + num;
+  }
+
+  function todayStr() {
+    const d = new Date();
+    return d.getFullYear() + '-' +
+      String(d.getMonth() + 1).padStart(2, '0') + '-' +
+      String(d.getDate()).padStart(2, '0');
+  }
+
+  // ---- Initialize ----
+  function init() {
+    setupCollapsible();
+    setupTabs();
+    setupActions();
+    setupTax();
+    setupPhoneFormatting();
+    newEstimate(false); // don't confirm on first load
+  }
+
+  // ---- Collapsible Sections ----
+  function setupCollapsible() {
+    $$('[data-collapse]').forEach(header => {
+      header.addEventListener('click', () => {
+        header.closest('.section').classList.toggle('section--collapsed');
+      });
+    });
+  }
+
+  // ---- View Tabs ----
+  function setupTabs() {
+    $$('.view-tabs__tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const view = tab.dataset.view;
+        $$('.view-tabs__tab').forEach(t => {
+          t.classList.toggle('view-tabs__tab--active', t === tab);
+          t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
+        });
+        $$('.view').forEach(v => v.classList.remove('view--active'));
+        $('#view-' + view).classList.add('view--active');
+
+        // Show/hide action bar
+        $('#action-bar').style.display = view === 'editor' ? '' : 'none';
+
+        if (view === 'saved') renderSavedList();
+      });
+    });
+  }
+
+  // ---- Tax ----
+  function setupTax() {
+    const toggle = $('#tax-toggle');
+    const wrap = $('#tax-rate-wrap');
+    const rate = $('#tax-rate');
+    toggle.addEventListener('change', () => {
+      wrap.classList.toggle('tax-rate-wrap--visible', toggle.checked);
+      recalcTotals();
+    });
+    rate.addEventListener('input', recalcTotals);
+  }
+
+  // ---- Phone formatting ----
+  function setupPhoneFormatting() {
+    const phone = $('#client-phone');
+    phone.addEventListener('input', () => {
+      let val = phone.value.replace(/\D/g, '');
+      if (val.length > 10) val = val.slice(0, 10);
+      if (val.length >= 7) {
+        phone.value = '(' + val.slice(0, 3) + ') ' + val.slice(3, 6) + '-' + val.slice(6);
+      } else if (val.length >= 4) {
+        phone.value = '(' + val.slice(0, 3) + ') ' + val.slice(3);
+      } else if (val.length > 0) {
+        phone.value = '(' + val;
+      }
+    });
+  }
+
+  // ---- Line Items ----
+  function addLineItem(data) {
+    const item = {
+      id: Date.now() + '-' + Math.random().toString(36).slice(2, 6),
+      description: (data && data.description) || '',
+      quantity: (data && data.quantity) || 1,
+      unit: (data && data.unit) || 'each',
+      unitPrice: (data && data.unitPrice) || 0
+    };
+    lineItems.push(item);
+    renderLineItems();
+    return item;
+  }
+
+  function removeLineItem(id) {
+    lineItems = lineItems.filter(i => i.id !== id);
+    renderLineItems();
+    recalcTotals();
+  }
+
+  function renderLineItems() {
+    const list = $('#line-items-list');
+    list.innerHTML = '';
+    lineItems.forEach((item, idx) => {
+      const div = document.createElement('div');
+      div.className = 'line-item';
+      div.dataset.id = item.id;
+      div.innerHTML = `
+        <button class="line-item__remove" type="button" title="Remove item" data-remove="${item.id}">&times;</button>
+        <div class="line-item__desc">
+          <input class="field__input" type="text" placeholder="Item description" value="${escHtml(item.description)}" data-field="description" data-item="${item.id}">
+        </div>
+        <div class="line-item__numbers">
+          <div class="field">
+            <label class="field__label">Qty</label>
+            <input class="field__input" type="number" min="0" step="any" value="${item.quantity}" inputmode="decimal" data-field="quantity" data-item="${item.id}">
+          </div>
+          <div class="field">
+            <label class="field__label">Unit</label>
+            <select class="field__select" data-field="unit" data-item="${item.id}">
+              <option value="each"${item.unit === 'each' ? ' selected' : ''}>each</option>
+              <option value="hr"${item.unit === 'hr' ? ' selected' : ''}>hr</option>
+              <option value="sqft"${item.unit === 'sqft' ? ' selected' : ''}>sq ft</option>
+              <option value="lf"${item.unit === 'lf' ? ' selected' : ''}>lin ft</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field__label">Price</label>
+            <input class="field__input" type="number" min="0" step="0.01" value="${item.unitPrice}" inputmode="decimal" data-field="unitPrice" data-item="${item.id}" style="text-align:right;">
+          </div>
+          <div class="line-item__total" data-total="${item.id}">${fmt(item.quantity * item.unitPrice)}</div>
+        </div>
+      `;
+      list.appendChild(div);
+    });
+
+    // Event listeners
+    list.querySelectorAll('[data-remove]').forEach(btn => {
+      btn.addEventListener('click', () => removeLineItem(btn.dataset.remove));
+    });
+    list.querySelectorAll('[data-field]').forEach(input => {
+      input.addEventListener('input', () => {
+        const id = input.dataset.item;
+        const field = input.dataset.field;
+        const item = lineItems.find(i => i.id === id);
+        if (!item) return;
+        if (field === 'description' || field === 'unit') {
+          item[field] = input.value;
+        } else {
+          item[field] = parseFloat(input.value) || 0;
+        }
+        // Update line total
+        const totalEl = list.querySelector(`[data-total="${id}"]`);
+        if (totalEl) totalEl.textContent = fmt(item.quantity * item.unitPrice);
+        recalcTotals();
+      });
+    });
+
+    recalcTotals();
+  }
+
+  function recalcTotals() {
+    const subtotal = lineItems.reduce((sum, i) => sum + (i.quantity * i.unitPrice), 0);
+    const taxEnabled = $('#tax-toggle').checked;
+    const taxRate = taxEnabled ? (parseFloat($('#tax-rate').value) || 0) : 0;
+    const tax = subtotal * (taxRate / 100);
+    const total = subtotal + tax;
+
+    $('#subtotal-display').textContent = fmt(subtotal);
+    $('#total-subtotal').textContent = fmt(subtotal);
+    $('#total-tax').textContent = fmt(tax);
+    $('#total-grand').textContent = fmt(total);
+  }
+
+  // ---- Form Data ----
+  function gatherFormData() {
+    return {
+      id: $('#est-number').value,
+      date: $('#est-date').value,
+      client: {
+        name: $('#client-name').value.trim(),
+        address: $('#client-address').value.trim(),
+        city: $('#client-city').value.trim(),
+        state: $('#client-state').value.trim().toUpperCase(),
+        zip: $('#client-zip').value.trim(),
+        phone: $('#client-phone').value.trim(),
+        email: $('#client-email').value.trim()
+      },
+      projectType: $('#project-type').value,
+      description: $('#project-desc').value.trim(),
+      items: lineItems.map(i => ({
+        description: i.description,
+        quantity: i.quantity,
+        unit: i.unit,
+        unitPrice: i.unitPrice
+      })),
+      taxEnabled: $('#tax-toggle').checked,
+      taxRate: parseFloat($('#tax-rate').value) || 0,
+      notes: $('#est-notes').value,
+      status: 'draft'
+    };
+  }
+
+  function populateForm(est) {
+    $('#est-number').value = est.id;
+    $('#est-date').value = est.date;
+    $('#client-name').value = est.client.name || '';
+    $('#client-address').value = est.client.address || '';
+    $('#client-city').value = est.client.city || '';
+    $('#client-state').value = est.client.state || '';
+    $('#client-zip').value = est.client.zip || '';
+    $('#client-phone').value = est.client.phone || '';
+    $('#client-email').value = est.client.email || '';
+    $('#project-type').value = est.projectType || '';
+    $('#project-desc').value = est.description || '';
+    $('#tax-toggle').checked = !!est.taxEnabled;
+    $('#tax-rate').value = est.taxRate || 0;
+    $('#tax-rate-wrap').classList.toggle('tax-rate-wrap--visible', !!est.taxEnabled);
+    $('#est-notes').value = est.notes || '';
+
+    lineItems = [];
+    if (est.items && est.items.length) {
+      est.items.forEach(i => {
+        lineItems.push({
+          id: Date.now() + '-' + Math.random().toString(36).slice(2, 6),
+          description: i.description || '',
+          quantity: i.quantity || 1,
+          unit: i.unit || 'each',
+          unitPrice: i.unitPrice || 0
+        });
+      });
+    }
+    renderLineItems();
+
+    // Clear validation errors
+    $$('.field__input--error, .field__select--error, .field__textarea--error').forEach(el => {
+      el.classList.remove('field__input--error', 'field__select--error', 'field__textarea--error');
+    });
+  }
+
+  // ---- Validation ----
+  function validate() {
+    let valid = true;
+    // Clear previous
+    $$('.field__input--error, .field__select--error').forEach(el => {
+      el.classList.remove('field__input--error', 'field__select--error');
+    });
+
+    $$('[data-required]').forEach(el => {
+      if (!el.value.trim()) {
+        const errorClass = el.tagName === 'SELECT' ? 'field__select--error' : 'field__input--error';
+        el.classList.add(errorClass);
+        el.classList.add('shake');
+        setTimeout(() => el.classList.remove('shake'), 400);
+        valid = false;
+      }
+    });
+
+    // Must have at least one line item with a description
+    if (lineItems.length === 0 || !lineItems.some(i => i.description.trim())) {
+      toast('Add at least one line item with a description', 'error');
+      valid = false;
+    }
+
+    if (!valid) {
+      // Scroll to first error
+      const firstError = document.querySelector('.field__input--error, .field__select--error');
+      if (firstError) {
+        // Expand parent section if collapsed
+        const section = firstError.closest('.section');
+        if (section && section.classList.contains('section--collapsed')) {
+          section.classList.remove('section--collapsed');
+        }
+        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        firstError.focus();
+      }
+    }
+    return valid;
+  }
+
+  // ---- Actions ----
+  function setupActions() {
+    $('#add-item-btn').addEventListener('click', () => addLineItem());
+
+    $('#btn-save').addEventListener('click', saveEstimate);
+    $('#btn-preview').addEventListener('click', showPreview);
+    $('#btn-share').addEventListener('click', shareEstimate);
+    $('#btn-new').addEventListener('click', () => newEstimate(true));
+
+    $('#preview-back').addEventListener('click', hidePreview);
+    $('#preview-print').addEventListener('click', () => window.print());
+  }
+
+  function saveEstimate() {
+    const data = gatherFormData();
+    const now = new Date().toISOString();
+
+    const estimates = getEstimates();
+    const existingIdx = estimates.findIndex(e => e.id === data.id);
+
+    if (existingIdx >= 0) {
+      // Update existing
+      estimates[existingIdx] = {
+        ...data,
+        created: estimates[existingIdx].created,
+        updated: now
+      };
+    } else {
+      // New
+      estimates.unshift({
+        ...data,
+        created: now,
+        updated: now
+      });
+    }
+
+    saveEstimates(estimates);
+    loadedEstimateId = data.id;
+    toast('Estimate saved');
+  }
+
+  function newEstimate(confirm) {
+    if (confirm) {
+      const hasContent = lineItems.some(i => i.description.trim()) || $('#client-name').value.trim();
+      if (hasContent && !window.confirm('Start a new estimate? Unsaved changes will be lost.')) return;
+    }
+
+    loadedEstimateId = null;
+    const date = todayStr();
+    const estNumber = generateEstimateNumber(date);
+    lineItems = [];
+
+    // Reset form
+    $('#est-number').value = estNumber;
+    $('#est-date').value = date;
+    $('#client-name').value = '';
+    $('#client-address').value = '';
+    $('#client-city').value = '';
+    $('#client-state').value = '';
+    $('#client-zip').value = '';
+    $('#client-phone').value = '';
+    $('#client-email').value = '';
+    $('#project-type').value = '';
+    $('#project-desc').value = '';
+    $('#tax-toggle').checked = false;
+    $('#tax-rate').value = 0;
+    $('#tax-rate-wrap').classList.remove('tax-rate-wrap--visible');
+    $('#est-notes').value = 'Estimate valid for 30 days. 50% deposit required to begin work. Balance due upon completion.';
+
+    // Start with one empty line item
+    addLineItem();
+
+    // Clear validation errors
+    $$('.field__input--error, .field__select--error').forEach(el => {
+      el.classList.remove('field__input--error', 'field__select--error');
+    });
+
+    // Ensure editor view is active
+    $$('.view-tabs__tab').forEach(t => {
+      t.classList.toggle('view-tabs__tab--active', t.dataset.view === 'editor');
+      t.setAttribute('aria-selected', t.dataset.view === 'editor' ? 'true' : 'false');
+    });
+    $$('.view').forEach(v => v.classList.remove('view--active'));
+    $('#view-editor').classList.add('view--active');
+    $('#action-bar').style.display = '';
+
+    window.scrollTo(0, 0);
+  }
+
+  // ---- Preview ----
+  function showPreview() {
+    if (!validate()) return;
+
+    const data = gatherFormData();
+    const subtotal = data.items.reduce((s, i) => s + (i.quantity * i.unitPrice), 0);
+    const taxAmt = data.taxEnabled ? subtotal * (data.taxRate / 100) : 0;
+    const total = subtotal + taxAmt;
+
+    // Build client address string
+    let addressParts = [];
+    if (data.client.address) addressParts.push(data.client.address);
+    let cityStateZip = [];
+    if (data.client.city) cityStateZip.push(data.client.city);
+    if (data.client.state) cityStateZip.push(data.client.state);
+    if (cityStateZip.length) {
+      let csz = cityStateZip.join(', ');
+      if (data.client.zip) csz += ' ' + data.client.zip;
+      addressParts.push(csz);
+    } else if (data.client.zip) {
+      addressParts.push(data.client.zip);
+    }
+
+    let contactLines = [];
+    if (data.client.phone) contactLines.push(data.client.phone);
+    if (data.client.email) contactLines.push(data.client.email);
+
+    // Format date for display
+    const displayDate = formatDisplayDate(data.date);
+
+    // Build items rows
+    const itemRows = data.items.filter(i => i.description.trim()).map(i => {
+      const unitLabels = { each: 'each', hr: 'hr', sqft: 'sq ft', lf: 'lin ft' };
+      return `<tr>
+        <td>${escHtml(i.description)}</td>
+        <td>${i.quantity}</td>
+        <td>${unitLabels[i.unit] || i.unit}</td>
+        <td>${fmt(i.unitPrice)}</td>
+        <td>${fmt(i.quantity * i.unitPrice)}</td>
+      </tr>`;
+    }).join('');
+
+    let taxRow = '';
+    if (data.taxEnabled && data.taxRate > 0) {
+      taxRow = `<div class="preview-totals__row">
+        <span class="preview-totals__label">Tax (${data.taxRate}%)</span>
+        <span class="preview-totals__amount">${fmt(taxAmt)}</span>
+      </div>`;
+    }
+
+    const html = `
+      <div class="preview-header">
+        <div class="preview-brand">
+          <div class="preview-brand__logo">EB</div>
+          <div>
+            <div class="preview-brand__name">EB Services</div>
+            <div class="preview-brand__tagline">General Contractor</div>
+          </div>
+        </div>
+        <div class="preview-contact">
+          (555) 123-4567<br>
+          info@ebservices.com<br>
+          www.ebservices.com
+        </div>
+      </div>
+
+      <div class="preview-estimate-info">
+        <div>
+          <div class="preview-label">Prepared For</div>
+          <div class="preview-client-name">${escHtml(data.client.name)}</div>
+          ${addressParts.length ? '<div class="preview-client-detail">' + addressParts.map(escHtml).join('<br>') + '</div>' : ''}
+          ${contactLines.length ? '<div class="preview-client-detail" style="margin-top:4px;">' + contactLines.map(escHtml).join('<br>') + '</div>' : ''}
+        </div>
+        <div class="preview-estimate-meta">
+          <div class="preview-estimate-meta__id">${escHtml(data.id)}</div>
+          <div class="preview-estimate-meta__date">${displayDate}</div>
+        </div>
+      </div>
+
+      ${data.projectType || data.description ? `
+      <div class="preview-project">
+        ${data.projectType ? '<div class="preview-project__type">' + escHtml(data.projectType) + '</div>' : ''}
+        ${data.description ? '<div class="preview-project__desc">' + escHtml(data.description) + '</div>' : ''}
+      </div>` : ''}
+
+      <table class="preview-table">
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th>Qty</th>
+            <th>Unit</th>
+            <th>Rate</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${itemRows}
+        </tbody>
+      </table>
+
+      <div class="preview-totals">
+        <div class="preview-totals__row">
+          <span class="preview-totals__label">Subtotal</span>
+          <span class="preview-totals__amount">${fmt(subtotal)}</span>
+        </div>
+        ${taxRow}
+        <div class="preview-totals__row preview-totals__row--grand">
+          <span class="preview-totals__label">Total</span>
+          <span class="preview-totals__amount">${fmt(total)}</span>
+        </div>
+      </div>
+
+      ${data.notes ? `
+      <div class="preview-notes">
+        <div class="preview-notes__title">Terms &amp; Conditions</div>
+        <div class="preview-notes__text">${escHtml(data.notes)}</div>
+      </div>` : ''}
+
+      <div class="preview-footer">
+        Thank you for choosing EB Services.
+      </div>
+    `;
+
+    $('#preview-content').innerHTML = html;
+    $('#preview-overlay').classList.add('preview-overlay--active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function hidePreview() {
+    $('#preview-overlay').classList.remove('preview-overlay--active');
+    document.body.style.overflow = '';
+  }
+
+  // ---- Share ----
+  function shareEstimate() {
+    const data = gatherFormData();
+    const subtotal = data.items.reduce((s, i) => s + (i.quantity * i.unitPrice), 0);
+    const taxAmt = data.taxEnabled ? subtotal * (data.taxRate / 100) : 0;
+    const total = subtotal + taxAmt;
+
+    const unitLabels = { each: 'each', hr: 'hr', sqft: 'sq ft', lf: 'lin ft' };
+
+    let text = `EB SERVICES — ESTIMATE\n`;
+    text += `${data.id} | ${formatDisplayDate(data.date)}\n`;
+    text += `${'─'.repeat(36)}\n\n`;
+
+    if (data.client.name) text += `Client: ${data.client.name}\n`;
+    if (data.client.address) text += `${data.client.address}\n`;
+    let csz = [data.client.city, data.client.state].filter(Boolean).join(', ');
+    if (data.client.zip) csz += (csz ? ' ' : '') + data.client.zip;
+    if (csz) text += `${csz}\n`;
+    if (data.client.phone) text += `Phone: ${data.client.phone}\n`;
+    if (data.client.email) text += `Email: ${data.client.email}\n`;
+
+    if (data.projectType) text += `\nProject: ${data.projectType}\n`;
+    if (data.description) text += `${data.description}\n`;
+
+    text += `\n${'─'.repeat(36)}\n`;
+    data.items.filter(i => i.description.trim()).forEach(i => {
+      const lineTotal = fmt(i.quantity * i.unitPrice);
+      text += `${i.description}\n`;
+      text += `  ${i.quantity} ${unitLabels[i.unit] || i.unit} × ${fmt(i.unitPrice)} = ${lineTotal}\n`;
+    });
+    text += `${'─'.repeat(36)}\n`;
+    text += `Subtotal: ${fmt(subtotal)}\n`;
+    if (data.taxEnabled && data.taxRate > 0) {
+      text += `Tax (${data.taxRate}%): ${fmt(taxAmt)}\n`;
+    }
+    text += `TOTAL: ${fmt(total)}\n`;
+
+    if (data.notes) {
+      text += `\n${data.notes}\n`;
+    }
+    text += `\n— EB Services | (555) 123-4567`;
+
+    // Try Web Share API first (mobile)
+    if (navigator.share) {
+      navigator.share({
+        title: `Estimate ${data.id}`,
+        text: text
+      }).catch(() => {
+        // User cancelled or error — fall back to clipboard
+        copyToClipboard(text);
+      });
+    } else {
+      copyToClipboard(text);
+    }
+  }
+
+  function copyToClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => {
+        toast('Estimate copied to clipboard');
+      }).catch(() => {
+        fallbackCopy(text);
+      });
+    } else {
+      fallbackCopy(text);
+    }
+  }
+
+  function fallbackCopy(text) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand('copy');
+      toast('Estimate copied to clipboard');
+    } catch {
+      toast('Could not copy — please copy manually', 'error');
+    }
+    document.body.removeChild(ta);
+  }
+
+  // ---- Saved Estimates List ----
+  function renderSavedList() {
+    const list = $('#saved-list');
+    const estimates = getEstimates();
+
+    if (!estimates.length) {
+      list.innerHTML = `
+        <div class="saved-empty">
+          <div class="saved-empty__icon">&#128203;</div>
+          <div class="saved-empty__text">No saved estimates yet.<br>Create one and tap Save.</div>
+        </div>`;
+      return;
+    }
+
+    list.innerHTML = estimates.map(est => {
+      const subtotal = (est.items || []).reduce((s, i) => s + ((i.quantity || 0) * (i.unitPrice || 0)), 0);
+      const tax = est.taxEnabled ? subtotal * ((est.taxRate || 0) / 100) : 0;
+      const total = subtotal + tax;
+      return `
+        <div class="saved-card" data-load="${escAttr(est.id)}">
+          <div class="saved-card__info">
+            <div class="saved-card__id">${escHtml(est.id)}</div>
+            <div class="saved-card__client">${escHtml(est.client?.name || 'No client name')}</div>
+          </div>
+          <div class="saved-card__meta">
+            <span class="saved-card__total">${fmt(total)}</span>
+            <span class="saved-card__date">${formatShortDate(est.date)}</span>
+          </div>
+          <button class="saved-card__delete" title="Delete" data-delete="${escAttr(est.id)}">&times;</button>
+        </div>`;
+    }).join('');
+
+    // Load handlers
+    list.querySelectorAll('[data-load]').forEach(card => {
+      card.addEventListener('click', (e) => {
+        if (e.target.closest('[data-delete]')) return;
+        loadEstimate(card.dataset.load);
+      });
+    });
+
+    // Delete handlers
+    list.querySelectorAll('[data-delete]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (window.confirm('Delete this estimate?')) {
+          deleteEstimate(btn.dataset.delete);
+        }
+      });
+    });
+  }
+
+  function loadEstimate(id) {
+    const estimates = getEstimates();
+    const est = estimates.find(e => e.id === id);
+    if (!est) return;
+
+    loadedEstimateId = est.id;
+    populateForm(est);
+
+    // Switch to editor
+    $$('.view-tabs__tab').forEach(t => {
+      t.classList.toggle('view-tabs__tab--active', t.dataset.view === 'editor');
+      t.setAttribute('aria-selected', t.dataset.view === 'editor' ? 'true' : 'false');
+    });
+    $$('.view').forEach(v => v.classList.remove('view--active'));
+    $('#view-editor').classList.add('view--active');
+    $('#action-bar').style.display = '';
+
+    toast('Estimate loaded');
+    window.scrollTo(0, 0);
+  }
+
+  function deleteEstimate(id) {
+    let estimates = getEstimates();
+    estimates = estimates.filter(e => e.id !== id);
+    saveEstimates(estimates);
+    if (loadedEstimateId === id) loadedEstimateId = null;
+    renderSavedList();
+    toast('Estimate deleted');
+  }
+
+  // ---- Utility ----
+  function escHtml(str) {
+    if (!str) return '';
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function escAttr(str) {
+    return (str || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  function formatDisplayDate(dateStr) {
+    if (!dateStr) return '';
+    const parts = dateStr.split('-');
+    if (parts.length !== 3) return dateStr;
+    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const m = parseInt(parts[1], 10) - 1;
+    const d = parseInt(parts[2], 10);
+    return months[m] + ' ' + d + ', ' + parts[0];
+  }
+
+  function formatShortDate(dateStr) {
+    if (!dateStr) return '';
+    const parts = dateStr.split('-');
+    if (parts.length !== 3) return dateStr;
+    return parseInt(parts[1], 10) + '/' + parseInt(parts[2], 10) + '/' + parts[0].slice(2);
+  }
+
+  // ---- Start ----
+  document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+</body>
+</html>
