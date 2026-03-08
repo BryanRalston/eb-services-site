@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Business Dashboard — EB Services</title>
+  <style>
+/* ============================================================
+   EB Services Business Dashboard
+   Mobile-first, iframe-based tool hub
+   ============================================================ */
+
+:root {
+  --color-primary: #1A1A1A;
+  --color-primary-dark: #111111;
+  --color-primary-light: #2A2A2A;
+  --color-secondary: #2A2A2A;
+  --color-accent: #C6A44E;
+  --color-accent-hover: #A88A3D;
+  --color-accent-light: #D4B65A;
+  --color-accent-on-light: #8B7028;
+  --color-text: #1A1A1A;
+  --color-text-light: #F0EDE6;
+  --color-text-muted: #4A4A4A;
+  --color-bg: #FFFFFF;
+  --color-bg-alt: #F8F7F4;
+  --color-border: #E5E0D5;
+  --color-border-light: #F0EDE6;
+  --color-success: #28A745;
+  --color-error: #DC3545;
+  --color-warning: #F0AD4E;
+
+  --font-stack: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --transition-fast: 0.2s ease;
+
+  --header-height: 52px;
+  --bottom-nav-height: 64px;
+  --sidebar-width: 220px;
+}
+
+/* --- Reset --- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: var(--font-stack);
+  color: var(--color-text);
+  background: var(--color-bg-alt);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
+}
+
+/* ============================================================
+   Header
+   ============================================================ */
+.dash-header {
+  background: var(--color-primary);
+  color: var(--color-text-light);
+  height: var(--header-height);
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  z-index: 200;
+  box-shadow: var(--shadow-md);
+  position: relative;
+}
+.dash-header__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.dash-header__logo {
+  width: 32px;
+  height: 32px;
+  background: var(--color-accent);
+  color: var(--color-primary);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: -0.5px;
+  flex-shrink: 0;
+}
+.dash-header__title {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+.dash-header__company {
+  font-size: 10px;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+.dash-header__page {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-text-light);
+}
+
+/* ============================================================
+   Layout: Sidebar (desktop) + Content
+   ============================================================ */
+.dash-layout {
+  display: flex;
+  height: calc(100vh - var(--header-height));
+  height: calc(100dvh - var(--header-height));
+}
+
+/* --- Sidebar (desktop only) --- */
+.dash-sidebar {
+  display: none;
+  width: var(--sidebar-width);
+  background: var(--color-primary-dark);
+  border-right: 1px solid rgba(255,255,255,0.06);
+  flex-shrink: 0;
+  padding: 12px 0;
+  overflow-y: auto;
+}
+.dash-sidebar__label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: rgba(240,237,230,0.4);
+  padding: 16px 20px 6px;
+  font-weight: 700;
+}
+.dash-sidebar__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 20px;
+  color: rgba(240,237,230,0.7);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  transition: background var(--transition-fast), color var(--transition-fast);
+  border-left: 3px solid transparent;
+}
+.dash-sidebar__item:hover {
+  background: rgba(255,255,255,0.04);
+  color: var(--color-text-light);
+}
+.dash-sidebar__item--active {
+  background: rgba(198,164,78,0.08);
+  color: var(--color-accent);
+  border-left-color: var(--color-accent);
+  font-weight: 600;
+}
+.dash-sidebar__icon {
+  font-size: 18px;
+  width: 24px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.dash-sidebar__divider {
+  height: 1px;
+  background: rgba(255,255,255,0.06);
+  margin: 8px 16px;
+}
+
+/* --- Main Content Area --- */
+.dash-content {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+/* --- Dashboard Home --- */
+.dash-home {
+  display: none;
+  height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 20px 16px;
+  padding-bottom: calc(var(--bottom-nav-height) + 24px + env(safe-area-inset-bottom, 0px));
+}
+.dash-home--active {
+  display: block;
+}
+
+.dash-home__section-title {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-text-muted);
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.dash-home__section-title:not(:first-child) {
+  margin-top: 28px;
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.stat-card {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+}
+.stat-card__label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.stat-card__value {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--color-primary);
+  line-height: 1.1;
+}
+.stat-card__value--money {
+  color: var(--color-accent-on-light);
+  font-size: 24px;
+}
+
+/* Quick Actions */
+.quick-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.quick-action-btn {
+  flex: 1;
+  min-width: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 16px;
+  background: var(--color-primary);
+  color: var(--color-text-light);
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-stack);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+.quick-action-btn:hover {
+  background: var(--color-primary-light);
+}
+.quick-action-btn:active {
+  transform: scale(0.97);
+}
+.quick-action-btn__icon {
+  font-size: 18px;
+}
+
+/* Recent Activity */
+.activity-list {
+  list-style: none;
+}
+.activity-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-border-light);
+}
+.activity-item:last-child {
+  border-bottom: none;
+}
+.activity-item__icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.activity-item__icon--job {
+  background: #E3F2FD;
+  color: #1565C0;
+}
+.activity-item__icon--estimate {
+  background: #FFF8E1;
+  color: #F57F17;
+}
+.activity-item__icon--invoice {
+  background: #E8F5E9;
+  color: #2E7D32;
+}
+.activity-item__icon--review {
+  background: #F3E5F5;
+  color: #7B1FA2;
+}
+.activity-item__body {
+  flex: 1;
+  min-width: 0;
+}
+.activity-item__name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.activity-item__meta {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+.activity-item__badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 12px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.activity-item__badge--lead { background: #E3F2FD; color: #1565C0; }
+.activity-item__badge--quoted { background: #FFF8E1; color: #F57F17; }
+.activity-item__badge--scheduled { background: #E8F5E9; color: #2E7D32; }
+.activity-item__badge--in-progress { background: #E1F5FE; color: #0277BD; }
+.activity-item__badge--completed { background: #E0E0E0; color: #424242; }
+.activity-item__badge--cancelled { background: #FFEBEE; color: #C62828; }
+.activity-item__badge--draft { background: #E9ECEF; color: #6C757D; }
+.activity-item__badge--sent { background: #D4EDFC; color: #1A6FB5; }
+.activity-item__badge--partial { background: #FFF3CD; color: #856404; }
+.activity-item__badge--paid { background: #D4EDDA; color: #155724; }
+.activity-item__badge--overdue { background: #F8D7DA; color: #721C24; }
+
+.activity-empty {
+  text-align: center;
+  padding: 32px 16px;
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+/* --- Tool iframe --- */
+.tool-frame {
+  display: none;
+  width: 100%;
+  border: none;
+  background: var(--color-bg-alt);
+}
+.tool-frame--active {
+  display: block;
+}
+
+/* ============================================================
+   Bottom Navigation (mobile only)
+   ============================================================ */
+.bottom-nav {
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background: var(--color-primary);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  z-index: 300;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.15);
+}
+.bottom-nav__item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  background: none;
+  border: none;
+  color: rgba(240,237,230,0.5);
+  font-family: var(--font-stack);
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+  padding: 6px 0;
+  position: relative;
+}
+.bottom-nav__item:hover {
+  color: rgba(240,237,230,0.8);
+}
+.bottom-nav__item--active {
+  color: var(--color-accent);
+}
+.bottom-nav__item--active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 25%;
+  right: 25%;
+  height: 2px;
+  background: var(--color-accent);
+  border-radius: 0 0 2px 2px;
+}
+.bottom-nav__icon {
+  font-size: 22px;
+  line-height: 1;
+}
+.bottom-nav__label {
+  letter-spacing: 0.3px;
+}
+
+/* ============================================================
+   "More" Sheet (mobile)
+   ============================================================ */
+.more-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 400;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.more-overlay--visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.more-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-bg);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  z-index: 410;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  box-shadow: 0 -8px 30px rgba(0,0,0,0.2);
+}
+.more-sheet--visible {
+  transform: translateY(0);
+}
+.more-sheet__handle {
+  width: 36px;
+  height: 4px;
+  background: var(--color-border);
+  border-radius: 2px;
+  margin: 10px auto 4px;
+}
+.more-sheet__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 8px 20px 12px;
+}
+.more-sheet__item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--color-text);
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--font-stack);
+  transition: background var(--transition-fast);
+}
+.more-sheet__item:hover {
+  background: var(--color-bg-alt);
+}
+.more-sheet__item:active {
+  background: var(--color-border-light);
+}
+.more-sheet__item-icon {
+  font-size: 22px;
+  width: 28px;
+  text-align: center;
+}
+.more-sheet__item--external::after {
+  content: '\2197';
+  margin-left: auto;
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+.more-sheet__cancel {
+  display: block;
+  width: calc(100% - 32px);
+  margin: 8px 16px 16px;
+  padding: 14px;
+  background: var(--color-bg-alt);
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-stack);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text);
+  cursor: pointer;
+  text-align: center;
+}
+.more-sheet__cancel:active {
+  background: var(--color-border-light);
+}
+
+/* ============================================================
+   Add to Home Screen Hint
+   ============================================================ */
+.homescreen-hint {
+  display: none;
+  background: var(--color-primary);
+  color: var(--color-text-light);
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  line-height: 1.4;
+  margin-bottom: 16px;
+  position: relative;
+}
+.homescreen-hint--visible {
+  display: block;
+}
+.homescreen-hint__close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  color: rgba(240,237,230,0.6);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+}
+.homescreen-hint__close:hover {
+  color: var(--color-text-light);
+}
+
+/* ============================================================
+   Desktop (>= 768px)
+   ============================================================ */
+@media (min-width: 768px) {
+  .dash-sidebar {
+    display: block;
+  }
+  .bottom-nav {
+    display: none;
+  }
+  .more-overlay, .more-sheet {
+    display: none !important;
+  }
+  .dash-home {
+    padding-bottom: 24px;
+  }
+  .stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .dash-home__inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+}
+
+/* ============================================================
+   Utility
+   ============================================================ */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
+}
+  </style>
+</head>
+<body>
+
+  <!-- ====== Header ====== -->
+  <header class="dash-header">
+    <div class="dash-header__brand">
+      <div class="dash-header__logo">EB</div>
+      <div class="dash-header__title">
+        <span class="dash-header__company">EB Services</span>
+        <span class="dash-header__page">Business Dashboard</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ====== Layout ====== -->
+  <div class="dash-layout">
+
+    <!-- ====== Sidebar (desktop) ====== -->
+    <nav class="dash-sidebar" aria-label="Dashboard navigation">
+      <div class="dash-sidebar__label">Overview</div>
+      <button class="dash-sidebar__item dash-sidebar__item--active" data-tab="home">
+        <span class="dash-sidebar__icon">&#9638;</span>
+        Dashboard
+      </button>
+      <div class="dash-sidebar__divider"></div>
+      <div class="dash-sidebar__label">Tools</div>
+      <button class="dash-sidebar__item" data-tab="jobs">
+        <span class="dash-sidebar__icon">&#128203;</span>
+        Jobs
+      </button>
+      <button class="dash-sidebar__item" data-tab="estimates">
+        <span class="dash-sidebar__icon">&#128196;</span>
+        Estimates
+      </button>
+      <button class="dash-sidebar__item" data-tab="invoices">
+        <span class="dash-sidebar__icon">&#128176;</span>
+        Invoices
+      </button>
+      <button class="dash-sidebar__item" data-tab="reviews">
+        <span class="dash-sidebar__icon">&#11088;</span>
+        Reviews
+      </button>
+      <button class="dash-sidebar__item" data-tab="site-manager">
+        <span class="dash-sidebar__icon">&#127760;</span>
+        Site Manager
+      </button>
+      <div class="dash-sidebar__divider"></div>
+      <div class="dash-sidebar__label">Reference</div>
+      <a class="dash-sidebar__item" href="owner-guide.md" target="_blank" rel="noopener" style="text-decoration:none;">
+        <span class="dash-sidebar__icon">&#128218;</span>
+        Owner Guide
+      </a>
+    </nav>
+
+    <!-- ====== Main Content ====== -->
+    <main class="dash-content" id="dash-content">
+
+      <!-- Dashboard Home -->
+      <div class="dash-home dash-home--active" id="dash-home">
+        <div class="dash-home__inner">
+
+          <!-- Add to Home Screen hint -->
+          <div class="homescreen-hint" id="homescreen-hint">
+            <button class="homescreen-hint__close" id="homescreen-hint-close" aria-label="Dismiss">&times;</button>
+            <strong>Tip:</strong> Add this page to your home screen for one-tap access to all your business tools.
+            On iOS tap <strong>Share &#8594; Add to Home Screen</strong>.
+            On Android tap <strong>&#8942; &#8594; Add to Home Screen</strong>.
+          </div>
+
+          <!-- Quick Stats -->
+          <div class="dash-home__section-title">At a Glance</div>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-card__label">Active Jobs</div>
+              <div class="stat-card__value" id="stat-active-jobs">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card__label">Pipeline Value</div>
+              <div class="stat-card__value stat-card__value--money" id="stat-pipeline">$0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card__label">Unpaid Invoices</div>
+              <div class="stat-card__value" id="stat-unpaid-invoices">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card__label">Outstanding</div>
+              <div class="stat-card__value stat-card__value--money" id="stat-outstanding">$0</div>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="dash-home__section-title">Quick Actions</div>
+          <div class="quick-actions">
+            <button class="quick-action-btn" data-action="estimates">
+              <span class="quick-action-btn__icon">&#128196;</span>
+              New Estimate
+            </button>
+            <button class="quick-action-btn" data-action="jobs">
+              <span class="quick-action-btn__icon">&#128203;</span>
+              New Job
+            </button>
+            <button class="quick-action-btn" data-action="reviews">
+              <span class="quick-action-btn__icon">&#11088;</span>
+              Send Review
+            </button>
+          </div>
+
+          <!-- Recent Activity -->
+          <div class="dash-home__section-title">Recent Activity</div>
+          <ul class="activity-list" id="activity-list">
+            <li class="activity-empty">No activity yet. Create a job, estimate, or invoice to get started.</li>
+          </ul>
+
+        </div>
+      </div>
+
+      <!-- Tool iframes (created dynamically) -->
+    </main>
+  </div>
+
+  <!-- ====== Bottom Navigation (mobile) ====== -->
+  <nav class="bottom-nav" id="bottom-nav" aria-label="Main navigation">
+    <button class="bottom-nav__item bottom-nav__item--active" data-tab="home">
+      <span class="bottom-nav__icon">&#9638;</span>
+      <span class="bottom-nav__label">Dashboard</span>
+    </button>
+    <button class="bottom-nav__item" data-tab="jobs">
+      <span class="bottom-nav__icon">&#128203;</span>
+      <span class="bottom-nav__label">Jobs</span>
+    </button>
+    <button class="bottom-nav__item" data-tab="estimates">
+      <span class="bottom-nav__icon">&#128196;</span>
+      <span class="bottom-nav__label">Estimates</span>
+    </button>
+    <button class="bottom-nav__item" data-tab="invoices">
+      <span class="bottom-nav__icon">&#128176;</span>
+      <span class="bottom-nav__label">Invoices</span>
+    </button>
+    <button class="bottom-nav__item" data-tab="more">
+      <span class="bottom-nav__icon">&#8943;</span>
+      <span class="bottom-nav__label">More</span>
+    </button>
+  </nav>
+
+  <!-- ====== More Sheet (mobile) ====== -->
+  <div class="more-overlay" id="more-overlay"></div>
+  <div class="more-sheet" id="more-sheet">
+    <div class="more-sheet__handle"></div>
+    <div class="more-sheet__title">More Tools</div>
+    <button class="more-sheet__item" data-tab="site-manager">
+      <span class="more-sheet__item-icon">&#127760;</span>
+      Site Manager
+    </button>
+    <button class="more-sheet__item" data-tab="reviews">
+      <span class="more-sheet__item-icon">&#11088;</span>
+      Reviews
+    </button>
+    <a class="more-sheet__item more-sheet__item--external" href="owner-guide.md" target="_blank" rel="noopener" style="text-decoration:none;">
+      <span class="more-sheet__item-icon">&#128218;</span>
+      Owner Guide
+    </a>
+    <button class="more-sheet__cancel" id="more-cancel">Cancel</button>
+  </div>
+
+
+  <script>
+/* ============================================================
+   EB Services Business Dashboard — Controller
+   ============================================================ */
+(function() {
+  'use strict';
+
+  // ---- Tool definitions ----
+  const TOOLS = {
+    jobs:           { src: 'jobs.html',         label: 'Jobs' },
+    estimates:      { src: 'estimate.html',     label: 'Estimates' },
+    invoices:       { src: 'invoice.html',      label: 'Invoices' },
+    reviews:        { src: 'reviews.html',      label: 'Reviews' },
+    'site-manager': { src: 'site-manager.html', label: 'Site Manager' }
+  };
+
+  const ACTIVE_JOB_STATUSES = ['lead', 'quoted', 'scheduled', 'in-progress'];
+  const UNPAID_INVOICE_STATUSES = ['sent', 'partial', 'overdue'];
+
+  // ---- State ----
+  let currentTab = 'home';
+  const loadedFrames = {};   // tab -> iframe element
+
+  // ---- Helpers ----
+  const $ = (sel) => document.querySelector(sel);
+  const $$ = (sel) => document.querySelectorAll(sel);
+
+  function fmt(n) {
+    const num = parseFloat(n) || 0;
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(num);
+  }
+
+  function fmtFull(n) {
+    const num = parseFloat(n) || 0;
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(num);
+  }
+
+  function escHtml(str) {
+    if (!str) return '';
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function relativeDate(isoStr) {
+    if (!isoStr) return '';
+    const d = new Date(isoStr);
+    const now = new Date();
+    const diffMs = now - d;
+    const diffMin = Math.floor(diffMs / 60000);
+    if (diffMin < 1) return 'Just now';
+    if (diffMin < 60) return diffMin + 'm ago';
+    const diffH = Math.floor(diffMin / 60);
+    if (diffH < 24) return diffH + 'h ago';
+    const diffD = Math.floor(diffH / 24);
+    if (diffD < 7) return diffD + 'd ago';
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return months[d.getMonth()] + ' ' + d.getDate();
+  }
+
+  function formatShortDate(dateStr) {
+    if (!dateStr) return '';
+    // Handle both ISO and YYYY-MM-DD
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return months[d.getMonth()] + ' ' + d.getDate();
+  }
+
+  // ---- LocalStorage readers ----
+  function getJobs() {
+    try { return JSON.parse(localStorage.getItem('eb_jobs')) || []; }
+    catch { return []; }
+  }
+  function getEstimates() {
+    try { return JSON.parse(localStorage.getItem('eb_estimates')) || []; }
+    catch { return []; }
+  }
+  function getInvoices() {
+    try { return JSON.parse(localStorage.getItem('eb_invoices')) || []; }
+    catch { return []; }
+  }
+  function getReviewRequests() {
+    try { return JSON.parse(localStorage.getItem('eb_review_requests')) || []; }
+    catch { return []; }
+  }
+
+  // ---- Compute invoice balance ----
+  function invoiceBalance(inv) {
+    const items = inv.items || [];
+    const subtotal = items.reduce((s, i) => s + ((i.quantity || 0) * (i.unitPrice || 0)), 0);
+    const tax = inv.taxEnabled ? subtotal * ((inv.taxRate || 0) / 100) : 0;
+    const grandTotal = subtotal + tax;
+    const totalPaid = (inv.payments || []).reduce((s, p) => s + (parseFloat(p.amount) || 0), 0);
+    return grandTotal - totalPaid;
+  }
+
+  // ---- Compute job value ----
+  function getJobValue(job) {
+    if (job.value && job.value > 0) return job.value;
+    if (job.linkedEstimate) {
+      const est = getEstimates().find(e => e.id === job.linkedEstimate);
+      if (est && est.items) {
+        const subtotal = est.items.reduce((s, i) => s + ((i.quantity || 0) * (i.unitPrice || 0)), 0);
+        const tax = est.taxEnabled ? subtotal * ((est.taxRate || 0) / 100) : 0;
+        return subtotal + tax;
+      }
+    }
+    if (job.linkedInvoice) {
+      const inv = getInvoices().find(i => i.id === job.linkedInvoice);
+      if (inv && inv.items) {
+        const subtotal = inv.items.reduce((s, i) => s + ((i.quantity || 0) * (i.unitPrice || 0)), 0);
+        const tax = inv.taxEnabled ? subtotal * ((inv.taxRate || 0) / 100) : 0;
+        return subtotal + tax;
+      }
+    }
+    return 0;
+  }
+
+  // ---- Refresh Dashboard Stats ----
+  function refreshStats() {
+    const jobs = getJobs();
+    const invoices = getInvoices();
+
+    // Active jobs
+    const activeJobs = jobs.filter(j => ACTIVE_JOB_STATUSES.includes(j.status));
+    $('#stat-active-jobs').textContent = activeJobs.length;
+
+    // Pipeline value
+    let pipelineValue = 0;
+    activeJobs.forEach(j => { pipelineValue += getJobValue(j); });
+    $('#stat-pipeline').textContent = fmt(pipelineValue);
+
+    // Unpaid invoices
+    const unpaidInvoices = invoices.filter(i => UNPAID_INVOICE_STATUSES.includes(i.status));
+    $('#stat-unpaid-invoices').textContent = unpaidInvoices.length;
+
+    // Outstanding balance
+    let outstanding = 0;
+    unpaidInvoices.forEach(inv => {
+      const bal = invoiceBalance(inv);
+      if (bal > 0) outstanding += bal;
+    });
+    $('#stat-outstanding').textContent = fmt(outstanding);
+
+    // Recent activity
+    refreshActivity(jobs, invoices);
+  }
+
+  // ---- Recent Activity ----
+  function refreshActivity(jobs, invoices) {
+    const estimates = getEstimates();
+    const reviews = getReviewRequests();
+
+    // Combine all items with a common shape
+    const items = [];
+
+    jobs.forEach(j => {
+      items.push({
+        type: 'job',
+        name: (j.client && j.client.name) || 'Unnamed Job',
+        id: j.id,
+        status: j.status || 'lead',
+        date: j.updated || j.created || '',
+        icon: '&#128203;',
+        iconClass: 'activity-item__icon--job'
+      });
+    });
+
+    estimates.forEach(e => {
+      items.push({
+        type: 'estimate',
+        name: (e.client && e.client.name) || 'Unnamed Estimate',
+        id: e.id,
+        status: e.status || 'draft',
+        date: e.updated || e.created || '',
+        icon: '&#128196;',
+        iconClass: 'activity-item__icon--estimate'
+      });
+    });
+
+    invoices.forEach(inv => {
+      items.push({
+        type: 'invoice',
+        name: (inv.client && inv.client.name) || 'Unnamed Invoice',
+        id: inv.id,
+        status: inv.status || 'draft',
+        date: inv.updated || inv.created || '',
+        icon: '&#128176;',
+        iconClass: 'activity-item__icon--invoice'
+      });
+    });
+
+    reviews.forEach(r => {
+      items.push({
+        type: 'review',
+        name: r.clientName || r.name || 'Review Request',
+        id: r.id || '',
+        status: r.status || 'sent',
+        date: r.created || r.date || '',
+        icon: '&#11088;',
+        iconClass: 'activity-item__icon--review'
+      });
+    });
+
+    // Sort by date descending
+    items.sort((a, b) => {
+      const da = a.date || '';
+      const db = b.date || '';
+      return db.localeCompare(da);
+    });
+
+    // Take top 5
+    const recent = items.slice(0, 5);
+    const listEl = $('#activity-list');
+
+    if (recent.length === 0) {
+      listEl.innerHTML = '<li class="activity-empty">No activity yet. Create a job, estimate, or invoice to get started.</li>';
+      return;
+    }
+
+    listEl.innerHTML = recent.map(item => {
+      const typeLabel = item.type.charAt(0).toUpperCase() + item.type.slice(1);
+      const statusLabel = (item.status || '').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+      return `
+        <li class="activity-item">
+          <div class="activity-item__icon ${item.iconClass}">${item.icon}</div>
+          <div class="activity-item__body">
+            <div class="activity-item__name">${escHtml(item.name)}</div>
+            <div class="activity-item__meta">${typeLabel} &middot; ${item.id ? escHtml(item.id) + ' &middot; ' : ''}${relativeDate(item.date)}</div>
+          </div>
+          <span class="activity-item__badge activity-item__badge--${item.status}">${statusLabel}</span>
+        </li>`;
+    }).join('');
+  }
+
+  // ---- Tab Switching ----
+  function switchTab(tab) {
+    if (tab === 'more') {
+      openMoreSheet();
+      return;
+    }
+
+    const prevTab = currentTab;
+    currentTab = tab;
+
+    // Update URL hash
+    if (tab === 'home') {
+      history.replaceState(null, '', window.location.pathname);
+    } else {
+      history.replaceState(null, '', '#' + tab);
+    }
+
+    // Update nav highlights
+    $$('.bottom-nav__item').forEach(btn => {
+      const isMore = btn.dataset.tab === 'more';
+      const isActive = btn.dataset.tab === tab ||
+        (isMore && ['site-manager', 'reviews'].includes(tab) && window.innerWidth < 768);
+      // For the "More" button, highlight it if a More-sheet tool is active
+      if (isMore) {
+        btn.classList.toggle('bottom-nav__item--active',
+          ['site-manager'].includes(tab));
+      } else {
+        btn.classList.toggle('bottom-nav__item--active', btn.dataset.tab === tab);
+      }
+    });
+
+    $$('.dash-sidebar__item').forEach(btn => {
+      if (btn.dataset.tab) {
+        btn.classList.toggle('dash-sidebar__item--active', btn.dataset.tab === tab);
+      }
+    });
+
+    // Show/hide content
+    const dashHome = $('#dash-home');
+    if (tab === 'home') {
+      dashHome.classList.add('dash-home--active');
+      // Hide all frames
+      Object.values(loadedFrames).forEach(f => f.classList.remove('tool-frame--active'));
+      refreshStats();
+    } else if (TOOLS[tab]) {
+      dashHome.classList.remove('dash-home--active');
+      // Hide all frames first
+      Object.values(loadedFrames).forEach(f => f.classList.remove('tool-frame--active'));
+      // Show or create the iframe
+      showToolFrame(tab);
+    }
+
+    // Close more sheet if open
+    closeMoreSheet();
+  }
+
+  function showToolFrame(tab) {
+    const tool = TOOLS[tab];
+    if (!tool) return;
+
+    const content = $('#dash-content');
+
+    if (!loadedFrames[tab]) {
+      const iframe = document.createElement('iframe');
+      iframe.className = 'tool-frame';
+      iframe.src = tool.src;
+      iframe.title = tool.label;
+      iframe.setAttribute('loading', 'lazy');
+      content.appendChild(iframe);
+      loadedFrames[tab] = iframe;
+    }
+
+    // Calculate height
+    updateFrameHeight(loadedFrames[tab]);
+    loadedFrames[tab].classList.add('tool-frame--active');
+  }
+
+  function updateFrameHeight(iframe) {
+    const isMobile = window.innerWidth < 768;
+    const headerH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height'));
+    if (isMobile) {
+      // Account for bottom nav + safe area
+      const navH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--bottom-nav-height'));
+      iframe.style.height = `calc(100dvh - ${headerH}px - ${navH}px - env(safe-area-inset-bottom, 0px))`;
+    } else {
+      iframe.style.height = `calc(100dvh - ${headerH}px)`;
+    }
+  }
+
+  // ---- More Sheet ----
+  function openMoreSheet() {
+    $('#more-overlay').classList.add('more-overlay--visible');
+    // Small delay for animation
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        $('#more-sheet').classList.add('more-sheet--visible');
+      });
+    });
+  }
+
+  function closeMoreSheet() {
+    $('#more-sheet').classList.remove('more-sheet--visible');
+    $('#more-overlay').classList.remove('more-overlay--visible');
+  }
+
+  // ---- Homescreen Hint ----
+  function setupHomescreenHint() {
+    if (localStorage.getItem('eb_dashboard_hint_dismissed')) return;
+    // Only show on mobile devices
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
+                         window.navigator.standalone === true;
+    if (isStandalone) return;
+
+    const hint = $('#homescreen-hint');
+    hint.classList.add('homescreen-hint--visible');
+
+    $('#homescreen-hint-close').addEventListener('click', () => {
+      hint.classList.remove('homescreen-hint--visible');
+      localStorage.setItem('eb_dashboard_hint_dismissed', '1');
+    });
+  }
+
+  // ---- Event Listeners ----
+  function init() {
+    // Bottom nav (mobile)
+    $$('.bottom-nav__item').forEach(btn => {
+      btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+    });
+
+    // Sidebar (desktop)
+    $$('.dash-sidebar__item[data-tab]').forEach(btn => {
+      btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+    });
+
+    // More sheet items
+    $$('.more-sheet__item[data-tab]').forEach(btn => {
+      btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+    });
+
+    // More overlay click to close
+    $('#more-overlay').addEventListener('click', closeMoreSheet);
+    $('#more-cancel').addEventListener('click', closeMoreSheet);
+
+    // Quick action buttons
+    $$('.quick-action-btn[data-action]').forEach(btn => {
+      btn.addEventListener('click', () => switchTab(btn.dataset.action));
+    });
+
+    // Handle resize — update iframe heights
+    window.addEventListener('resize', () => {
+      Object.values(loadedFrames).forEach(updateFrameHeight);
+    });
+
+    // Handle hash routing on load
+    const hash = window.location.hash.replace('#', '');
+    if (hash && (TOOLS[hash] || hash === 'home')) {
+      switchTab(hash);
+    } else {
+      refreshStats();
+    }
+
+    // Refresh stats when returning to dashboard (e.g., from iframe tool)
+    // Listen for visibility and focus changes
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && currentTab === 'home') {
+        refreshStats();
+      }
+    });
+
+    window.addEventListener('focus', () => {
+      if (currentTab === 'home') refreshStats();
+    });
+
+    // Also refresh stats periodically when on home tab (in case user
+    // switches back from an iframe tool that modified localStorage)
+    setInterval(() => {
+      if (currentTab === 'home') refreshStats();
+    }, 3000);
+
+    // Homescreen hint
+    setupHomescreenHint();
+  }
+
+  // ---- Boot ----
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+})();
+  </script>
+</body>
+</html>

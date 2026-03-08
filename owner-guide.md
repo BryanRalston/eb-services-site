@@ -16,10 +16,17 @@ You can update all your business info, testimonials, and photos yourself using t
 
 ## Your Business Tools
 
-These are private — only you can see them. Bookmark each one or **"Add to Home Screen"** on your phone so they work like apps.
+These are all private — only you use them. Everything is inside one dashboard:
+
+**https://bryanralston.github.io/eb-services-site/dashboard.html**
+
+**Add this one link to your Home Screen** — it's your entire business toolkit in one place. On iPhone: open in Safari → tap Share (square with arrow) → "Add to Home Screen."
+
+The dashboard shows your business stats at a glance (active jobs, pipeline value, unpaid invoices) and has quick-action buttons. Tap any tool in the bottom nav (mobile) or sidebar (desktop) to switch between them.
+
+Here's what each tool does:
 
 ### Site Manager
-**https://bryanralston.github.io/eb-services-site/site-manager.html**
 
 This is how you update your website — your business info, testimonials, and photos. No coding needed.
 
@@ -42,8 +49,6 @@ This is how you update your website — your business info, testimonials, and ph
 5. Save and upload the config file
 
 ### Estimate Builder
-**https://bryanralston.github.io/eb-services-site/estimate.html**
-
 Create professional estimates on-site. Fill in the client info, add your line items with prices, and send it right from your phone. No more "I'll get that estimate to you later."
 
 - Auto-generates estimate numbers
@@ -55,8 +60,6 @@ Create professional estimates on-site. Fill in the client info, add your line it
 - Back up your data: Saved tab → Download Backup
 
 ### Invoice Tool
-**https://bryanralston.github.io/eb-services-site/invoice.html**
-
 Turn estimates into invoices when the job is done. Track payments and see what's still owed.
 
 - "Create from Estimate" pulls in all the details — no retyping
@@ -66,8 +69,6 @@ Turn estimates into invoices when the job is done. Track payments and see what's
 - Preview and share just like estimates
 
 ### Job Tracker
-**https://bryanralston.github.io/eb-services-site/jobs.html**
-
 Keep track of all your jobs in one place.
 
 - Pipeline view: Lead → Quoted → Scheduled → In Progress → Completed
@@ -77,8 +78,6 @@ Keep track of all your jobs in one place.
 - Quick-tap to change status as jobs progress
 
 ### Review Manager
-**https://bryanralston.github.io/eb-services-site/reviews.html**
-
 Google reviews are the #1 way to get found locally. This makes asking for them easy.
 
 - **First**: Go to Settings and paste your Google review link (see the setup guide below for how to get it)
