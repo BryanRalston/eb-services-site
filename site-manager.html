@@ -96,7 +96,7 @@ body {
   line-height: 1.2;
 }
 .app-header__company {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--color-accent);
   text-transform: uppercase;
   letter-spacing: 1.5px;
@@ -223,6 +223,7 @@ body {
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
   -webkit-appearance: none;
   appearance: none;
+  min-height: 44px;
 }
 .field__input:focus,
 .field__select:focus,
@@ -807,6 +808,11 @@ body {
   padding: 4px;
   font-family: inherit;
   line-height: 1;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* --- Responsive --- */
@@ -1230,22 +1236,22 @@ body {
       item.innerHTML =
         '<div class="list-item__number">Testimonial ' + (i + 1) + '</div>' +
         '<div class="field">' +
-          '<label class="field__label">Quote</label>' +
-          '<textarea class="field__textarea testimonial-text" rows="3" data-index="' + i + '">' + escapeHtml(t.text) + '</textarea>' +
+          '<label class="field__label" for="testimonial-text-' + i + '">Quote</label>' +
+          '<textarea class="field__textarea testimonial-text" id="testimonial-text-' + i + '" rows="3" data-index="' + i + '">' + escapeHtml(t.text) + '</textarea>' +
         '</div>' +
         '<div class="field__row field__row--2">' +
           '<div class="field">' +
-            '<label class="field__label">Customer Name</label>' +
-            '<input class="field__input testimonial-author" type="text" value="' + escapeAttr(t.author) + '" data-index="' + i + '">' +
+            '<label class="field__label" for="testimonial-author-' + i + '">Customer Name</label>' +
+            '<input class="field__input testimonial-author" id="testimonial-author-' + i + '" type="text" value="' + escapeAttr(t.author) + '" data-index="' + i + '">' +
           '</div>' +
           '<div class="field">' +
-            '<label class="field__label">Project Type</label>' +
-            '<input class="field__input testimonial-project" type="text" value="' + escapeAttr(t.project) + '" data-index="' + i + '">' +
+            '<label class="field__label" for="testimonial-project-' + i + '">Project Type</label>' +
+            '<input class="field__input testimonial-project" id="testimonial-project-' + i + '" type="text" value="' + escapeAttr(t.project) + '" data-index="' + i + '">' +
           '</div>' +
         '</div>' +
         '<div class="field">' +
-          '<label class="field__label">City</label>' +
-          '<input class="field__input testimonial-city" type="text" value="' + escapeAttr(t.city) + '" data-index="' + i + '">' +
+          '<label class="field__label" for="testimonial-city-' + i + '">City</label>' +
+          '<input class="field__input testimonial-city" id="testimonial-city-' + i + '" type="text" value="' + escapeAttr(t.city) + '" data-index="' + i + '">' +
         '</div>' +
         '<div class="list-item__actions">' +
           (i > 0 ? '<button class="list-item__btn move-up" data-index="' + i + '">Move Up</button>' : '') +
@@ -1354,12 +1360,12 @@ body {
           thumbHtml +
           '<div class="photo-card__fields">' +
             '<div class="field">' +
-              '<label class="field__label">Label</label>' +
-              '<input class="field__input gallery-label" type="text" value="' + escapeAttr(g.label) + '" data-index="' + i + '" placeholder="e.g. Master Bathroom Remodel">' +
+              '<label class="field__label" for="gallery-label-' + i + '">Label</label>' +
+              '<input class="field__input gallery-label" id="gallery-label-' + i + '" type="text" value="' + escapeAttr(g.label) + '" data-index="' + i + '" placeholder="e.g. Master Bathroom Remodel">' +
             '</div>' +
             '<div class="field">' +
-              '<label class="field__label">Category</label>' +
-              '<select class="field__select gallery-category" data-index="' + i + '">' +
+              '<label class="field__label" for="gallery-category-' + i + '">Category</label>' +
+              '<select class="field__select gallery-category" id="gallery-category-' + i + '" data-index="' + i + '">' +
                 '<option value="bathroom"' + (g.category === 'bathroom' ? ' selected' : '') + '>Bathroom</option>' +
                 '<option value="kitchen"' + (g.category === 'kitchen' ? ' selected' : '') + '>Kitchen</option>' +
                 '<option value="handyman"' + (g.category === 'handyman' ? ' selected' : '') + '>Handyman</option>' +
@@ -1369,8 +1375,8 @@ body {
               '</select>' +
             '</div>' +
             '<div class="field">' +
-              '<label class="field__label">Alt Text</label>' +
-              '<input class="field__input gallery-alt" type="text" value="' + escapeAttr(g.alt) + '" data-index="' + i + '" placeholder="Description for accessibility">' +
+              '<label class="field__label" for="gallery-alt-' + i + '">Alt Text</label>' +
+              '<input class="field__input gallery-alt" id="gallery-alt-' + i + '" type="text" value="' + escapeAttr(g.alt) + '" data-index="' + i + '" placeholder="Description for accessibility">' +
             '</div>' +
           '</div>' +
         '</div>' +

@@ -303,6 +303,7 @@ p:last-child {
   gap: 0.75rem;
   text-decoration: none;
   flex-shrink: 0;
+  min-height: 44px;
 }
 
 .site-logo__icon {
@@ -479,8 +480,10 @@ p:last-child {
   flex-direction: column;
   justify-content: center;
   gap: 5px;
-  width: 32px;
-  height: 32px;
+  min-width: 44px;
+  min-height: 44px;
+  width: 44px;
+  height: 44px;
   padding: 4px;
   z-index: 1001;
 }
