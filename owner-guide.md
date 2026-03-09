@@ -32,7 +32,7 @@ This is how you update your website — your business info, testimonials, and ph
 
 - **Business tab**: Your name, phone, email, service area, license number, hours, social media links, bio
 - **Reviews tab**: Add/edit/remove customer testimonials that show on the website
-- **Gallery tab**: Add photos to your gallery (upload photos to GitHub, then add the filename here)
+- **Gallery tab**: Add photos directly from your phone or computer — they're saved right into the config file
 - **Preview tab**: See how your changes will look before publishing
 
 **How to update your site:**
@@ -42,11 +42,10 @@ This is how you update your website — your business info, testimonials, and ph
 4. Upload the file — your site updates automatically in 1-2 minutes
 
 **Adding photos:**
-1. Take good photos of your work (landscape mode, good lighting)
-2. Go to your GitHub repository → click the `photos` folder
-3. Click "Add file" → "Upload files" → drag your photos in → click "Commit changes"
-4. Open Site Manager → Gallery tab → enter the filename (e.g., `photos/bathroom-remodel-1.jpg`)
-5. Save and upload the config file
+1. Open the Dashboard → Site Manager → Gallery tab
+2. Tap "+ Add Photo" and pick a photo from your phone or computer
+3. Add a label and category
+4. Save Config and upload to GitHub — your photos are included in the file automatically
 
 ### Estimate Builder
 Create professional estimates on-site. Fill in the client info, add your line items with prices, and send it right from your phone. No more "I'll get that estimate to you later."

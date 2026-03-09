@@ -309,27 +309,166 @@ body {
   color: var(--color-text-muted);
 }
 
-/* --- Gallery photo preview --- */
-.photo-preview {
-  width: 80px;
-  height: 60px;
-  border-radius: var(--radius-sm);
-  object-fit: cover;
-  border: 1px solid var(--color-border);
-  margin-bottom: 8px;
+/* --- Gallery Photo Cards --- */
+.photo-card {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 14px;
+  align-items: start;
 }
-.photo-placeholder {
-  width: 80px;
-  height: 60px;
+.photo-card__thumb {
+  width: 120px;
+  height: 90px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+.photo-card__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: auto;
+  display: block;
+}
+.photo-card__thumb-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  border: 2px dashed var(--color-border);
   border-radius: var(--radius-sm);
   background: var(--color-bg-alt);
-  border: 1px dashed var(--color-border);
+  color: var(--color-text-muted);
+  font-size: 11px;
+  text-align: center;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+.photo-card__thumb-placeholder:hover,
+.photo-card__thumb-placeholder:active {
+  border-color: var(--color-accent);
+  background: rgba(198, 164, 78, 0.05);
+}
+.photo-card__thumb-placeholder-icon {
+  font-size: 28px;
+  line-height: 1;
+}
+.photo-card__fields {
+  min-width: 0;
+}
+.photo-card__change-btn {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  background: rgba(0,0,0,0.7);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 10px;
+  padding: 2px 6px;
+  cursor: pointer;
+  font-family: inherit;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+.photo-card__thumb:hover .photo-card__change-btn {
+  opacity: 1;
+}
+
+/* --- Photo Lightbox --- */
+.lightbox-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.85);
+  z-index: 500;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.lightbox-overlay--active {
+  display: flex;
+}
+.lightbox-overlay img {
+  max-width: 100%;
+  max-height: 85vh;
+  border-radius: var(--radius-md);
+  box-shadow: 0 0 40px rgba(0,0,0,0.5);
+}
+.lightbox-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 44px;
+  height: 44px;
+  background: rgba(255,255,255,0.15);
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
-  color: var(--color-border);
-  margin-bottom: 8px;
+}
+
+/* --- Config Size Indicator --- */
+.config-size {
+  margin-top: 16px;
+  padding: 10px 14px;
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.config-size__bar {
+  flex: 1;
+  height: 6px;
+  background: var(--color-border-light);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.config-size__fill {
+  height: 100%;
+  background: var(--color-success);
+  border-radius: 3px;
+  transition: width 0.3s ease, background 0.3s ease;
+}
+.config-size__fill--warning {
+  background: var(--color-warning);
+}
+.config-size__fill--danger {
+  background: var(--color-error);
+}
+.config-size__warning {
+  color: var(--color-warning);
+  font-weight: 600;
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+@media (max-width: 480px) {
+  .photo-card {
+    grid-template-columns: 1fr;
+  }
+  .photo-card__thumb {
+    width: 100%;
+    height: 180px;
+  }
 }
 
 /* --- Add Item Button --- */
@@ -854,14 +993,31 @@ body {
           <h2 class="section__title">Project Photos</h2>
         </div>
         <div class="section__body">
-          <p class="field__hint" style="margin-bottom: 14px;">Upload your photos to the <strong>photos</strong> folder on GitHub, then enter the filename here (e.g., <code>photos/bathroom-remodel-1.jpg</code>).</p>
+          <p class="field__hint" style="margin-bottom: 14px;">Tap a photo card to add or change a photo directly from your phone or computer. Photos are saved right into your config file — no separate upload step needed.</p>
           <div id="gallery-list"></div>
           <button class="add-item-btn" id="add-gallery">+ Add Photo</button>
+          <div class="config-size" id="config-size" style="display: none;">
+            <span id="config-size-text">0 KB</span>
+            <div class="config-size__bar">
+              <div class="config-size__fill" id="config-size-fill" style="width: 0%"></div>
+            </div>
+            <span id="config-size-limit">/ 10 MB</span>
+          </div>
+          <div class="config-size__warning" id="config-size-warning" style="display: none;"></div>
         </div>
       </div>
 
     </div>
   </div>
+
+  <!-- Photo Lightbox -->
+  <div class="lightbox-overlay" id="photo-lightbox">
+    <button class="lightbox-close" id="lightbox-close" aria-label="Close preview">&times;</button>
+    <img src="" alt="Photo preview" id="lightbox-img">
+  </div>
+
+  <!-- Hidden file input for photo selection -->
+  <input type="file" id="photo-file-input" accept="image/*" style="display: none;">
 
   <!-- ===== PREVIEW TAB ===== -->
   <div class="view" id="view-preview">
@@ -1164,6 +1320,9 @@ body {
   });
 
   // --- Gallery ---
+  var photoFileInput = document.getElementById('photo-file-input');
+  var activePhotoIndex = -1; // which gallery card is picking a photo
+
   function renderGallery() {
     var list = document.getElementById('gallery-list');
     list.innerHTML = '';
@@ -1171,53 +1330,74 @@ body {
       var item = document.createElement('div');
       item.className = 'list-item';
 
-      var previewHtml = '';
+      var thumbHtml = '';
       if (g.src) {
-        previewHtml = '<img class="photo-preview" src="' + escapeAttr(g.src) + '" alt="Preview" onerror="this.style.display=\'none\'">';
+        thumbHtml =
+          '<div class="photo-card__thumb" data-index="' + i + '">' +
+            '<img src="' + escapeAttr(g.src) + '" alt="Preview">' +
+            '<button class="photo-card__change-btn" type="button">Change</button>' +
+          '</div>';
       } else {
         var icons = { bathroom: '&#128705;', kitchen: '&#127858;', handyman: '&#128295;', improvement: '&#127968;', entertainment: '&#127916;' };
-        previewHtml = '<div class="photo-placeholder">' + (icons[g.category] || '&#128247;') + '</div>';
+        thumbHtml =
+          '<div class="photo-card__thumb" data-index="' + i + '">' +
+            '<div class="photo-card__thumb-placeholder">' +
+              '<div class="photo-card__thumb-placeholder-icon">' + (icons[g.category] || '&#128247;') + '</div>' +
+              '<div>Tap to add photo</div>' +
+            '</div>' +
+          '</div>';
       }
 
       item.innerHTML =
         '<div class="list-item__number">Photo ' + (i + 1) + '</div>' +
-        previewHtml +
-        '<div class="field">' +
-          '<label class="field__label">File Path</label>' +
-          '<input class="field__input gallery-src" type="text" value="' + escapeAttr(g.src) + '" data-index="' + i + '" placeholder="photos/bathroom-remodel-1.jpg">' +
-        '</div>' +
-        '<div class="field">' +
-          '<label class="field__label">Description (Alt Text)</label>' +
-          '<input class="field__input gallery-alt" type="text" value="' + escapeAttr(g.alt) + '" data-index="' + i + '" placeholder="Master bathroom with custom tile shower">' +
-        '</div>' +
-        '<div class="field__row field__row--2">' +
-          '<div class="field">' +
-            '<label class="field__label">Category</label>' +
-            '<select class="field__select gallery-category" data-index="' + i + '">' +
-              '<option value="bathroom"' + (g.category === 'bathroom' ? ' selected' : '') + '>Bathroom</option>' +
-              '<option value="kitchen"' + (g.category === 'kitchen' ? ' selected' : '') + '>Kitchen</option>' +
-              '<option value="handyman"' + (g.category === 'handyman' ? ' selected' : '') + '>Handyman</option>' +
-              '<option value="improvement"' + (g.category === 'improvement' ? ' selected' : '') + '>Home Improvement</option>' +
-              '<option value="entertainment"' + (g.category === 'entertainment' ? ' selected' : '') + '>Entertainment</option>' +
-            '</select>' +
-          '</div>' +
-          '<div class="field">' +
-            '<label class="field__label">Label</label>' +
-            '<input class="field__input gallery-label" type="text" value="' + escapeAttr(g.label) + '" data-index="' + i + '" placeholder="Bathroom Remodel">' +
+        '<div class="photo-card">' +
+          thumbHtml +
+          '<div class="photo-card__fields">' +
+            '<div class="field">' +
+              '<label class="field__label">Label</label>' +
+              '<input class="field__input gallery-label" type="text" value="' + escapeAttr(g.label) + '" data-index="' + i + '" placeholder="e.g. Master Bathroom Remodel">' +
+            '</div>' +
+            '<div class="field">' +
+              '<label class="field__label">Category</label>' +
+              '<select class="field__select gallery-category" data-index="' + i + '">' +
+                '<option value="bathroom"' + (g.category === 'bathroom' ? ' selected' : '') + '>Bathroom</option>' +
+                '<option value="kitchen"' + (g.category === 'kitchen' ? ' selected' : '') + '>Kitchen</option>' +
+                '<option value="handyman"' + (g.category === 'handyman' ? ' selected' : '') + '>Handyman</option>' +
+                '<option value="improvement"' + (g.category === 'improvement' ? ' selected' : '') + '>Home Improvement</option>' +
+                '<option value="entertainment"' + (g.category === 'entertainment' ? ' selected' : '') + '>Entertainment</option>' +
+                '<option value="other"' + (g.category === 'other' ? ' selected' : '') + '>Other</option>' +
+              '</select>' +
+            '</div>' +
+            '<div class="field">' +
+              '<label class="field__label">Alt Text</label>' +
+              '<input class="field__input gallery-alt" type="text" value="' + escapeAttr(g.alt) + '" data-index="' + i + '" placeholder="Description for accessibility">' +
+            '</div>' +
           '</div>' +
         '</div>' +
         '<div class="list-item__actions">' +
+          (i > 0 ? '<button class="list-item__btn move-up-gallery" data-index="' + i + '">&#9650; Up</button>' : '') +
+          (i < config.gallery.length - 1 ? '<button class="list-item__btn move-down-gallery" data-index="' + i + '">&#9660; Down</button>' : '') +
           '<button class="list-item__btn list-item__btn--danger remove-gallery" data-index="' + i + '">Remove</button>' +
         '</div>';
       list.appendChild(item);
     });
 
-    // Bind events
-    list.querySelectorAll('.gallery-src').forEach(function (el) {
-      el.addEventListener('input', function () {
-        config.gallery[parseInt(this.getAttribute('data-index'))].src = this.value;
+    // Bind photo pick on thumb click
+    list.querySelectorAll('.photo-card__thumb').forEach(function (el) {
+      el.addEventListener('click', function (e) {
+        // If clicking the image itself (not change btn), show lightbox if there's a photo
+        var idx = parseInt(this.getAttribute('data-index'));
+        var imgEl = this.querySelector('img');
+        if (imgEl && e.target === imgEl && config.gallery[idx].src) {
+          showLightbox(config.gallery[idx].src);
+          return;
+        }
+        // Otherwise trigger file pick
+        triggerPhotoPick(idx);
       });
     });
+
+    // Bind field events
     list.querySelectorAll('.gallery-alt').forEach(function (el) {
       el.addEventListener('input', function () {
         config.gallery[parseInt(this.getAttribute('data-index'))].alt = this.value;
@@ -1233,6 +1413,24 @@ body {
         config.gallery[parseInt(this.getAttribute('data-index'))].label = this.value;
       });
     });
+    list.querySelectorAll('.move-up-gallery').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var idx = parseInt(this.getAttribute('data-index'));
+        var tmp = config.gallery[idx - 1];
+        config.gallery[idx - 1] = config.gallery[idx];
+        config.gallery[idx] = tmp;
+        renderGallery();
+      });
+    });
+    list.querySelectorAll('.move-down-gallery').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var idx = parseInt(this.getAttribute('data-index'));
+        var tmp = config.gallery[idx + 1];
+        config.gallery[idx + 1] = config.gallery[idx];
+        config.gallery[idx] = tmp;
+        renderGallery();
+      });
+    });
     list.querySelectorAll('.remove-gallery').forEach(function (btn) {
       btn.addEventListener('click', function () {
         var idx = parseInt(this.getAttribute('data-index'));
@@ -1242,6 +1440,111 @@ body {
         }
       });
     });
+
+    updateConfigSize();
+  }
+
+  function triggerPhotoPick(index) {
+    activePhotoIndex = index;
+    photoFileInput.value = ''; // reset so same file can be re-selected
+    photoFileInput.click();
+  }
+
+  // Process selected photo: resize, compress, store as base64
+  photoFileInput.addEventListener('change', function () {
+    var file = this.files[0];
+    if (!file || activePhotoIndex < 0) return;
+    var idx = activePhotoIndex;
+
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      var img = new Image();
+      img.onload = function () {
+        var maxWidth = 1200;
+        var w = img.width;
+        var h = img.height;
+
+        // Only downscale, never upscale
+        if (w > maxWidth) {
+          h = Math.round(h * (maxWidth / w));
+          w = maxWidth;
+        }
+
+        var canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+
+        var dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+        config.gallery[idx].src = dataUrl;
+        renderGallery();
+        showToast('Photo added!', 'success');
+      };
+      img.onerror = function () {
+        showToast('Could not read that image. Try a different photo.', 'error');
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Lightbox
+  function showLightbox(src) {
+    var overlay = document.getElementById('photo-lightbox');
+    var img = document.getElementById('lightbox-img');
+    img.src = src;
+    overlay.classList.add('lightbox-overlay--active');
+  }
+  document.getElementById('lightbox-close').addEventListener('click', function () {
+    document.getElementById('photo-lightbox').classList.remove('lightbox-overlay--active');
+  });
+  document.getElementById('photo-lightbox').addEventListener('click', function (e) {
+    if (e.target === this) {
+      this.classList.remove('lightbox-overlay--active');
+    }
+  });
+
+  // Config size indicator
+  function updateConfigSize() {
+    var sizeEl = document.getElementById('config-size');
+    var textEl = document.getElementById('config-size-text');
+    var fillEl = document.getElementById('config-size-fill');
+    var warnEl = document.getElementById('config-size-warning');
+
+    // Only show if there are gallery items with photos
+    var hasPhotos = config.gallery.some(function (g) { return g.src && g.src.indexOf('data:image') === 0; });
+    if (!hasPhotos) {
+      sizeEl.style.display = 'none';
+      warnEl.style.display = 'none';
+      return;
+    }
+
+    readForm();
+    var json = JSON.stringify(config);
+    var bytes = new Blob([json]).size;
+    var kb = (bytes / 1024).toFixed(0);
+    var mb = (bytes / (1024 * 1024)).toFixed(1);
+    var maxMB = 10;
+    var pct = Math.min(100, (bytes / (maxMB * 1024 * 1024)) * 100);
+
+    sizeEl.style.display = 'flex';
+    textEl.textContent = bytes > 1024 * 1024 ? mb + ' MB' : kb + ' KB';
+    fillEl.style.width = pct + '%';
+
+    fillEl.className = 'config-size__fill';
+    if (pct > 80) {
+      fillEl.classList.add('config-size__fill--danger');
+    } else if (pct > 50) {
+      fillEl.classList.add('config-size__fill--warning');
+    }
+
+    if (bytes > 5 * 1024 * 1024) {
+      warnEl.style.display = 'block';
+      warnEl.textContent = 'Your config file is getting large (' + mb + ' MB). Consider removing unused photos to keep it under 10 MB.';
+    } else {
+      warnEl.style.display = 'none';
+    }
   }
 
   document.getElementById('add-gallery').addEventListener('click', function () {
