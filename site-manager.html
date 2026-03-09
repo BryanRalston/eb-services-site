@@ -1615,6 +1615,27 @@ body {
     }
   }
 
+  // --- Auto-save to localStorage on any change ---
+  function autoSave() {
+    try {
+      localStorage.setItem('eb_site_config_draft', JSON.stringify(config));
+    } catch (e) { /* quota exceeded — ignore */ }
+  }
+
+  // Patch renderGallery and renderTestimonials to auto-save after changes
+  var _origRenderGallery = renderGallery;
+  renderGallery = function () { _origRenderGallery(); autoSave(); };
+  var _origRenderTestimonials = renderTestimonials;
+  renderTestimonials = function () { _origRenderTestimonials(); autoSave(); };
+
+  // Auto-save on any form input change
+  document.addEventListener('input', function (e) {
+    if (e.target.closest('.main')) { readForm(); autoSave(); }
+  });
+  document.addEventListener('change', function (e) {
+    if (e.target.closest('.main')) { readForm(); autoSave(); }
+  });
+
   // --- Save Config ---
   document.getElementById('btn-save').addEventListener('click', function () {
     readForm();
@@ -1628,6 +1649,8 @@ body {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+    // Clear draft after saving
+    localStorage.removeItem('eb_site_config_draft');
     showToast('Config file downloaded!', 'success');
   });
 
@@ -1718,8 +1741,23 @@ body {
     });
   }
 
-  // --- Try loading existing config from site ---
-  function tryLoadFromSite() {
+  // --- Try loading config: localStorage draft first, then site, then defaults ---
+  function tryLoadConfig() {
+    // Check for unsaved draft in localStorage first
+    var draft = null;
+    try {
+      var stored = localStorage.getItem('eb_site_config_draft');
+      if (stored) draft = JSON.parse(stored);
+    } catch (e) { /* ignore */ }
+
+    if (draft) {
+      config = deepMerge(JSON.parse(JSON.stringify(DEFAULT_CONFIG)), draft);
+      populateForm();
+      showToast('Restored unsaved changes', 'success');
+      return;
+    }
+
+    // Otherwise fetch from site
     fetch('site-config.json')
       .then(function (response) {
         if (!response.ok) throw new Error('Not found');
@@ -1736,7 +1774,7 @@ body {
   }
 
   // --- Init ---
-  tryLoadFromSite();
+  tryLoadConfig();
   initA2HSHint();
 
 })();
